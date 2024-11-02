@@ -91,17 +91,17 @@ export default function Home() {
     setCapturedOpponentPieces([]);
   };
 
-  const addPieceToStand = (selectedPiece: Piece, targetPiece: Piece) => {
+  const addPieceToStand = (selectedPiece: Piece, pieceAtDestination: Piece) => {
     if (selectedPiece.owner === "player") {
       setCapturedPlayerPieces((prev) => [
         ...prev,
-        { type: targetPiece.type, owner: "player" },
+        { type: pieceAtDestination.type, owner: "player" },
       ]);
       return;
     }
     setCapturedOpponentPieces((prev) => [
       ...prev,
-      { type: targetPiece.type, owner: "opponent" },
+      { type: pieceAtDestination.type, owner: "opponent" },
     ]);
   };
 
@@ -111,28 +111,17 @@ export default function Home() {
     );
   };
 
-  const handleCellClick = (row: number, col: number) => {
-    // targetPiece, selectedPieceの違いは何だ？
-    const targetPiece = pieces.find(
-      (p) => p.position[0] === row && p.position[1] === col
-    );
-    if (selectedPiece) {
-      if (targetPiece && targetPiece.owner !== selectedPiece.owner) {
+  const capturePiece = (selectedPiece: Piece, pieceAtDestination: Piece) => {
         // 相手の駒がいる場合は取る
-        setPieces((prevPieces) => prevPieces.filter((p) => p !== targetPiece));
+    setPieces((prevPieces) =>
+      prevPieces.filter((p) => p !== pieceAtDestination)
+    );
 
         // 駒台に追加
-        addPieceToStand(selectedPiece, targetPiece);
-      }
+    addPieceToStand(selectedPiece, pieceAtDestination);
+  };
 
-      // 成れるかどうか
-      const isEnableToPromote =
-        !selectedPiece.isPromoted && isPromotionZone(selectedPiece.owner, row);
-      // 成るかどうか
-      const shouldPromote = isEnableToPromote && window.confirm("成りますか？");
-
-      // 駒を移動
-      if (canMoveTo(selectedPiece, row, col)) {
+  const movePiece = (row: number, col: number, shouldPromote: boolean) => {
         setPieces((prevPieces) =>
           prevPieces.map((piece) =>
             piece === selectedPiece
@@ -146,13 +135,39 @@ export default function Home() {
         );
 
         setSelectedPiece(null);
-      }
+  };
+
+  // TODO:関数に切り出す
+  // TODO:if減らす
+  const handleCellClick = (row: number, col: number) => {
+    // 移動先のマスにある駒
+    const pieceAtDestination = pieces.find(
+      (p) => p.position[0] === row && p.position[1] === col
+    );
+
+    if (!selectedPiece) {
+      if (pieceAtDestination) setSelectedPiece(pieceAtDestination);
       return;
     }
 
-    if (targetPiece) {
-      setSelectedPiece(targetPiece);
+    if (
+      pieceAtDestination &&
+      pieceAtDestination.owner !== selectedPiece.owner
+    ) {
+      capturePiece(selectedPiece, pieceAtDestination);
     }
+
+    // 成れるかどうか
+    const isEnableToPromote =
+      !selectedPiece.isPromoted && isPromotionZone(selectedPiece.owner, row);
+    // 成るかどうか
+    const shouldPromote = isEnableToPromote && window.confirm("成りますか？");
+
+    // 駒を移動
+    if (canMoveTo(selectedPiece, row, col)) {
+      movePiece(row, col, shouldPromote);
+    }
+  };
   };
 
   return (
