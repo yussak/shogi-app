@@ -91,7 +91,28 @@ export default function Home() {
     setCapturedOpponentPieces([]);
   };
 
+  const addPieceToStand = (selectedPiece: Piece, targetPiece: Piece) => {
+    if (selectedPiece.owner === "player") {
+      setCapturedPlayerPieces((prev) => [
+        ...prev,
+        { type: targetPiece.type, owner: "player" },
+      ]);
+      return;
+    }
+    setCapturedOpponentPieces((prev) => [
+      ...prev,
+      { type: targetPiece.type, owner: "opponent" },
+    ]);
+  };
+
+  const isPromotionZone = (owner: string, row: number) => {
+    return (
+      (owner === "player" && row <= 2) || (owner === "opponent" && row >= 6)
+    );
+  };
+
   const handleCellClick = (row: number, col: number) => {
+    // targetPiece, selectedPieceの違いは何だ？
     const targetPiece = pieces.find(
       (p) => p.position[0] === row && p.position[1] === col
     );
@@ -101,24 +122,14 @@ export default function Home() {
         setPieces((prevPieces) => prevPieces.filter((p) => p !== targetPiece));
 
         // 駒台に追加
-        if (selectedPiece.owner === "player") {
-          setCapturedPlayerPieces((prev) => [
-            ...prev,
-            { type: targetPiece.type, owner: "player" },
-          ]);
-        } else {
-          setCapturedOpponentPieces((prev) => [
-            ...prev,
-            { type: targetPiece.type, owner: "opponent" },
-          ]);
-        }
+        addPieceToStand(selectedPiece, targetPiece);
       }
 
-      const isPromotionZone =
-        (selectedPiece.owner === "player" && row <= 2) ||
-        (selectedPiece.owner === "opponent" && row >= 6);
-
-      const shouldPromote = isPromotionZone && window.confirm("成りますか？");
+      // 成れるかどうか
+      const isEnableToPromote =
+        !selectedPiece.isPromoted && isPromotionZone(selectedPiece.owner, row);
+      // 成るかどうか
+      const shouldPromote = isEnableToPromote && window.confirm("成りますか？");
 
       // 駒を移動
       if (canMoveTo(selectedPiece, row, col)) {
@@ -152,7 +163,6 @@ export default function Home() {
         {/* TODO:一手進めるボタン用意 */}
         {/* TODO:駒台の駒を打てるようにする */}
         {/* TODO:と金の動ける場所を正しくする */}
-        {/* TODO:すでに成っているのに成るかの確認が出るので修正 */}
         {/* TODO:選択中に他のコマを選択しても動かせないので対応 */}
 
         <button onClick={reset}>平手配置</button>
