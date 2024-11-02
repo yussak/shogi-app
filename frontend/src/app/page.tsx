@@ -38,6 +38,22 @@ export default function Home() {
     );
   };
 
+  const getMovablePositions = (piece: Piece | null): [number, number][] => {
+    if (!piece) return [];
+
+    const { type, position } = piece;
+    const [row, col] = position;
+    if (type === "fuhyou") {
+      return [[row - 1, col]];
+    }
+
+    return [];
+  };
+
+  const movablePositions = selectedPiece
+    ? getMovablePositions(selectedPiece)
+    : [];
+
   const handleCellClick = (row: number, col: number) => {
     if (selectedPiece) {
       if (canMoveTo(selectedPiece, row, col)) {
@@ -61,6 +77,7 @@ export default function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+        {/* TODO:初期に戻すボタンおく */}
         {/* TODO：駒台用意 */}
         <div
           style={{
@@ -71,9 +88,12 @@ export default function Home() {
           {rows.map((_, rowIndex) =>
             columns.map((_, colIndex) => {
               // マスに駒があるかを確認
-              console.log(pieces);
               const piece = pieces.find(
                 (p) => p.position[0] === rowIndex && p.position[1] === colIndex
+              );
+
+              const isMovablePosition = movablePositions.some(
+                (pos) => pos[0] === rowIndex && pos[1] === colIndex
               );
 
               return (
@@ -87,12 +107,13 @@ export default function Home() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    backgroundColor:
-                      selectedPiece &&
-                      selectedPiece.position[0] === rowIndex &&
-                      selectedPiece.position[1] === colIndex
-                        ? "#FFD700"
-                        : "#F0D9B5",
+                    backgroundColor: isMovablePosition
+                      ? "#A3D2CA" // 移動可能位置の色
+                      : selectedPiece &&
+                        selectedPiece.position[0] === rowIndex &&
+                        selectedPiece.position[1] === colIndex
+                      ? "#FFD700" // 選択中の駒の色
+                      : "#F0D9B5",
                   }}
                 >
                   {piece && piece.type === "fuhyou" ? "歩" : ""}
