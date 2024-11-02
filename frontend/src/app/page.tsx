@@ -97,14 +97,36 @@ export default function Home() {
 
     const { type, position, owner } = piece;
     if (!position) {
-      const movablePositions = Array.from({ length: 8 }, (_, row) => row + 1) // 1行目から8行目
-        .flatMap((row) =>
-          Array.from({ length: 9 }, (_, col) => [row, col] as [number, number])
-        )
-        .filter(
-          ([row, col]) =>
-            !pieces.some((p) => p.position[0] === row && p.position[1] === col)
-        );
+      let movablePositions;
+      if (owner === "player") {
+        movablePositions = Array.from({ length: 8 }, (_, row) => row + 1) // 1行目から8行目
+          .flatMap((row) =>
+            Array.from(
+              { length: 9 },
+              (_, col) => [row, col] as [number, number]
+            )
+          )
+          .filter(
+            ([row, col]) =>
+              !pieces.some(
+                (p) => p.position[0] === row && p.position[1] === col
+              )
+          );
+      } else {
+        movablePositions = Array.from({ length: 8 }, (_, row) => row) // 0行目から7行目
+          .flatMap((row) =>
+            Array.from(
+              { length: 9 },
+              (_, col) => [row, col] as [number, number]
+            )
+          )
+          .filter(
+            ([row, col]) =>
+              !pieces.some(
+                (p) => p.position[0] === row && p.position[1] === col
+              )
+          );
+      }
 
       return movablePositions;
     }
@@ -223,6 +245,7 @@ export default function Home() {
         {/* TODO:選択中に他のコマを選択しても動かせないので対応 */}
         {/* TODO:二歩できなくする */}
         {/* TODO:後手が持ち駒から歩を打つ時、９行目が打てる場所に表示されてしまうので対処 */}
+        {/* TODO:移動可能の場所が青く出るけどそうじゃないところにも打ててしまうので修正 */}
 
         <button onClick={reset}>平手配置</button>
         <div
