@@ -26,13 +26,27 @@ export default function Home() {
   const rows = Array.from({ length: 9 });
   const columns = Array.from({ length: 9 });
 
+  const canMoveTo = (
+    selectedPiece: Piece,
+    targetRow: number,
+    targetCol: number
+  ) => {
+    return (
+      selectedPiece.type === "fuhyou" &&
+      selectedPiece.position[0] - 1 === targetRow &&
+      selectedPiece.position[1] === targetCol
+    );
+  };
+
   const handleCellClick = (row: number, col: number) => {
     if (selectedPiece) {
-      setPieces((prevPieces) =>
-        prevPieces.map((piece) =>
-          piece === selectedPiece ? { ...piece, position: [row, col] } : piece
-        )
-      );
+      if (canMoveTo(selectedPiece, row, col)) {
+        setPieces((prevPieces) =>
+          prevPieces.map((piece) =>
+            piece === selectedPiece ? { ...piece, position: [row, col] } : piece
+          )
+        );
+      }
       setSelectedPiece(null);
     } else {
       const piece = pieces.find(
