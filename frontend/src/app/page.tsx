@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 type Piece = {
-  type: "fuhyou"; // 駒の種類
+  type: "fuhyou";
   position: [number, number];
 };
 
@@ -28,11 +28,11 @@ export default function Home() {
 
   const handleCellClick = (row: number, col: number) => {
     if (selectedPiece) {
-      setPieces((prevPieces) => {
+      setPieces((prevPieces) =>
         prevPieces.map((piece) =>
           piece === selectedPiece ? { ...piece, position: [row, col] } : piece
-        );
-      });
+        )
+      );
       setSelectedPiece(null);
     } else {
       const piece = pieces.find(
@@ -57,6 +57,7 @@ export default function Home() {
           {rows.map((_, rowIndex) =>
             columns.map((_, colIndex) => {
               // マスに駒があるかを確認
+              console.log(pieces);
               const piece = pieces.find(
                 (p) => p.position[0] === rowIndex && p.position[1] === colIndex
               );
