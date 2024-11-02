@@ -1,5 +1,6 @@
 "use client";
 
+import CapturedPieces from "@/components/ui/CapturePieces";
 import { useState } from "react";
 
 type Piece = {
@@ -90,30 +91,6 @@ export default function Home() {
     setCapturedOpponentPieces([]);
   };
 
-  const CapturedPieces = ({ pieces }: { pieces: CapturedPiece[] }) => {
-    return (
-      <div
-        style={{
-          display: "flex",
-          gap: "10px",
-          padding: "10px",
-          border: "1px solid black",
-        }}
-      >
-        {pieces.map((piece, index) => (
-          <div
-            key={index}
-            style={{
-              transform: piece.owner === "opponent" ? "rotate(180deg)" : "none",
-            }}
-          >
-            {piece.type === "fuhyou" ? "歩" : ""}
-          </div>
-        ))}
-      </div>
-    );
-  };
-
   const handleCellClick = (row: number, col: number) => {
     if (selectedPiece) {
       const targetPiece = pieces.find(
@@ -177,6 +154,7 @@ export default function Home() {
         {/* TODO:一手戻すボタン用意 */}
         {/* TODO:一手進めるボタン用意 */}
         {/* TODO:駒台の駒を打てるようにする */}
+        {/* TODO:と金の動ける場所を正しくする */}
 
         <button onClick={reset}>平手配置</button>
         <div
