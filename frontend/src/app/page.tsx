@@ -59,26 +59,20 @@ export default function Home() {
     const { owner, position, type } = selectedPiece;
 
     if (!position) {
-      setPieces((prevPieces) => [
-        ...prevPieces,
-        {
-          ...selectedPiece,
-          position: [targetRow, targetCol],
-          isPromoted: false,
-        },
-      ]);
-
-      setSelectedPiece(null);
-      if (selectedPiece.owner === "player") {
-        setCapturedPlayerPieces((prev) =>
-          prev.filter((p) => p != selectedPiece)
-        );
-      } else {
-        setCapturedOpponentPieces((prev) =>
-          prev.filter((p) => p != selectedPiece)
+      if (owner === "player") {
+        return (
+          targetRow > 0 &&
+          !pieces.some(
+            (p) => p.position[0] === targetRow && p.position[1] === targetCol
+          )
         );
       }
-      return true;
+      return (
+        targetRow < 8 &&
+        !pieces.some(
+          (p) => p.position[0] === targetRow && p.position[1] === targetCol
+        )
+      );
     }
 
     const [row, col] = position;
@@ -223,6 +217,27 @@ export default function Home() {
 
     // 駒を移動
     if (canMoveTo(selectedPiece, row, col)) {
+      if (!selectedPiece.position) {
+        setPieces((prevPieces) => [
+          ...prevPieces,
+          {
+            ...selectedPiece,
+            position: [row, col],
+            isPromoted: false,
+          },
+        ]);
+
+        setSelectedPiece(null);
+        if (selectedPiece.owner === "player") {
+          setCapturedPlayerPieces((prev) =>
+            prev.filter((p) => p != selectedPiece)
+          );
+        } else {
+          setCapturedOpponentPieces((prev) =>
+            prev.filter((p) => p != selectedPiece)
+          );
+        }
+      }
       movePiece(row, col, shouldPromote);
     }
   };
