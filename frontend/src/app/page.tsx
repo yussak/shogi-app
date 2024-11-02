@@ -19,15 +19,15 @@ const initialPieces: Piece[] = [
   { type: "fuhyou", position: [6, 7], owner: "player" },
   { type: "fuhyou", position: [6, 8], owner: "player" },
 
-  { type: "fuhyou", position: [1, 0], owner: "opponent" },
-  { type: "fuhyou", position: [1, 1], owner: "opponent" },
-  { type: "fuhyou", position: [1, 2], owner: "opponent" },
-  { type: "fuhyou", position: [1, 3], owner: "opponent" },
-  { type: "fuhyou", position: [1, 4], owner: "opponent" },
-  { type: "fuhyou", position: [1, 5], owner: "opponent" },
-  { type: "fuhyou", position: [1, 6], owner: "opponent" },
-  { type: "fuhyou", position: [1, 7], owner: "opponent" },
-  { type: "fuhyou", position: [1, 8], owner: "opponent" },
+  { type: "fuhyou", position: [2, 0], owner: "opponent" },
+  { type: "fuhyou", position: [2, 1], owner: "opponent" },
+  { type: "fuhyou", position: [2, 2], owner: "opponent" },
+  { type: "fuhyou", position: [2, 3], owner: "opponent" },
+  { type: "fuhyou", position: [2, 4], owner: "opponent" },
+  { type: "fuhyou", position: [2, 5], owner: "opponent" },
+  { type: "fuhyou", position: [2, 6], owner: "opponent" },
+  { type: "fuhyou", position: [2, 7], owner: "opponent" },
+  { type: "fuhyou", position: [2, 8], owner: "opponent" },
 ];
 
 export default function Home() {
