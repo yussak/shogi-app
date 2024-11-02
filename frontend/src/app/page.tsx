@@ -92,11 +92,10 @@ export default function Home() {
   };
 
   const handleCellClick = (row: number, col: number) => {
+    const targetPiece = pieces.find(
+      (p) => p.position[0] === row && p.position[1] === col
+    );
     if (selectedPiece) {
-      const targetPiece = pieces.find(
-        (p) => p.position[0] === row && p.position[1] === col
-      );
-
       if (targetPiece && targetPiece.owner !== selectedPiece.owner) {
         // 相手の駒がいる場合は取る
         setPieces((prevPieces) => prevPieces.filter((p) => p !== targetPiece));
@@ -137,13 +136,11 @@ export default function Home() {
 
         setSelectedPiece(null);
       }
-    } else {
-      const piece = pieces.find(
-        (p) => p.position[0] === row && p.position[1] === col
-      );
-      if (piece) {
-        setSelectedPiece(piece);
-      }
+      return;
+    }
+
+    if (targetPiece) {
+      setSelectedPiece(targetPiece);
     }
   };
 
@@ -155,6 +152,8 @@ export default function Home() {
         {/* TODO:一手進めるボタン用意 */}
         {/* TODO:駒台の駒を打てるようにする */}
         {/* TODO:と金の動ける場所を正しくする */}
+        {/* TODO:すでに成っているのに成るかの確認が出るので修正 */}
+        {/* TODO:選択中に他のコマを選択しても動かせないので対応 */}
 
         <button onClick={reset}>平手配置</button>
         <div
