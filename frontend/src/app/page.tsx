@@ -5,18 +5,29 @@ import { useState } from "react";
 type Piece = {
   type: "fuhyou";
   position: [number, number];
+  owner: "player" | "opponent";
 };
 
 const initialPieces: Piece[] = [
-  { type: "fuhyou", position: [6, 0] },
-  { type: "fuhyou", position: [6, 1] },
-  { type: "fuhyou", position: [6, 2] },
-  { type: "fuhyou", position: [6, 3] },
-  { type: "fuhyou", position: [6, 4] },
-  { type: "fuhyou", position: [6, 5] },
-  { type: "fuhyou", position: [6, 6] },
-  { type: "fuhyou", position: [6, 7] },
-  { type: "fuhyou", position: [6, 8] },
+  { type: "fuhyou", position: [6, 0], owner: "player" },
+  { type: "fuhyou", position: [6, 1], owner: "player" },
+  { type: "fuhyou", position: [6, 2], owner: "player" },
+  { type: "fuhyou", position: [6, 3], owner: "player" },
+  { type: "fuhyou", position: [6, 4], owner: "player" },
+  { type: "fuhyou", position: [6, 5], owner: "player" },
+  { type: "fuhyou", position: [6, 6], owner: "player" },
+  { type: "fuhyou", position: [6, 7], owner: "player" },
+  { type: "fuhyou", position: [6, 8], owner: "player" },
+
+  { type: "fuhyou", position: [1, 0], owner: "opponent" },
+  { type: "fuhyou", position: [1, 1], owner: "opponent" },
+  { type: "fuhyou", position: [1, 2], owner: "opponent" },
+  { type: "fuhyou", position: [1, 3], owner: "opponent" },
+  { type: "fuhyou", position: [1, 4], owner: "opponent" },
+  { type: "fuhyou", position: [1, 5], owner: "opponent" },
+  { type: "fuhyou", position: [1, 6], owner: "opponent" },
+  { type: "fuhyou", position: [1, 7], owner: "opponent" },
+  { type: "fuhyou", position: [1, 8], owner: "opponent" },
 ];
 
 export default function Home() {
@@ -112,6 +123,9 @@ export default function Home() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    // 相手の駒の場合逆さまにする
+                    transform:
+                      piece?.owner === "opponent" ? "rotate(180deg)" : "none",
                     backgroundColor: isMovablePosition
                       ? "#A3D2CA" // 移動可能位置の色
                       : selectedPiece &&
