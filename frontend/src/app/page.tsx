@@ -85,6 +85,8 @@ export default function Home() {
   const reset = () => {
     setPieces(initialPieces);
     setSelectedPiece(null);
+    setCapturedPlayerPieces([]);
+    setCapturedOpponentPieces([]);
   };
 
   const CapturedPieces = ({ pieces }: { pieces: CapturedPiece[] }) => {
