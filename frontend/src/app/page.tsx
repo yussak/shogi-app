@@ -58,18 +58,29 @@ export default function Home() {
     const { owner, position, type } = selectedPiece;
 
     if (!position) {
+      const isFuhyoInColumn = pieces.some(
+        (p) =>
+          p.type === "fuhyou" &&
+          p.position[1] === targetCol &&
+          !p.isPromoted &&
+          p.owner === owner
+      );
       if (owner === PLAYER) {
         return (
           targetRow > 0 &&
           !pieces.some(
             (p) => p.position[0] === targetRow && p.position[1] === targetCol
-          )
+          ) &&
+          !isFuhyoInColumn
         );
       }
       return (
         targetRow < 8 &&
         !pieces.some(
-          (p) => p.position[0] === targetRow && p.position[1] === targetCol
+          (p) =>
+            p.position[0] === targetRow &&
+            p.position[1] === targetCol &&
+            !isFuhyoInColumn
         )
       );
     }
@@ -103,7 +114,14 @@ export default function Home() {
             ([row, col]) =>
               !pieces.some(
                 (p) => p.position[0] === row && p.position[1] === col
-              )
+              ) && // そのマスに駒がない
+              !pieces.some(
+                (p) =>
+                  p.type === "fuhyou" &&
+                  !p.isPromoted &&
+                  p.position[1] === col &&
+                  p.owner === owner
+              ) // 同じ列に歩がない
           );
       } else {
         movablePositions = Array.from({ length: 8 }, (_, row) => row) // 0行目から7行目
@@ -117,7 +135,14 @@ export default function Home() {
             ([row, col]) =>
               !pieces.some(
                 (p) => p.position[0] === row && p.position[1] === col
-              )
+              ) && // そのマスに駒がない
+              !pieces.some(
+                (p) =>
+                  p.type === "fuhyou" &&
+                  !p.isPromoted &&
+                  p.position[1] === col &&
+                  p.owner === owner
+              ) // 同じ列に歩がない
           );
       }
 
@@ -239,7 +264,6 @@ export default function Home() {
         {/* TODO:駒台の駒を打てるようにする */}
         {/* TODO:と金の動ける場所を正しくする */}
         {/* TODO:選択中に他のコマを選択しても動かせないので対応 */}
-        {/* TODO:二歩できなくする */}
 
         <button onClick={reset}>平手配置</button>
         <div
