@@ -50,38 +50,24 @@ export default function Home() {
   const rows = Array.from({ length: 9 });
   const columns = Array.from({ length: 9 });
 
-  const canMoveTo = (
-    selectedPiece: Piece,
-    targetRow: number,
-    targetCol: number
-  ) => {
+  // 駒がある位置に移動可能か判定するべき
+  const canMoveTo = (selectedPiece: Piece, targetRow: number, targetCol: number) => {
     const { owner, position, type } = selectedPiece;
 
     if (!position) {
       const isFuhyoInColumn = pieces.some(
-        (p) =>
-          p.type === "fuhyou" &&
-          p.position[1] === targetCol &&
-          !p.isPromoted &&
-          p.owner === owner
+        (p) => p.type === "fuhyou" && p.position[1] === targetCol && !p.isPromoted && p.owner === owner
       );
       if (owner === PLAYER) {
         return (
           targetRow > 0 &&
-          !pieces.some(
-            (p) => p.position[0] === targetRow && p.position[1] === targetCol
-          ) &&
+          !pieces.some((p) => p.position[0] === targetRow && p.position[1] === targetCol) &&
           !isFuhyoInColumn
         );
       }
       return (
         targetRow < 8 &&
-        !pieces.some(
-          (p) =>
-            p.position[0] === targetRow &&
-            p.position[1] === targetCol &&
-            !isFuhyoInColumn
-        )
+        !pieces.some((p) => p.position[0] === targetRow && p.position[1] === targetCol && !isFuhyoInColumn)
       );
     }
 
@@ -95,7 +81,7 @@ export default function Home() {
     }
   };
 
-  // TODO:canMoveToと被ってるので直す（以下でcanMoveTo読めばいいだけかも
+  // 移動可能な場所を表示するべき
   const getMovablePositions = (piece: Piece | null): [number, number][] => {
     if (!piece) return [];
 
@@ -104,45 +90,19 @@ export default function Home() {
       let movablePositions;
       if (owner === PLAYER) {
         movablePositions = Array.from({ length: 8 }, (_, row) => row + 1) // 1行目から8行目
-          .flatMap((row) =>
-            Array.from(
-              { length: 9 },
-              (_, col) => [row, col] as [number, number]
-            )
-          )
+          .flatMap((row) => Array.from({ length: 9 }, (_, col) => [row, col] as [number, number]))
           .filter(
             ([row, col]) =>
-              !pieces.some(
-                (p) => p.position[0] === row && p.position[1] === col
-              ) && // そのマスに駒がない
-              !pieces.some(
-                (p) =>
-                  p.type === "fuhyou" &&
-                  !p.isPromoted &&
-                  p.position[1] === col &&
-                  p.owner === owner
-              ) // 同じ列に歩がない
+              !pieces.some((p) => p.position[0] === row && p.position[1] === col) && // そのマスに駒がない
+              !pieces.some((p) => p.type === "fuhyou" && !p.isPromoted && p.position[1] === col && p.owner === owner) // 同じ列に歩がない
           );
       } else {
         movablePositions = Array.from({ length: 8 }, (_, row) => row) // 0行目から7行目
-          .flatMap((row) =>
-            Array.from(
-              { length: 9 },
-              (_, col) => [row, col] as [number, number]
-            )
-          )
+          .flatMap((row) => Array.from({ length: 9 }, (_, col) => [row, col] as [number, number]))
           .filter(
             ([row, col]) =>
-              !pieces.some(
-                (p) => p.position[0] === row && p.position[1] === col
-              ) && // そのマスに駒がない
-              !pieces.some(
-                (p) =>
-                  p.type === "fuhyou" &&
-                  !p.isPromoted &&
-                  p.position[1] === col &&
-                  p.owner === owner
-              ) // 同じ列に歩がない
+              !pieces.some((p) => p.position[0] === row && p.position[1] === col) && // そのマスに駒がない
+              !pieces.some((p) => p.type === "fuhyou" && !p.isPromoted && p.position[1] === col && p.owner === owner) // 同じ列に歩がない
           );
       }
 
@@ -167,10 +127,7 @@ export default function Home() {
   };
 
   const addPieceToStand = (selectedPiece: Piece, pieceAtDestination: Piece) => {
-    setCapturedPieces((prev) => [
-      ...prev,
-      { type: pieceAtDestination.type, owner: selectedPiece.owner },
-    ]);
+    setCapturedPieces((prev) => [...prev, { type: pieceAtDestination.type, owner: selectedPiece.owner }]);
   };
 
   const isPromotionZone = (owner: string, row: number) => {
@@ -179,9 +136,7 @@ export default function Home() {
 
   const capturePiece = (selectedPiece: Piece, pieceAtDestination: Piece) => {
     // 相手の駒がいる場合は取る
-    setPieces((prevPieces) =>
-      prevPieces.filter((p) => p !== pieceAtDestination)
-    );
+    setPieces((prevPieces) => prevPieces.filter((p) => p !== pieceAtDestination));
 
     // 駒台に追加
     addPieceToStand(selectedPiece, pieceAtDestination);
@@ -205,27 +160,20 @@ export default function Home() {
 
   const handleCellClick = (row: number, col: number) => {
     // 移動先のマスにある駒
-    const pieceAtDestination = pieces.find(
-      (p) => p.position[0] === row && p.position[1] === col
-    );
+    const pieceAtDestination = pieces.find((p) => p.position[0] === row && p.position[1] === col);
 
     if (!selectedPiece) {
       if (pieceAtDestination) setSelectedPiece(pieceAtDestination);
       return;
     }
 
-    if (
-      pieceAtDestination &&
-      pieceAtDestination.owner !== selectedPiece.owner
-    ) {
+    if (pieceAtDestination && pieceAtDestination.owner !== selectedPiece.owner) {
       capturePiece(selectedPiece, pieceAtDestination);
     }
 
     // 成れるかどうか
     const isEnableToPromote =
-      !selectedPiece.isPromoted &&
-      "position" in selectedPiece &&
-      isPromotionZone(selectedPiece.owner, row);
+      !selectedPiece.isPromoted && "position" in selectedPiece && isPromotionZone(selectedPiece.owner, row);
     // 成るかどうか
     const shouldPromote = isEnableToPromote && window.confirm("成りますか？");
 
@@ -264,6 +212,7 @@ export default function Home() {
         {/* TODO:駒台の駒を打てるようにする */}
         {/* TODO:と金の動ける場所を正しくする */}
         {/* TODO:選択中に他のコマを選択しても動かせないので対応 */}
+        {/* TODO:自分の駒を取れてしまうので修正　例えば33と金34歩33歩とできてしまう */}
 
         <button onClick={reset}>平手配置</button>
         <div
@@ -275,16 +224,10 @@ export default function Home() {
           {rows.map((_, rowIndex) =>
             columns.map((_, colIndex) => {
               // マスに駒があるかを確認
-              const piece = pieces.find(
-                (p) => p.position[0] === rowIndex && p.position[1] === colIndex
-              );
+              const piece = pieces.find((p) => p.position[0] === rowIndex && p.position[1] === colIndex);
 
-              const movablePositions = selectedPiece
-                ? getMovablePositions(selectedPiece)
-                : [];
-              const isMovablePosition = movablePositions.some(
-                (pos) => pos[0] === rowIndex && pos[1] === colIndex
-              );
+              const movablePositions = selectedPiece ? getMovablePositions(selectedPiece) : [];
+              const isMovablePosition = movablePositions.some((pos) => pos[0] === rowIndex && pos[1] === colIndex);
 
               return (
                 <div
@@ -298,8 +241,7 @@ export default function Home() {
                     alignItems: "center",
                     justifyContent: "center",
                     // 相手の駒の場合逆さまにする
-                    transform:
-                      piece?.owner === OPPONENT ? "rotate(180deg)" : "none",
+                    transform: piece?.owner === OPPONENT ? "rotate(180deg)" : "none",
                     backgroundColor: isMovablePosition
                       ? "#A3D2CA" // 移動可能位置の色
                       : selectedPiece &&
@@ -310,11 +252,7 @@ export default function Home() {
                       : "#F0D9B5",
                   }}
                 >
-                  {piece && piece.type === "fuhyou"
-                    ? piece.isPromoted
-                      ? "と"
-                      : "歩"
-                    : ""}
+                  {piece && piece.type === "fuhyou" ? (piece.isPromoted ? "と" : "歩") : ""}
                 </div>
               );
             })
