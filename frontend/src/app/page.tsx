@@ -109,7 +109,6 @@ export default function Home() {
       return movablePositions;
     }
     const [row, col] = position;
-    // console.log("po", position);
 
     if (type === "fuhyou") {
       if (owner === "player") {
@@ -194,7 +193,9 @@ export default function Home() {
 
     // 成れるかどうか
     const isEnableToPromote =
-      !selectedPiece.isPromoted && isPromotionZone(selectedPiece.owner, row);
+      !selectedPiece.isPromoted &&
+      "position" in selectedPiece &&
+      isPromotionZone(selectedPiece.owner, row);
     // 成るかどうか
     const shouldPromote = isEnableToPromote && window.confirm("成りますか？");
 
@@ -221,6 +222,7 @@ export default function Home() {
         {/* TODO:と金の動ける場所を正しくする */}
         {/* TODO:選択中に他のコマを選択しても動かせないので対応 */}
         {/* TODO:二歩できなくする */}
+        {/* TODO:後手が持ち駒から歩を打つ時、９行目が打てる場所に表示されてしまうので対処 */}
 
         <button onClick={reset}>平手配置</button>
         <div
