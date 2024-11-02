@@ -10,6 +10,7 @@ type Piece = {
   isPromoted: boolean;
 };
 
+// TODO:右上から数えたい（できなそうだが）今は左が0番目に成ってる
 const initialPieces: Piece[] = [
   { type: "fuhyou", position: [6, 0], owner: "player", isPromoted: false },
   { type: "fuhyou", position: [6, 1], owner: "player", isPromoted: false },
@@ -32,6 +33,7 @@ const initialPieces: Piece[] = [
   { type: "fuhyou", position: [2, 8], owner: "opponent", isPromoted: false },
 ];
 
+// TODO:Pieceと分ける必要あるのか確認
 type CapturedPiece = {
   type: string;
   owner: "player" | "opponent";
@@ -55,6 +57,30 @@ export default function Home() {
     targetCol: number
   ) => {
     const { owner, position, type } = selectedPiece;
+
+    if (!position) {
+      setPieces((prevPieces) => [
+        ...prevPieces,
+        {
+          ...selectedPiece,
+          position: [targetRow, targetCol],
+          isPromoted: false,
+        },
+      ]);
+
+      setSelectedPiece(null);
+      if (selectedPiece.owner === "player") {
+        setCapturedPlayerPieces((prev) =>
+          prev.filter((p) => p != selectedPiece)
+        );
+      } else {
+        setCapturedOpponentPieces((prev) =>
+          prev.filter((p) => p != selectedPiece)
+        );
+      }
+      return true;
+    }
+
     const [row, col] = position;
 
     if (type === "fuhyou") {
@@ -65,11 +91,26 @@ export default function Home() {
     }
   };
 
+  // TODO:canMoveToと被ってるので直す（以下でcanMoveTo読めばいいだけかも
   const getMovablePositions = (piece: Piece | null): [number, number][] => {
     if (!piece) return [];
 
     const { type, position, owner } = piece;
+    if (!position) {
+      const movablePositions = Array.from({ length: 8 }, (_, row) => row + 1) // 1行目から8行目
+        .flatMap((row) =>
+          Array.from({ length: 9 }, (_, col) => [row, col] as [number, number])
+        )
+        .filter(
+          ([row, col]) =>
+            !pieces.some((p) => p.position[0] === row && p.position[1] === col)
+        );
+
+      return movablePositions;
+    }
     const [row, col] = position;
+    // console.log("po", position);
+
     if (type === "fuhyou") {
       if (owner === "player") {
         return [[row - 1, col]];
@@ -79,10 +120,6 @@ export default function Home() {
 
     return [];
   };
-
-  const movablePositions = selectedPiece
-    ? getMovablePositions(selectedPiece)
-    : [];
 
   const reset = () => {
     setPieces(initialPieces);
@@ -112,33 +149,31 @@ export default function Home() {
   };
 
   const capturePiece = (selectedPiece: Piece, pieceAtDestination: Piece) => {
-        // 相手の駒がいる場合は取る
+    // 相手の駒がいる場合は取る
     setPieces((prevPieces) =>
       prevPieces.filter((p) => p !== pieceAtDestination)
     );
 
-        // 駒台に追加
+    // 駒台に追加
     addPieceToStand(selectedPiece, pieceAtDestination);
   };
 
   const movePiece = (row: number, col: number, shouldPromote: boolean) => {
-        setPieces((prevPieces) =>
-          prevPieces.map((piece) =>
-            piece === selectedPiece
-              ? {
-                  ...piece,
-                  position: [row, col],
-                  isPromoted: piece.isPromoted || shouldPromote,
-                }
-              : piece
-          )
-        );
+    setPieces((prevPieces) =>
+      prevPieces.map((piece) =>
+        piece === selectedPiece
+          ? {
+              ...piece,
+              position: [row, col],
+              isPromoted: piece.isPromoted || shouldPromote,
+            }
+          : piece
+      )
+    );
 
-        setSelectedPiece(null);
+    setSelectedPiece(null);
   };
 
-  // TODO:関数に切り出す
-  // TODO:if減らす
   const handleCellClick = (row: number, col: number) => {
     // 移動先のマスにある駒
     const pieceAtDestination = pieces.find(
@@ -168,17 +203,24 @@ export default function Home() {
       movePiece(row, col, shouldPromote);
     }
   };
+
+  const handleCapturedPieceClick = (piece: Piece) => {
+    setSelectedPiece(piece);
   };
 
   return (
     <div className="grid items-center justify-items-center">
       <main>
-        <CapturedPieces pieces={capturedOpponentPieces} />
+        <CapturedPieces
+          pieces={capturedOpponentPieces}
+          handleCapturedPieceClick={handleCapturedPieceClick}
+        />
         {/* TODO:一手戻すボタン用意 */}
         {/* TODO:一手進めるボタン用意 */}
         {/* TODO:駒台の駒を打てるようにする */}
         {/* TODO:と金の動ける場所を正しくする */}
         {/* TODO:選択中に他のコマを選択しても動かせないので対応 */}
+        {/* TODO:二歩できなくする */}
 
         <button onClick={reset}>平手配置</button>
         <div
@@ -194,6 +236,9 @@ export default function Home() {
                 (p) => p.position[0] === rowIndex && p.position[1] === colIndex
               );
 
+              const movablePositions = selectedPiece
+                ? getMovablePositions(selectedPiece)
+                : [];
               const isMovablePosition = movablePositions.some(
                 (pos) => pos[0] === rowIndex && pos[1] === colIndex
               );
@@ -215,6 +260,7 @@ export default function Home() {
                     backgroundColor: isMovablePosition
                       ? "#A3D2CA" // 移動可能位置の色
                       : selectedPiece &&
+                        selectedPiece.position &&
                         selectedPiece.position[0] === rowIndex &&
                         selectedPiece.position[1] === colIndex
                       ? "#FFD700" // 選択中の駒の色
@@ -231,7 +277,10 @@ export default function Home() {
             })
           )}
         </div>
-        <CapturedPieces pieces={capturedPlayerPieces} />
+        <CapturedPieces
+          pieces={capturedPlayerPieces}
+          handleCapturedPieceClick={handleCapturedPieceClick}
+        />
       </main>
     </div>
   );

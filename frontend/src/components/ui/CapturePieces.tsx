@@ -3,7 +3,13 @@ type CapturedPiece = {
   owner: "player" | "opponent";
 };
 
-const CapturedPieces = ({ pieces }: { pieces: CapturedPiece[] }) => {
+const CapturedPieces = ({
+  pieces,
+  handleCapturedPieceClick,
+}: {
+  pieces: CapturedPiece[];
+  handleCapturedPieceClick: (piece: CapturedPiece) => void;
+}) => {
   return (
     <div
       style={{
@@ -19,6 +25,7 @@ const CapturedPieces = ({ pieces }: { pieces: CapturedPiece[] }) => {
           style={{
             transform: piece.owner === "opponent" ? "rotate(180deg)" : "none",
           }}
+          onClick={() => handleCapturedPieceClick(piece)}
         >
           {piece.type === "fuhyou" ? "歩" : ""}
         </div>
