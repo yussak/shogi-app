@@ -42,20 +42,27 @@ export default function Home() {
     targetRow: number,
     targetCol: number
   ) => {
-    return (
-      selectedPiece.type === "fuhyou" &&
-      selectedPiece.position[0] - 1 === targetRow &&
-      selectedPiece.position[1] === targetCol
-    );
+    const { owner, position, type } = selectedPiece;
+    const [row, col] = position;
+
+    if (type === "fuhyou") {
+      if (owner === "player") {
+        return row - 1 === targetRow && col === targetCol;
+      }
+      return row + 1 === targetRow && col === targetCol;
+    }
   };
 
   const getMovablePositions = (piece: Piece | null): [number, number][] => {
     if (!piece) return [];
 
-    const { type, position } = piece;
+    const { type, position, owner } = piece;
     const [row, col] = position;
     if (type === "fuhyou") {
-      return [[row - 1, col]];
+      if (owner === "player") {
+        return [[row - 1, col]];
+      }
+      return [[row + 1, col]];
     }
 
     return [];
@@ -94,6 +101,8 @@ export default function Home() {
     <div className="grid items-center justify-items-center">
       <main>
         {/* TODO：駒台用意 */}
+        {/* TODO:一手戻すボタン用意 */}
+        {/* TODO:一手進めるボタン用意 */}
         <button onClick={reset}>平手配置</button>
         <div
           style={{
