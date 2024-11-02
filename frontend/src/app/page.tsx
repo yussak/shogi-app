@@ -74,11 +74,16 @@ export default function Home() {
     }
   };
 
+  const reset = () => {
+    setPieces(initialPieces);
+    setSelectedPiece(null);
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        {/* TODO:初期に戻すボタンおく */}
+    <div className="grid items-center justify-items-center">
+      <main>
         {/* TODO：駒台用意 */}
+        <button onClick={reset}>平手配置</button>
         <div
           style={{
             display: "grid",
