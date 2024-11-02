@@ -10,6 +10,9 @@ type Piece = {
   isPromoted: boolean;
 };
 
+const PLAYER = "player";
+const OPPONENT = "opponent";
+
 // TODO:右上から数えたい（できなそうだが）今は左が0番目に成ってる
 const initialPieces: Piece[] = [
   { type: "fuhyou", position: [6, 0], owner: "player", isPromoted: false },
@@ -42,12 +45,8 @@ type CapturedPiece = {
 export default function Home() {
   const [pieces, setPieces] = useState<Piece[]>(initialPieces);
   const [selectedPiece, setSelectedPiece] = useState<Piece | null>(null);
-  const [capturedPlayerPieces, setCapturedPlayerPieces] = useState<
-    CapturedPiece[]
-  >([]);
-  const [capturedOpponentPieces, setCapturedOpponentPieces] = useState<
-    CapturedPiece[]
-  >([]);
+  const [capturedPieces, setCapturedPieces] = useState<CapturedPiece[]>([]);
+
   const rows = Array.from({ length: 9 });
   const columns = Array.from({ length: 9 });
 
@@ -139,21 +138,13 @@ export default function Home() {
   const reset = () => {
     setPieces(initialPieces);
     setSelectedPiece(null);
-    setCapturedPlayerPieces([]);
-    setCapturedOpponentPieces([]);
+    setCapturedPieces([]);
   };
 
   const addPieceToStand = (selectedPiece: Piece, pieceAtDestination: Piece) => {
-    if (selectedPiece.owner === "player") {
-      setCapturedPlayerPieces((prev) => [
-        ...prev,
-        { type: pieceAtDestination.type, owner: "player" },
-      ]);
-      return;
-    }
-    setCapturedOpponentPieces((prev) => [
+    setCapturedPieces((prev) => [
       ...prev,
-      { type: pieceAtDestination.type, owner: "opponent" },
+      { type: pieceAtDestination.type, owner: selectedPiece.owner },
     ]);
   };
 
@@ -228,15 +219,7 @@ export default function Home() {
         ]);
 
         setSelectedPiece(null);
-        if (selectedPiece.owner === "player") {
-          setCapturedPlayerPieces((prev) =>
-            prev.filter((p) => p != selectedPiece)
-          );
-        } else {
-          setCapturedOpponentPieces((prev) =>
-            prev.filter((p) => p != selectedPiece)
-          );
-        }
+        setCapturedPieces((prev) => prev.filter((p) => p != selectedPiece));
       }
       movePiece(row, col, shouldPromote);
     }
@@ -250,7 +233,7 @@ export default function Home() {
     <div className="grid items-center justify-items-center">
       <main>
         <CapturedPieces
-          pieces={capturedOpponentPieces}
+          pieces={capturedPieces.filter((piece) => piece.owner === "opponent")}
           handleCapturedPieceClick={handleCapturedPieceClick}
         />
         {/* TODO:一手戻すボタン用意 */}
@@ -316,7 +299,7 @@ export default function Home() {
           )}
         </div>
         <CapturedPieces
-          pieces={capturedPlayerPieces}
+          pieces={capturedPieces.filter((piece) => piece.owner === "player")}
           handleCapturedPieceClick={handleCapturedPieceClick}
         />
       </main>
