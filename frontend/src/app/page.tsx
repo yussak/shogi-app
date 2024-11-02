@@ -6,28 +6,29 @@ type Piece = {
   type: "fuhyou";
   position: [number, number];
   owner: "player" | "opponent";
+  isPromoted: boolean;
 };
 
 const initialPieces: Piece[] = [
-  { type: "fuhyou", position: [6, 0], owner: "player" },
-  { type: "fuhyou", position: [6, 1], owner: "player" },
-  { type: "fuhyou", position: [6, 2], owner: "player" },
-  { type: "fuhyou", position: [6, 3], owner: "player" },
-  { type: "fuhyou", position: [6, 4], owner: "player" },
-  { type: "fuhyou", position: [6, 5], owner: "player" },
-  { type: "fuhyou", position: [6, 6], owner: "player" },
-  { type: "fuhyou", position: [6, 7], owner: "player" },
-  { type: "fuhyou", position: [6, 8], owner: "player" },
+  { type: "fuhyou", position: [6, 0], owner: "player", isPromoted: false },
+  { type: "fuhyou", position: [6, 1], owner: "player", isPromoted: false },
+  { type: "fuhyou", position: [6, 2], owner: "player", isPromoted: false },
+  { type: "fuhyou", position: [6, 3], owner: "player", isPromoted: false },
+  { type: "fuhyou", position: [6, 4], owner: "player", isPromoted: false },
+  { type: "fuhyou", position: [6, 5], owner: "player", isPromoted: false },
+  { type: "fuhyou", position: [6, 6], owner: "player", isPromoted: false },
+  { type: "fuhyou", position: [6, 7], owner: "player", isPromoted: false },
+  { type: "fuhyou", position: [6, 8], owner: "player", isPromoted: false },
 
-  { type: "fuhyou", position: [2, 0], owner: "opponent" },
-  { type: "fuhyou", position: [2, 1], owner: "opponent" },
-  { type: "fuhyou", position: [2, 2], owner: "opponent" },
-  { type: "fuhyou", position: [2, 3], owner: "opponent" },
-  { type: "fuhyou", position: [2, 4], owner: "opponent" },
-  { type: "fuhyou", position: [2, 5], owner: "opponent" },
-  { type: "fuhyou", position: [2, 6], owner: "opponent" },
-  { type: "fuhyou", position: [2, 7], owner: "opponent" },
-  { type: "fuhyou", position: [2, 8], owner: "opponent" },
+  { type: "fuhyou", position: [2, 0], owner: "opponent", isPromoted: false },
+  { type: "fuhyou", position: [2, 1], owner: "opponent", isPromoted: false },
+  { type: "fuhyou", position: [2, 2], owner: "opponent", isPromoted: false },
+  { type: "fuhyou", position: [2, 3], owner: "opponent", isPromoted: false },
+  { type: "fuhyou", position: [2, 4], owner: "opponent", isPromoted: false },
+  { type: "fuhyou", position: [2, 5], owner: "opponent", isPromoted: false },
+  { type: "fuhyou", position: [2, 6], owner: "opponent", isPromoted: false },
+  { type: "fuhyou", position: [2, 7], owner: "opponent", isPromoted: false },
+  { type: "fuhyou", position: [2, 8], owner: "opponent", isPromoted: false },
 ];
 
 type CapturedPiece = {
@@ -137,11 +138,23 @@ export default function Home() {
         }
       }
 
+      const isPromotionZone =
+        (selectedPiece.owner === "player" && row <= 2) ||
+        (selectedPiece.owner === "opponent" && row >= 6);
+
+      const shouldPromote = isPromotionZone && window.confirm("成りますか？");
+
       // 駒を移動
       if (canMoveTo(selectedPiece, row, col)) {
         setPieces((prevPieces) =>
           prevPieces.map((piece) =>
-            piece === selectedPiece ? { ...piece, position: [row, col] } : piece
+            piece === selectedPiece
+              ? {
+                  ...piece,
+                  position: [row, col],
+                  isPromoted: piece.isPromoted || shouldPromote,
+                }
+              : piece
           )
         );
 
@@ -164,7 +177,6 @@ export default function Home() {
         {/* TODO:一手戻すボタン用意 */}
         {/* TODO:一手進めるボタン用意 */}
         {/* TODO:駒台の駒を打てるようにする */}
-        {/* TODO:成れるようにする */}
 
         <button onClick={reset}>平手配置</button>
         <div
@@ -207,7 +219,11 @@ export default function Home() {
                       : "#F0D9B5",
                   }}
                 >
-                  {piece && piece.type === "fuhyou" ? "歩" : ""}
+                  {piece && piece.type === "fuhyou"
+                    ? piece.isPromoted
+                      ? "と"
+                      : "歩"
+                    : ""}
                 </div>
               );
             })
