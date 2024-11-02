@@ -15,25 +15,25 @@ const OPPONENT = "opponent";
 
 // TODO:右上から数えたい（できなそうだが）今は左が0番目に成ってる
 const initialPieces: Piece[] = [
-  { type: "fuhyou", position: [6, 0], owner: "player", isPromoted: false },
-  { type: "fuhyou", position: [6, 1], owner: "player", isPromoted: false },
-  { type: "fuhyou", position: [6, 2], owner: "player", isPromoted: false },
-  { type: "fuhyou", position: [6, 3], owner: "player", isPromoted: false },
-  { type: "fuhyou", position: [6, 4], owner: "player", isPromoted: false },
-  { type: "fuhyou", position: [6, 5], owner: "player", isPromoted: false },
-  { type: "fuhyou", position: [6, 6], owner: "player", isPromoted: false },
-  { type: "fuhyou", position: [6, 7], owner: "player", isPromoted: false },
-  { type: "fuhyou", position: [6, 8], owner: "player", isPromoted: false },
+  { type: "fuhyou", position: [6, 0], owner: PLAYER, isPromoted: false },
+  { type: "fuhyou", position: [6, 1], owner: PLAYER, isPromoted: false },
+  { type: "fuhyou", position: [6, 2], owner: PLAYER, isPromoted: false },
+  { type: "fuhyou", position: [6, 3], owner: PLAYER, isPromoted: false },
+  { type: "fuhyou", position: [6, 4], owner: PLAYER, isPromoted: false },
+  { type: "fuhyou", position: [6, 5], owner: PLAYER, isPromoted: false },
+  { type: "fuhyou", position: [6, 6], owner: PLAYER, isPromoted: false },
+  { type: "fuhyou", position: [6, 7], owner: PLAYER, isPromoted: false },
+  { type: "fuhyou", position: [6, 8], owner: PLAYER, isPromoted: false },
 
-  { type: "fuhyou", position: [2, 0], owner: "opponent", isPromoted: false },
-  { type: "fuhyou", position: [2, 1], owner: "opponent", isPromoted: false },
-  { type: "fuhyou", position: [2, 2], owner: "opponent", isPromoted: false },
-  { type: "fuhyou", position: [2, 3], owner: "opponent", isPromoted: false },
-  { type: "fuhyou", position: [2, 4], owner: "opponent", isPromoted: false },
-  { type: "fuhyou", position: [2, 5], owner: "opponent", isPromoted: false },
-  { type: "fuhyou", position: [2, 6], owner: "opponent", isPromoted: false },
-  { type: "fuhyou", position: [2, 7], owner: "opponent", isPromoted: false },
-  { type: "fuhyou", position: [2, 8], owner: "opponent", isPromoted: false },
+  { type: "fuhyou", position: [2, 0], owner: OPPONENT, isPromoted: false },
+  { type: "fuhyou", position: [2, 1], owner: OPPONENT, isPromoted: false },
+  { type: "fuhyou", position: [2, 2], owner: OPPONENT, isPromoted: false },
+  { type: "fuhyou", position: [2, 3], owner: OPPONENT, isPromoted: false },
+  { type: "fuhyou", position: [2, 4], owner: OPPONENT, isPromoted: false },
+  { type: "fuhyou", position: [2, 5], owner: OPPONENT, isPromoted: false },
+  { type: "fuhyou", position: [2, 6], owner: OPPONENT, isPromoted: false },
+  { type: "fuhyou", position: [2, 7], owner: OPPONENT, isPromoted: false },
+  { type: "fuhyou", position: [2, 8], owner: OPPONENT, isPromoted: false },
 ];
 
 // TODO:Pieceと分ける必要あるのか確認
@@ -58,7 +58,7 @@ export default function Home() {
     const { owner, position, type } = selectedPiece;
 
     if (!position) {
-      if (owner === "player") {
+      if (owner === PLAYER) {
         return (
           targetRow > 0 &&
           !pieces.some(
@@ -77,7 +77,7 @@ export default function Home() {
     const [row, col] = position;
 
     if (type === "fuhyou") {
-      if (owner === "player") {
+      if (owner === PLAYER) {
         return row - 1 === targetRow && col === targetCol;
       }
       return row + 1 === targetRow && col === targetCol;
@@ -91,7 +91,7 @@ export default function Home() {
     const { type, position, owner } = piece;
     if (!position) {
       let movablePositions;
-      if (owner === "player") {
+      if (owner === PLAYER) {
         movablePositions = Array.from({ length: 8 }, (_, row) => row + 1) // 1行目から8行目
           .flatMap((row) =>
             Array.from(
@@ -126,7 +126,7 @@ export default function Home() {
     const [row, col] = position;
 
     if (type === "fuhyou") {
-      if (owner === "player") {
+      if (owner === PLAYER) {
         return [[row - 1, col]];
       }
       return [[row + 1, col]];
@@ -149,9 +149,7 @@ export default function Home() {
   };
 
   const isPromotionZone = (owner: string, row: number) => {
-    return (
-      (owner === "player" && row <= 2) || (owner === "opponent" && row >= 6)
-    );
+    return (owner === PLAYER && row <= 2) || (owner === OPPONENT && row >= 6);
   };
 
   const capturePiece = (selectedPiece: Piece, pieceAtDestination: Piece) => {
@@ -233,7 +231,7 @@ export default function Home() {
     <div className="grid items-center justify-items-center">
       <main>
         <CapturedPieces
-          pieces={capturedPieces.filter((piece) => piece.owner === "opponent")}
+          pieces={capturedPieces.filter((piece) => piece.owner === OPPONENT)}
           handleCapturedPieceClick={handleCapturedPieceClick}
         />
         {/* TODO:一手戻すボタン用意 */}
@@ -277,7 +275,7 @@ export default function Home() {
                     justifyContent: "center",
                     // 相手の駒の場合逆さまにする
                     transform:
-                      piece?.owner === "opponent" ? "rotate(180deg)" : "none",
+                      piece?.owner === OPPONENT ? "rotate(180deg)" : "none",
                     backgroundColor: isMovablePosition
                       ? "#A3D2CA" // 移動可能位置の色
                       : selectedPiece &&
@@ -299,7 +297,7 @@ export default function Home() {
           )}
         </div>
         <CapturedPieces
-          pieces={capturedPieces.filter((piece) => piece.owner === "player")}
+          pieces={capturedPieces.filter((piece) => piece.owner === PLAYER)}
           handleCapturedPieceClick={handleCapturedPieceClick}
         />
       </main>
