@@ -30,10 +30,20 @@ const initialPieces: Piece[] = [
   { type: "fuhyou", position: [2, 8], owner: "opponent" },
 ];
 
+type CapturedPiece = {
+  type: string;
+  owner: "player" | "opponent";
+};
+
 export default function Home() {
   const [pieces, setPieces] = useState<Piece[]>(initialPieces);
   const [selectedPiece, setSelectedPiece] = useState<Piece | null>(null);
-
+  const [capturedPlayerPieces, setCapturedPlayerPieces] = useState<
+    CapturedPiece[]
+  >([]);
+  const [capturedOpponentPieces, setCapturedOpponentPieces] = useState<
+    CapturedPiece[]
+  >([]);
   const rows = Array.from({ length: 9 });
   const columns = Array.from({ length: 9 });
 
@@ -72,16 +82,69 @@ export default function Home() {
     ? getMovablePositions(selectedPiece)
     : [];
 
+  const reset = () => {
+    setPieces(initialPieces);
+    setSelectedPiece(null);
+  };
+
+  const CapturedPieces = ({ pieces }: { pieces: CapturedPiece[] }) => {
+    return (
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          padding: "10px",
+          border: "1px solid black",
+        }}
+      >
+        {pieces.map((piece, index) => (
+          <div
+            key={index}
+            style={{
+              transform: piece.owner === "opponent" ? "rotate(180deg)" : "none",
+            }}
+          >
+            {piece.type === "fuhyou" ? "歩" : ""}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   const handleCellClick = (row: number, col: number) => {
     if (selectedPiece) {
+      const targetPiece = pieces.find(
+        (p) => p.position[0] === row && p.position[1] === col
+      );
+
+      if (targetPiece && targetPiece.owner !== selectedPiece.owner) {
+        // 相手の駒がいる場合は取る
+        setPieces((prevPieces) => prevPieces.filter((p) => p !== targetPiece));
+
+        // 駒台に追加
+        if (selectedPiece.owner === "player") {
+          setCapturedPlayerPieces((prev) => [
+            ...prev,
+            { type: targetPiece.type, owner: "player" },
+          ]);
+        } else {
+          setCapturedOpponentPieces((prev) => [
+            ...prev,
+            { type: targetPiece.type, owner: "opponent" },
+          ]);
+        }
+      }
+
+      // 駒を移動
       if (canMoveTo(selectedPiece, row, col)) {
         setPieces((prevPieces) =>
           prevPieces.map((piece) =>
             piece === selectedPiece ? { ...piece, position: [row, col] } : piece
           )
         );
+
+        setSelectedPiece(null);
       }
-      setSelectedPiece(null);
     } else {
       const piece = pieces.find(
         (p) => p.position[0] === row && p.position[1] === col
@@ -92,17 +155,15 @@ export default function Home() {
     }
   };
 
-  const reset = () => {
-    setPieces(initialPieces);
-    setSelectedPiece(null);
-  };
-
   return (
     <div className="grid items-center justify-items-center">
       <main>
-        {/* TODO：駒台用意 */}
+        <CapturedPieces pieces={capturedOpponentPieces} />
         {/* TODO:一手戻すボタン用意 */}
         {/* TODO:一手進めるボタン用意 */}
+        {/* TODO:駒台の駒を打てるようにする */}
+        {/* TODO:成れるようにする */}
+
         <button onClick={reset}>平手配置</button>
         <div
           style={{
@@ -150,6 +211,7 @@ export default function Home() {
             })
           )}
         </div>
+        <CapturedPieces pieces={capturedPlayerPieces} />
       </main>
     </div>
   );
