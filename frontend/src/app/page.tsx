@@ -6,12 +6,14 @@ import { useState } from "react";
 type Piece = {
   type: "fuhyou";
   position: [number, number];
-  owner: "player" | "opponent";
+  owner: owner;
   isPromoted: boolean;
 };
 
 const PLAYER = "player";
 const OPPONENT = "opponent";
+
+type owner = "player" | "opponent";
 
 // TODO:右上から数えたい（できなそうだが）今は左が0番目に成ってる
 const initialPieces: Piece[] = [
@@ -39,7 +41,7 @@ const initialPieces: Piece[] = [
 // TODO:Pieceと分ける必要あるのか確認
 type CapturedPiece = {
   type: string;
-  owner: "player" | "opponent";
+  owner: owner;
 };
 
 export default function Home() {
@@ -54,7 +56,7 @@ export default function Home() {
   const canMoveTo = (selectedPiece: Piece, targetRow: number, targetCol: number) => {
     const { owner, position, type } = selectedPiece;
 
-    if (!position) {
+    if (position == null) {
       const isFuhyoInColumn = pieces.some(
         (p) => p.type === "fuhyou" && p.position[1] === targetCol && !p.isPromoted && p.owner === owner
       );
@@ -81,33 +83,33 @@ export default function Home() {
     }
   };
 
+  const generateRows = (owner: owner) => {
+    // 1~8行目か0~7行目
+    return owner === PLAYER
+      ? Array.from({ length: 8 }, (_, row) => row + 1)
+      : Array.from({ length: 8 }, (_, row) => row);
+  };
+
+  const generatePositions = (rows: number[]) => {
+    return rows.flatMap((row) => Array.from({ length: 9 }, (_, col) => [row, col] as [number, number]));
+  };
+
+  const isPositionAvailable = (row: number, col: number, owner: owner) => {
+    return (
+      !pieces.some((p) => p.position[0] === row && p.position[1] === col) && // そのマスに駒がない
+      !pieces.some((p) => p.type === "fuhyou" && !p.isPromoted && p.position[1] === col && p.owner === owner)
+    ); // 同じ列に歩がない
+  };
+
   // 移動可能な場所を表示するべき
-  const getMovablePositions = (piece: Piece | null): [number, number][] => {
-    if (!piece) return [];
-
+  const getavailablePositions = (piece: Piece): [number, number][] => {
     const { type, position, owner } = piece;
-    if (!position) {
-      let movablePositions;
-      if (owner === PLAYER) {
-        movablePositions = Array.from({ length: 8 }, (_, row) => row + 1) // 1行目から8行目
-          .flatMap((row) => Array.from({ length: 9 }, (_, col) => [row, col] as [number, number]))
-          .filter(
-            ([row, col]) =>
-              !pieces.some((p) => p.position[0] === row && p.position[1] === col) && // そのマスに駒がない
-              !pieces.some((p) => p.type === "fuhyou" && !p.isPromoted && p.position[1] === col && p.owner === owner) // 同じ列に歩がない
-          );
-      } else {
-        movablePositions = Array.from({ length: 8 }, (_, row) => row) // 0行目から7行目
-          .flatMap((row) => Array.from({ length: 9 }, (_, col) => [row, col] as [number, number]))
-          .filter(
-            ([row, col]) =>
-              !pieces.some((p) => p.position[0] === row && p.position[1] === col) && // そのマスに駒がない
-              !pieces.some((p) => p.type === "fuhyou" && !p.isPromoted && p.position[1] === col && p.owner === owner) // 同じ列に歩がない
-          );
-      }
 
-      return movablePositions;
+    if (position == null) {
+      const rows = generateRows(owner);
+      return generatePositions(rows).filter(([row, col]) => isPositionAvailable(row, col, owner));
     }
+
     const [row, col] = position;
 
     if (type === "fuhyou") {
@@ -226,7 +228,7 @@ export default function Home() {
               // マスに駒があるかを確認
               const piece = pieces.find((p) => p.position[0] === rowIndex && p.position[1] === colIndex);
 
-              const movablePositions = selectedPiece ? getMovablePositions(selectedPiece) : [];
+              const movablePositions = selectedPiece ? getavailablePositions(selectedPiece) : [];
               const isMovablePosition = movablePositions.some((pos) => pos[0] === rowIndex && pos[1] === colIndex);
 
               return (
