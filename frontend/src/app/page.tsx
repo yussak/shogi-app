@@ -1,19 +1,10 @@
 "use client";
 
+import Board from "@/components/ui/Board";
 import CapturedPieces from "@/components/ui/CapturePieces";
+import { OPPONENT, PLAYER } from "@/consts";
+import { CapturedPiece, owner, Piece } from "@/types";
 import { useState } from "react";
-
-type Piece = {
-  type: "fuhyou";
-  position: [number, number];
-  owner: owner;
-  isPromoted: boolean;
-};
-
-const PLAYER = "player";
-const OPPONENT = "opponent";
-
-type owner = "player" | "opponent";
 
 // TODO:右上から数えたい（できなそうだが）今は左が0番目に成ってる
 const initialPieces: Piece[] = [
@@ -37,12 +28,6 @@ const initialPieces: Piece[] = [
   { type: "fuhyou", position: [2, 7], owner: OPPONENT, isPromoted: false },
   { type: "fuhyou", position: [2, 8], owner: OPPONENT, isPromoted: false },
 ];
-
-// TODO:Pieceと分ける必要あるのか確認
-type CapturedPiece = {
-  type: string;
-  owner: owner;
-};
 
 export default function Home() {
   const [pieces, setPieces] = useState<Piece[]>(initialPieces);
@@ -204,7 +189,6 @@ export default function Home() {
   };
 
   const handleCapturedPieceClick = (piece: CapturedPiece) => {
-    // const handleCapturedPieceClick = (piece: Piece) => {
     setSelectedPiece(piece);
   };
 
@@ -235,33 +219,19 @@ export default function Home() {
               const piece = pieces.find((p) => p.position[0] === rowIndex && p.position[1] === colIndex);
 
               const movablePositions = selectedPiece ? getavailablePositions(selectedPiece) : [];
-              const isMovablePosition = movablePositions.some((pos) => pos[0] === rowIndex && pos[1] === colIndex);
+              const isavailablePosition = movablePositions.some(
+                (position) => position[0] === rowIndex && position[1] === colIndex
+              );
 
               return (
-                <div
-                  key={`${rowIndex}-${colIndex}`}
-                  onClick={() => handleCellClick(rowIndex, colIndex)}
-                  style={{
-                    width: "70px",
-                    height: "70px",
-                    border: "1px solid black",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    // 相手の駒の場合逆さまにする
-                    transform: piece?.owner === OPPONENT ? "rotate(180deg)" : "none",
-                    backgroundColor: isMovablePosition
-                      ? "#A3D2CA" // 移動可能位置の色
-                      : selectedPiece &&
-                        selectedPiece.position &&
-                        selectedPiece.position[0] === rowIndex &&
-                        selectedPiece.position[1] === colIndex
-                      ? "#FFD700" // 選択中の駒の色
-                      : "#F0D9B5",
-                  }}
-                >
-                  {piece && piece.type === "fuhyou" ? (piece.isPromoted ? "と" : "歩") : ""}
-                </div>
+                <Board
+                  rowIndex={rowIndex}
+                  colIndex={colIndex}
+                  piece={piece}
+                  isavailablePosition={isavailablePosition}
+                  selectedPiece={selectedPiece}
+                  handleCellClick={handleCellClick}
+                />
               );
             })
           )}
