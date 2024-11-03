@@ -1,3 +1,4 @@
+import { OPPONENT } from "@/consts";
 import { Piece } from "@/types";
 
 type Props = {
