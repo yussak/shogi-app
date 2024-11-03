@@ -198,7 +198,8 @@ export default function Home() {
     }
   };
 
-  const handleCapturedPieceClick = (piece: Piece) => {
+  const handleCapturedPieceClick = (piece: CapturedPiece) => {
+    // const handleCapturedPieceClick = (piece: Piece) => {
     setSelectedPiece(piece);
   };
 
