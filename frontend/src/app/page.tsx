@@ -52,25 +52,30 @@ export default function Home() {
   const rows = Array.from({ length: 9 });
   const columns = Array.from({ length: 9 });
 
+  const getAvailablePositionsOfCapturedPiece = (owner: owner, targetRow: number, targetCol: number) => {
+    const isFuhyoInColumn = pieces.some(
+      (p) => p.type === "fuhyou" && p.position[1] === targetCol && !p.isPromoted && p.owner === owner
+    );
+    if (owner === PLAYER) {
+      return (
+        targetRow > 0 &&
+        !pieces.some((p) => p.position[0] === targetRow && p.position[1] === targetCol) &&
+        !isFuhyoInColumn
+      );
+    }
+    return (
+      targetRow < 8 &&
+      !pieces.some((p) => p.position[0] === targetRow && p.position[1] === targetCol && !isFuhyoInColumn)
+    );
+  };
+
   // 駒がある位置に移動可能か判定するべき
   const canMoveTo = (selectedPiece: Piece, targetRow: number, targetCol: number) => {
     const { owner, position, type } = selectedPiece;
 
     if (position == null) {
-      const isFuhyoInColumn = pieces.some(
-        (p) => p.type === "fuhyou" && p.position[1] === targetCol && !p.isPromoted && p.owner === owner
-      );
-      if (owner === PLAYER) {
-        return (
-          targetRow > 0 &&
-          !pieces.some((p) => p.position[0] === targetRow && p.position[1] === targetCol) &&
-          !isFuhyoInColumn
-        );
-      }
-      return (
-        targetRow < 8 &&
-        !pieces.some((p) => p.position[0] === targetRow && p.position[1] === targetCol && !isFuhyoInColumn)
-      );
+      // 駒台から打てる場所を表示
+      return getAvailablePositionsOfCapturedPiece(owner, targetRow, targetCol);
     }
 
     const [row, col] = position;
