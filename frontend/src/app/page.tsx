@@ -1,10 +1,10 @@
 "use client";
 
-import Board from "@/components/ui/Board";
 import CapturedPieces from "@/components/ui/CapturePieces";
 import { OPPONENT, PLAYER } from "@/consts";
 import { CapturedPiece, owner, Piece } from "@/types";
 import { useState } from "react";
+import Board from "@/components/ui/Board";
 
 // TODO:右上から数えたい（できなそうだが）今は左が0番目に成ってる
 const initialPieces: Piece[] = [
@@ -207,35 +207,14 @@ export default function Home() {
         {/* TODO:自分の駒を取れてしまうので修正　例えば33と金34歩33歩とできてしまう */}
 
         <button onClick={reset}>平手配置</button>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(9, 70px)",
-          }}
-        >
-          {rows.map((_, rowIndex) =>
-            columns.map((_, colIndex) => {
-              // マスに駒があるかを確認
-              const piece = pieces.find((p) => p.position[0] === rowIndex && p.position[1] === colIndex);
-
-              const movablePositions = selectedPiece ? getavailablePositions(selectedPiece) : [];
-              const isavailablePosition = movablePositions.some(
-                (position) => position[0] === rowIndex && position[1] === colIndex
-              );
-
-              return (
-                <Board
-                  rowIndex={rowIndex}
-                  colIndex={colIndex}
-                  piece={piece}
-                  isavailablePosition={isavailablePosition}
-                  selectedPiece={selectedPiece}
-                  handleCellClick={handleCellClick}
-                />
-              );
-            })
-          )}
-        </div>
+        <Board
+          rows={rows}
+          columns={columns}
+          pieces={pieces}
+          selectedPiece={selectedPiece}
+          handleCellClick={handleCellClick}
+          getavailablePositions={getavailablePositions}
+        />
         <CapturedPieces
           pieces={capturedPieces.filter((piece) => piece.owner === PLAYER)}
           handleCapturedPieceClick={handleCapturedPieceClick}
