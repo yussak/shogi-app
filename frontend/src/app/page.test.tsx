@@ -36,13 +36,22 @@ describe("先手", () => {
     expect(screen.queryByTestId("piece-6-0")).toBeInTheDocument();
   });
 
-  //   it("盤上の歩がさせる位置が正しい", () => {
-  //     //
-  //   });
+  it("駒を取得したら盤上に追加される", () => {
+    render(<Home />);
+    const initialCapturedPiece = screen.queryByTestId("captured-piece-player");
+    expect(initialCapturedPiece).toBeNull();
 
-  //   it("駒を取得したら盤上に追加される", () => {
-  //     //
-  //   });
+    const playerPiece = screen.getByTestId("piece-6-0");
+    // initialPiecesで2-0の位置はopponentのものになっている
+    const targetCell = screen.getByTestId("cell-2-0");
+
+    fireEvent.click(playerPiece);
+    fireEvent.click(targetCell);
+
+    // 駒台に捕獲された駒が追加されたことを確認
+    const capturedPiece = screen.getByTestId(`captured-piece-player`);
+    expect(capturedPiece).toBeInTheDocument();
+  });
 
   //   it("駒台の歩が打てる位置が正しい", () => {
   //     //

@@ -10,6 +10,7 @@ const CapturedPieces = ({
   pieces: CapturedPiece[];
   handleCapturedPieceClick: (piece: CapturedPiece) => void;
 }) => {
+  console.log("a", pieces);
   return (
     <div
       style={{
@@ -22,6 +23,7 @@ const CapturedPieces = ({
       {pieces.map((piece, index) => (
         <div
           key={index}
+          data-testid={`captured-piece-${piece.owner}`}
           style={{
             transform: piece.owner === "opponent" ? "rotate(180deg)" : "none",
           }}
