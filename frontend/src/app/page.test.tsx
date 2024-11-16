@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import Home from "./page";
 
 describe("先手", () => {
-  it("盤上の歩が1マス上にさせる", async () => {
+  it("盤上の歩が1マス上に指せる", async () => {
     render(<Home />);
 
     // 初期位置に駒があることを確認
@@ -22,6 +22,18 @@ describe("先手", () => {
     // 駒が移動したことを確認
     expect(screen.queryByTestId("piece-6-0")).not.toBeInTheDocument();
     expect(screen.getByTestId("piece-5-0")).toBeInTheDocument();
+  });
+
+  it("盤上の歩が1マス以外に指そうとしたら移動できない", async () => {
+    render(<Home />);
+
+    const initialPiece = screen.getByTestId("piece-6-0");
+    const targetCell = screen.getByTestId("cell-4-0");
+
+    fireEvent.click(initialPiece);
+    fireEvent.click(targetCell);
+
+    expect(screen.queryByTestId("piece-6-0")).toBeInTheDocument();
   });
 
   //   it("盤上の歩がさせる位置が正しい", () => {
