@@ -167,8 +167,8 @@ export default function Home() {
       }
       // すでに駒台に置かれている駒を移動させる
       moveExistingPiece(selectedPiece, row, col, shouldPromote);
-      setSelectedPiece(null);
     }
+    setSelectedPiece(null);
   };
 
   const handleCapturedPieceClick = (piece: CapturedPiece) => {
