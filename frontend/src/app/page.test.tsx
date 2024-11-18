@@ -119,16 +119,37 @@ describe("先手", () => {
     expect(promotedPiece.textContent).toBe("と");
   });
 
-  //   it("駒台の歩が打てる位置が正しい", () => {
-  //     //
-  //   });
+  it("駒台の歩が打てる", () => {
+    render(<Home />);
+
+    // １マスずつ移動させる
+    fireEvent.click(screen.getByTestId("piece-6-0"));
+    fireEvent.click(screen.getByTestId("cell-5-0"));
+
+    fireEvent.click(screen.getByTestId("piece-5-0"));
+    fireEvent.click(screen.getByTestId("cell-4-0"));
+
+    fireEvent.click(screen.getByTestId("piece-4-0"));
+    fireEvent.click(screen.getByTestId("cell-3-0"));
+
+    window.confirm = vi.fn(() => true);
+    fireEvent.click(screen.getByTestId("piece-3-0"));
+    fireEvent.click(screen.getByTestId("cell-2-0"));
+
+    // 駒台をクリックして移動
+    fireEvent.click(screen.getByTestId("captured-piece-player"));
+    fireEvent.click(screen.getByTestId("cell-8-0"));
+
+    const movedPiece = screen.getByTestId("piece-8-0");
+    expect(movedPiece).toBeInTheDocument();
+  });
 
   //   it("駒台から歩を打つ時に二歩できない", () => {
   //     //
   //   });
 
   //   it("1マス目に指したら自動で成る", () => {
-  //     //
+  //     // 未実装なので自動では成れない
   //   });
 
   //   it("自分の駒は取れない（多分未実装）", () => {
