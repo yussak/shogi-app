@@ -28,7 +28,7 @@ const CapturedPieces = ({
           }}
           onClick={() => handleCapturedPieceClick(piece)}
         >
-          {piece.type === "fuhyou" ? "歩" : ""}
+          {piece.type === "pawn" ? "歩" : ""}
         </div>
       ))}
     </div>

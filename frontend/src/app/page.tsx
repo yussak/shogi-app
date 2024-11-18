@@ -5,29 +5,7 @@ import { OPPONENT, PLAYER } from "@/consts";
 import { CapturedPiece, owner, Piece } from "@/types";
 import { useState } from "react";
 import Board from "@/components/ui/Board";
-
-// TODO:右上から数えたい（できなそうだが）今は左が0番目に成ってる
-const initialPieces: Piece[] = [
-  { type: "fuhyou", position: [6, 0], owner: PLAYER, isPromoted: false },
-  { type: "fuhyou", position: [6, 1], owner: PLAYER, isPromoted: false },
-  { type: "fuhyou", position: [6, 2], owner: PLAYER, isPromoted: false },
-  { type: "fuhyou", position: [6, 3], owner: PLAYER, isPromoted: false },
-  { type: "fuhyou", position: [6, 4], owner: PLAYER, isPromoted: false },
-  { type: "fuhyou", position: [6, 5], owner: PLAYER, isPromoted: false },
-  { type: "fuhyou", position: [6, 6], owner: PLAYER, isPromoted: false },
-  { type: "fuhyou", position: [6, 7], owner: PLAYER, isPromoted: false },
-  { type: "fuhyou", position: [6, 8], owner: PLAYER, isPromoted: false },
-
-  { type: "fuhyou", position: [2, 0], owner: OPPONENT, isPromoted: false },
-  { type: "fuhyou", position: [2, 1], owner: OPPONENT, isPromoted: false },
-  { type: "fuhyou", position: [2, 2], owner: OPPONENT, isPromoted: false },
-  { type: "fuhyou", position: [2, 3], owner: OPPONENT, isPromoted: false },
-  { type: "fuhyou", position: [2, 4], owner: OPPONENT, isPromoted: false },
-  { type: "fuhyou", position: [2, 5], owner: OPPONENT, isPromoted: false },
-  { type: "fuhyou", position: [2, 6], owner: OPPONENT, isPromoted: false },
-  { type: "fuhyou", position: [2, 7], owner: OPPONENT, isPromoted: false },
-  { type: "fuhyou", position: [2, 8], owner: OPPONENT, isPromoted: false },
-];
+import { initialPieces } from "@/utils";
 
 export default function Home() {
   const [pieces, setPieces] = useState<Piece[]>(initialPieces);
@@ -39,7 +17,7 @@ export default function Home() {
 
   const getAvailablePositionsOfCapturedPiece = (owner: owner, targetRow: number, targetCol: number) => {
     const isFuhyoInColumn = pieces.some(
-      (p) => p.type === "fuhyou" && p.position[1] === targetCol && !p.isPromoted && p.owner === owner
+      (p) => p.type === "pawn" && p.position[1] === targetCol && !p.isPromoted && p.owner === owner
     );
     if (owner === PLAYER) {
       return (
@@ -65,7 +43,7 @@ export default function Home() {
 
     const [row, col] = position;
 
-    if (type === "fuhyou") {
+    if (type === "pawn") {
       if (owner === PLAYER) {
         return row - 1 === targetRow && col === targetCol;
       }
@@ -87,7 +65,7 @@ export default function Home() {
   const isPositionAvailable = (row: number, col: number, owner: owner) => {
     return (
       !pieces.some((p) => p.position[0] === row && p.position[1] === col) && // そのマスに駒がない
-      !pieces.some((p) => p.type === "fuhyou" && !p.isPromoted && p.position[1] === col && p.owner === owner)
+      !pieces.some((p) => p.type === "pawn" && !p.isPromoted && p.position[1] === col && p.owner === owner)
     ); // 同じ列に歩がない
   };
 
@@ -102,7 +80,7 @@ export default function Home() {
 
     const [row, col] = position;
 
-    if (type === "fuhyou") {
+    if (type === "pawn") {
       if (owner === PLAYER) {
         return [[row - 1, col]];
       }

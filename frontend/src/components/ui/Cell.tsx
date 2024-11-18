@@ -40,7 +40,7 @@ const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, h
           // 相手の駒の場合逆さまにする
           style={{ transform: piece.owner === OPPONENT ? "rotate(180deg)" : "none" }}
         >
-          {piece && piece.type === "fuhyou" ? (piece.isPromoted ? "と" : "歩") : ""}
+          {piece && piece.type === "pawn" ? (piece.isPromoted ? "と" : "歩") : ""}
         </div>
       )}
     </div>
