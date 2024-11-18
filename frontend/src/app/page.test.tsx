@@ -87,15 +87,43 @@ describe("先手", () => {
     expect(movedPiece.textContent).toBe("と");
   });
 
+  it("成ったり成らなかったりできる", () => {
+    render(<Home />);
+
+    // １マスずつ移動させる
+    fireEvent.click(screen.getByTestId("piece-6-0"));
+    fireEvent.click(screen.getByTestId("cell-5-0"));
+
+    fireEvent.click(screen.getByTestId("piece-5-0"));
+    fireEvent.click(screen.getByTestId("cell-4-0"));
+
+    fireEvent.click(screen.getByTestId("piece-4-0"));
+    fireEvent.click(screen.getByTestId("cell-3-0"));
+
+    // 成らない
+    window.confirm = vi.fn(() => false);
+    fireEvent.click(screen.getByTestId("piece-3-0"));
+    fireEvent.click(screen.getByTestId("cell-2-0"));
+
+    const movedPiece = screen.getByTestId("piece-2-0");
+    expect(movedPiece.textContent).toBe("歩");
+    expect(movedPiece.textContent).not.toBe("と");
+
+    // 成る
+    window.confirm = vi.fn(() => true);
+    fireEvent.click(screen.getByTestId("piece-2-0"));
+    fireEvent.click(screen.getByTestId("cell-1-0"));
+
+    const promotedPiece = screen.getByTestId("piece-1-0");
+    expect(promotedPiece.textContent).not.toBe("歩");
+    expect(promotedPiece.textContent).toBe("と");
+  });
+
   //   it("駒台の歩が打てる位置が正しい", () => {
   //     //
   //   });
 
   //   it("駒台から歩を打つ時に二歩できない", () => {
-  //     //
-  //   });
-
-  //   it("成らないことも可能", () => {
   //     //
   //   });
 
