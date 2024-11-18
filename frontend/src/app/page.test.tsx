@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import Home from "./page";
 
 describe("先手", () => {
@@ -64,17 +64,27 @@ describe("先手", () => {
     expect(capturedPiece).toBeInTheDocument();
   });
 
+  it("3マスより上にいる時に成れる", () => {
+    render(<Home />);
 
-    const playerPiece = screen.getByTestId("piece-6-0");
-    // initialPiecesで2-0の位置はopponentのものになっている
-    const targetCell = screen.getByTestId("cell-2-0");
+    // １マスずつ移動させる
+    fireEvent.click(screen.getByTestId("piece-6-0"));
+    fireEvent.click(screen.getByTestId("cell-5-0"));
 
-    fireEvent.click(playerPiece);
-    fireEvent.click(targetCell);
+    fireEvent.click(screen.getByTestId("piece-5-0"));
+    fireEvent.click(screen.getByTestId("cell-4-0"));
 
-    // 駒台に捕獲された駒が追加されたことを確認
-    const capturedPiece = screen.getByTestId(`captured-piece-player`);
-    expect(capturedPiece).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("piece-4-0"));
+    fireEvent.click(screen.getByTestId("cell-3-0"));
+
+    // 成るかの確認
+    window.confirm = vi.fn(() => true);
+    fireEvent.click(screen.getByTestId("piece-3-0"));
+    fireEvent.click(screen.getByTestId("cell-2-0"));
+
+    const movedPiece = screen.getByTestId("piece-2-0");
+    expect(movedPiece.textContent).not.toBe("歩");
+    expect(movedPiece.textContent).toBe("と");
   });
 
   //   it("駒台の歩が打てる位置が正しい", () => {
@@ -85,15 +95,15 @@ describe("先手", () => {
   //     //
   //   });
 
-  //   it("3マスより上にいる時に成れる", () => {
-  //     //
-  //   });
-
   //   it("成らないことも可能", () => {
   //     //
   //   });
 
   //   it("1マス目に指したら自動で成る", () => {
+  //     //
+  //   });
+
+  //   it("自分の駒は取れない（多分未実装）", () => {
   //     //
   //   });
 });
