@@ -36,10 +36,34 @@ describe("先手", () => {
     expect(screen.queryByTestId("piece-6-0")).toBeInTheDocument();
   });
 
-  it("駒を取得したら盤上に追加される", () => {
+  it("駒を取得したら盤上に追加される", async () => {
     render(<Home />);
+
+    // 最初に駒台に駒はない
     const initialCapturedPiece = screen.queryByTestId("captured-piece-player");
     expect(initialCapturedPiece).toBeNull();
+
+    // １マスずつ移動させる
+    fireEvent.click(screen.getByTestId("piece-6-0"));
+    fireEvent.click(screen.getByTestId("cell-5-0"));
+
+    fireEvent.click(screen.getByTestId("piece-5-0"));
+    fireEvent.click(screen.getByTestId("cell-4-0"));
+
+    fireEvent.click(screen.getByTestId("piece-4-0"));
+    fireEvent.click(screen.getByTestId("cell-3-0"));
+
+    fireEvent.click(screen.getByTestId("piece-3-0"));
+    fireEvent.click(screen.getByTestId("cell-2-0"));
+
+    const playerPiece = screen.getByTestId("piece-2-0");
+    expect(playerPiece).toBeInTheDocument();
+
+    const capturedPiece = screen.getByTestId("captured-piece-player");
+
+    expect(capturedPiece).toBeInTheDocument();
+  });
+
 
     const playerPiece = screen.getByTestId("piece-6-0");
     // initialPiecesで2-0の位置はopponentのものになっている
