@@ -32,13 +32,10 @@ describe("先手", () => {
   it("盤上の歩が1マス以外に指そうとしたら移動できない", async () => {
     render(<Home />);
 
-    const initialPiece = screen.getByTestId("piece-6-0");
-    const targetCell = screen.getByTestId("cell-4-0");
-
-    fireEvent.click(initialPiece);
-    fireEvent.click(targetCell);
+    movePiece(6, 4);
 
     expect(screen.queryByTestId("piece-6-0")).toBeInTheDocument();
+    expect(screen.queryByTestId("piece-4-0")).not.toBeInTheDocument();
   });
 
   it("駒を取得したら盤上に追加される", async () => {
