@@ -134,20 +134,31 @@ export default function Home() {
     addPieceToStand(selectedPiece, pieceAtDestination);
   };
 
-  const movePiece = (row: number, col: number, shouldPromote: boolean) => {
+  // すでに駒台に置かれている駒を移動させる
+  const moveExistingPiece = (selectedPiece: Piece, row: number, col: number, shouldPromote: boolean) => {
     setPieces((prevPieces) =>
       prevPieces.map((piece) =>
         piece === selectedPiece
           ? {
-              ...piece,
+              ...selectedPiece,
               position: [row, col],
               isPromoted: piece.isPromoted || shouldPromote,
             }
           : piece
       )
     );
+  };
 
-    setSelectedPiece(null);
+  // 駒台にある駒を打つ
+  const moveNewPiece = (piece: Piece, row: number, col: number) => {
+    setPieces((prevPieces) => [
+      ...prevPieces,
+      {
+        ...piece,
+        position: [row, col],
+        isPromoted: false,
+      },
+    ]);
   };
 
   const handleCellClick = (row: number, col: number) => {
@@ -172,19 +183,13 @@ export default function Home() {
     // 駒を移動
     if (canMoveTo(selectedPiece, row, col)) {
       if (!selectedPiece.position) {
-        setPieces((prevPieces) => [
-          ...prevPieces,
-          {
-            ...selectedPiece,
-            position: [row, col],
-            isPromoted: false,
-          },
-        ]);
-
-        setSelectedPiece(null);
+        moveNewPiece(selectedPiece, row, col);
         setCapturedPieces((prev) => prev.filter((p) => p != selectedPiece));
+        setSelectedPiece(null);
       }
-      movePiece(row, col, shouldPromote);
+      // すでに駒台に置かれている駒を移動させる
+      moveExistingPiece(selectedPiece, row, col, shouldPromote);
+      setSelectedPiece(null);
     }
   };
 
@@ -199,9 +204,6 @@ export default function Home() {
           pieces={capturedPieces.filter((piece) => piece.owner === OPPONENT)}
           handleCapturedPieceClick={handleCapturedPieceClick}
         />
-        {/* TODO:一手戻すボタン用意 */}
-        {/* TODO:一手進めるボタン用意 */}
-        {/* TODO:駒台の駒を打てるようにする */}
         {/* TODO:と金の動ける場所を正しくする */}
         {/* TODO:選択中に他のコマを選択しても動かせないので対応 */}
         {/* TODO:自分の駒を取れてしまうので修正　例えば33と金34歩33歩とできてしまう */}

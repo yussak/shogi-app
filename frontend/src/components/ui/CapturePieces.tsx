@@ -10,7 +10,6 @@ const CapturedPieces = ({
   pieces: CapturedPiece[];
   handleCapturedPieceClick: (piece: CapturedPiece) => void;
 }) => {
-  console.log("a", pieces);
   return (
     <div
       style={{
