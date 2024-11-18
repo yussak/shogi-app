@@ -18,14 +18,11 @@ describe("先手", () => {
     // セルの存在を確認
     const targetCell = screen.getByTestId("cell-5-0");
 
-    // 初期位置のセルをクリック
     fireEvent.click(initialPiece);
-
-    // 移動先のセルをクリック
     fireEvent.click(targetCell);
 
     // 駒が移動したことを確認
-    expect(screen.queryByTestId("piece-6-0")).not.toBeInTheDocument();
+    expect(initialPiece).not.toBeInTheDocument();
     expect(screen.getByTestId("piece-5-0")).toBeInTheDocument();
   });
 
@@ -57,19 +54,13 @@ describe("先手", () => {
     render(<Home />);
 
     // １マスずつ移動させる
-    fireEvent.click(screen.getByTestId("piece-6-0"));
-    fireEvent.click(screen.getByTestId("cell-5-0"));
-
-    fireEvent.click(screen.getByTestId("piece-5-0"));
-    fireEvent.click(screen.getByTestId("cell-4-0"));
-
-    fireEvent.click(screen.getByTestId("piece-4-0"));
-    fireEvent.click(screen.getByTestId("cell-3-0"));
+    movePiece(6, 5);
+    movePiece(5, 4);
+    movePiece(4, 3);
 
     // 成るかの確認
     window.confirm = vi.fn(() => true);
-    fireEvent.click(screen.getByTestId("piece-3-0"));
-    fireEvent.click(screen.getByTestId("cell-2-0"));
+    movePiece(3, 2);
 
     const movedPiece = screen.getByTestId("piece-2-0");
     expect(movedPiece.textContent).not.toBe("歩");
@@ -80,19 +71,13 @@ describe("先手", () => {
     render(<Home />);
 
     // １マスずつ移動させる
-    fireEvent.click(screen.getByTestId("piece-6-0"));
-    fireEvent.click(screen.getByTestId("cell-5-0"));
-
-    fireEvent.click(screen.getByTestId("piece-5-0"));
-    fireEvent.click(screen.getByTestId("cell-4-0"));
-
-    fireEvent.click(screen.getByTestId("piece-4-0"));
-    fireEvent.click(screen.getByTestId("cell-3-0"));
+    movePiece(6, 5);
+    movePiece(5, 4);
+    movePiece(4, 3);
 
     // 成らない
     window.confirm = vi.fn(() => false);
-    fireEvent.click(screen.getByTestId("piece-3-0"));
-    fireEvent.click(screen.getByTestId("cell-2-0"));
+    movePiece(3, 2);
 
     const movedPiece = screen.getByTestId("piece-2-0");
     expect(movedPiece.textContent).toBe("歩");
@@ -100,8 +85,7 @@ describe("先手", () => {
 
     // 成る
     window.confirm = vi.fn(() => true);
-    fireEvent.click(screen.getByTestId("piece-2-0"));
-    fireEvent.click(screen.getByTestId("cell-1-0"));
+    movePiece(2, 1);
 
     const promotedPiece = screen.getByTestId("piece-1-0");
     expect(promotedPiece.textContent).not.toBe("歩");
@@ -112,43 +96,30 @@ describe("先手", () => {
     render(<Home />);
 
     // １マスずつ移動させる
-    fireEvent.click(screen.getByTestId("piece-6-0"));
-    fireEvent.click(screen.getByTestId("cell-5-0"));
-
-    fireEvent.click(screen.getByTestId("piece-5-0"));
-    fireEvent.click(screen.getByTestId("cell-4-0"));
-
-    fireEvent.click(screen.getByTestId("piece-4-0"));
-    fireEvent.click(screen.getByTestId("cell-3-0"));
+    movePiece(6, 5);
+    movePiece(5, 4);
+    movePiece(4, 3);
 
     window.confirm = vi.fn(() => true);
-    fireEvent.click(screen.getByTestId("piece-3-0"));
-    fireEvent.click(screen.getByTestId("cell-2-0"));
+    movePiece(3, 2);
 
     // 駒台をクリックして移動
     fireEvent.click(screen.getByTestId("captured-piece-player"));
     fireEvent.click(screen.getByTestId("cell-8-0"));
 
-    const movedPiece = screen.getByTestId("piece-8-0");
-    expect(movedPiece).toBeInTheDocument();
+    expect(screen.getByTestId("piece-8-0")).toBeInTheDocument();
   });
 
   it("駒台から歩を打つ時に二歩できない", () => {
     render(<Home />);
 
     // １マスずつ移動させる
-    fireEvent.click(screen.getByTestId("piece-6-0"));
-    fireEvent.click(screen.getByTestId("cell-5-0"));
-
-    fireEvent.click(screen.getByTestId("piece-5-0"));
-    fireEvent.click(screen.getByTestId("cell-4-0"));
-
-    fireEvent.click(screen.getByTestId("piece-4-0"));
-    fireEvent.click(screen.getByTestId("cell-3-0"));
+    movePiece(6, 5);
+    movePiece(5, 4);
+    movePiece(4, 3);
 
     window.confirm = vi.fn(() => false);
-    fireEvent.click(screen.getByTestId("piece-3-0"));
-    fireEvent.click(screen.getByTestId("cell-2-0"));
+    movePiece(3, 2);
 
     // 駒台をクリックして移動
     fireEvent.click(screen.getByTestId("captured-piece-player"));
