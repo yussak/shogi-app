@@ -144,9 +144,29 @@ describe("先手", () => {
     expect(movedPiece).toBeInTheDocument();
   });
 
-  //   it("駒台から歩を打つ時に二歩できない", () => {
-  //     //
-  //   });
+  it("駒台から歩を打つ時に二歩できない", () => {
+    render(<Home />);
+
+    // １マスずつ移動させる
+    fireEvent.click(screen.getByTestId("piece-6-0"));
+    fireEvent.click(screen.getByTestId("cell-5-0"));
+
+    fireEvent.click(screen.getByTestId("piece-5-0"));
+    fireEvent.click(screen.getByTestId("cell-4-0"));
+
+    fireEvent.click(screen.getByTestId("piece-4-0"));
+    fireEvent.click(screen.getByTestId("cell-3-0"));
+
+    window.confirm = vi.fn(() => false);
+    fireEvent.click(screen.getByTestId("piece-3-0"));
+    fireEvent.click(screen.getByTestId("cell-2-0"));
+
+    // 駒台をクリックして移動
+    fireEvent.click(screen.getByTestId("captured-piece-player"));
+    fireEvent.click(screen.getByTestId("cell-8-0"));
+
+    expect(screen.queryByTestId("piece-8-0")).toBeNull();
+  });
 
   //   it("1マス目に指したら自動で成る", () => {
   //     // 未実装なので自動では成れない
