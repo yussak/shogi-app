@@ -3,6 +3,11 @@ import "@testing-library/jest-dom";
 import { describe, expect, it, vi } from "vitest";
 import Home from "./page";
 
+const movePiece = (from: number, to: number) => {
+  fireEvent.click(screen.getByTestId(`piece-${from}-0`));
+  fireEvent.click(screen.getByTestId(`cell-${to}-0`));
+};
+
 describe("先手", () => {
   it("盤上の歩が1マス上に指せる", async () => {
     render(<Home />);
@@ -40,28 +45,15 @@ describe("先手", () => {
     render(<Home />);
 
     // 最初に駒台に駒はない
-    const initialCapturedPiece = screen.queryByTestId("captured-piece-player");
-    expect(initialCapturedPiece).toBeNull();
+    expect(screen.queryByTestId("captured-piece-player")).toBeNull();
 
     // １マスずつ移動させる
-    fireEvent.click(screen.getByTestId("piece-6-0"));
-    fireEvent.click(screen.getByTestId("cell-5-0"));
+    movePiece(6, 5);
+    movePiece(5, 4);
+    movePiece(4, 3);
+    movePiece(3, 2);
 
-    fireEvent.click(screen.getByTestId("piece-5-0"));
-    fireEvent.click(screen.getByTestId("cell-4-0"));
-
-    fireEvent.click(screen.getByTestId("piece-4-0"));
-    fireEvent.click(screen.getByTestId("cell-3-0"));
-
-    fireEvent.click(screen.getByTestId("piece-3-0"));
-    fireEvent.click(screen.getByTestId("cell-2-0"));
-
-    const playerPiece = screen.getByTestId("piece-2-0");
-    expect(playerPiece).toBeInTheDocument();
-
-    const capturedPiece = screen.getByTestId("captured-piece-player");
-
-    expect(capturedPiece).toBeInTheDocument();
+    expect(screen.getByTestId("captured-piece-player")).toBeInTheDocument();
   });
 
   it("3マスより上にいる時に成れる", () => {
