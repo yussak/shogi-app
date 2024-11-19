@@ -48,9 +48,7 @@ export default function Home() {
         return row - 1 === targetRow && col === targetCol;
       }
       return row + 1 === targetRow && col === targetCol;
-    }
-
-    if (type === "gold") {
+    } else if (type === "gold") {
       if (owner === PLAYER) {
         return (
           (row - 1 === targetRow && col === targetCol) || //上
@@ -61,7 +59,14 @@ export default function Home() {
           (row === targetRow && col + 1 === targetCol) // 右
         );
       }
-      // TODO:相手の方も書く
+      return (
+        (row + 1 === targetRow && col === targetCol) || //上
+        (row - 1 === targetRow && col === targetCol) || //下
+        (row + 1 === targetRow && col - 1 === targetCol) || //左前
+        (row + 1 === targetRow && col + 1 === targetCol) || // 右前
+        (row === targetRow && col - 1 === targetCol) || // 左
+        (row === targetRow && col + 1 === targetCol) // 右
+      );
     }
   };
 
@@ -99,9 +104,7 @@ export default function Home() {
         return [[row - 1, col]];
       }
       return [[row + 1, col]];
-    }
-
-    if (type === "gold") {
+    } else if (type === "gold") {
       if (owner === PLAYER) {
         return [
           [row - 1, col],
@@ -112,7 +115,14 @@ export default function Home() {
           [row, col + 1],
         ];
       }
-      // TODO:相手の方も書く
+      return [
+        [row + 1, col],
+        [row - 1, col],
+        [row + 1, col - 1],
+        [row + 1, col + 1],
+        [row, col - 1],
+        [row, col + 1],
+      ];
     }
 
     return [];
