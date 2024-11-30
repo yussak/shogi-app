@@ -67,7 +67,7 @@ export default function Home() {
     setPieces((prevPieces) => prevPieces.filter((p) => p !== pieceAtDestination));
 
     // 駒台に追加
-    setCapturedPieces((prev) => [...prev, { type: pieceAtDestination.type, owner: selectedPiece.owner }]);
+    setCapturedPieces((prevPieces) => [...prevPieces, { type: pieceAtDestination.type, owner: selectedPiece.owner }]);
   };
 
   // すでに駒台に置かれている駒を移動させる
@@ -76,7 +76,7 @@ export default function Home() {
       prevPieces.map((piece) =>
         piece === selectedPiece
           ? {
-              ...selectedPiece,
+              ...piece,
               position: [row, col],
               isPromoted: piece.isPromoted || shouldPromote,
             }
