@@ -12,12 +12,12 @@ export default function Home() {
   const [selectedPiece, setSelectedPiece] = useState<Piece | null>(null);
   const [capturedPieces, setCapturedPieces] = useState<CapturedPiece[]>([]);
 
-  const rows = Array.from({ length: 9 });
-  const columns = Array.from({ length: 9 });
+  const rows: number[] = Array.from({ length: 9 });
+  const columns: number[] = Array.from({ length: 9 });
 
   const getAvailablePositionsOfCapturedPiece = (owner: owner, targetRow: number, targetCol: number) => {
     // 二歩できなくする
-    // これって最初からpiece一つだけわたってくればいいんでは
+    // 駒台の駒はpositionがないので今ある駒かがないところみたいな判定が必要なのでselectedPieceは使えない
     const isPawnInColumn = pieces.some(
       (p) => p.type === "pawn" && p.position[1] === targetCol && !p.isPromoted && p.owner === owner
     );
@@ -44,33 +44,26 @@ export default function Home() {
         return row - 1 === targetRow && col === targetCol;
       }
       return row + 1 === targetRow && col === targetCol;
-    } else if (type === "gold") {
-      if (owner === PLAYER) {
-        return (
-          (row - 1 === targetRow && col === targetCol) || //上
-          (row + 1 === targetRow && col === targetCol) || //下
-          (row - 1 === targetRow && col - 1 === targetCol) || //左前
-          (row - 1 === targetRow && col + 1 === targetCol) || // 右前
-          (row === targetRow && col - 1 === targetCol) || // 左
-          (row === targetRow && col + 1 === targetCol) // 右
-        );
-      }
-      return (
-        (row + 1 === targetRow && col === targetCol) || //上
-        (row - 1 === targetRow && col === targetCol) || //下
-        (row + 1 === targetRow && col - 1 === targetCol) || //左前
-        (row + 1 === targetRow && col + 1 === targetCol) || // 右前
-        (row === targetRow && col - 1 === targetCol) || // 左
-        (row === targetRow && col + 1 === targetCol) // 右
-      );
+      // } else if (type === "gold") {
+      //   if (owner === PLAYER) {
+      //     return (
+      //       (row - 1 === targetRow && col === targetCol) || //上
+      //       (row + 1 === targetRow && col === targetCol) || //下
+      //       (row - 1 === targetRow && col - 1 === targetCol) || //左前
+      //       (row - 1 === targetRow && col + 1 === targetCol) || // 右前
+      //       (row === targetRow && col - 1 === targetCol) || // 左
+      //       (row === targetRow && col + 1 === targetCol) // 右
+      //     );
+      //   }
+      //   return (
+      //     (row + 1 === targetRow && col === targetCol) || //上
+      //     (row - 1 === targetRow && col === targetCol) || //下
+      //     (row + 1 === targetRow && col - 1 === targetCol) || //左前
+      //     (row + 1 === targetRow && col + 1 === targetCol) || // 右前
+      //     (row === targetRow && col - 1 === targetCol) || // 左
+      //     (row === targetRow && col + 1 === targetCol) // 右
+      //   );
     }
-  };
-
-  const generateRows = (owner: owner) => {
-    // 1~8行目か0~7行目
-    return owner === PLAYER
-      ? Array.from({ length: 8 }, (_, row) => row + 1)
-      : Array.from({ length: 8 }, (_, row) => row);
   };
 
   const generatePositions = (rows: number[]) => {
@@ -89,7 +82,6 @@ export default function Home() {
     const { type, position, owner } = piece;
 
     if (position == null) {
-      const rows = generateRows(owner);
       return generatePositions(rows).filter(([row, col]) => isPositionAvailable(row, col, owner));
     }
 
@@ -100,25 +92,25 @@ export default function Home() {
         return [[row - 1, col]];
       }
       return [[row + 1, col]];
-    } else if (type === "gold") {
-      if (owner === PLAYER) {
-        return [
-          [row - 1, col],
-          [row + 1, col],
-          [row - 1, col - 1],
-          [row - 1, col + 1],
-          [row, col - 1],
-          [row, col + 1],
-        ];
-      }
-      return [
-        [row + 1, col],
-        [row - 1, col],
-        [row + 1, col - 1],
-        [row + 1, col + 1],
-        [row, col - 1],
-        [row, col + 1],
-      ];
+      // } else if (type === "gold") {
+      //   if (owner === PLAYER) {
+      //     return [
+      //       [row - 1, col],
+      //       [row + 1, col],
+      //       [row - 1, col - 1],
+      //       [row - 1, col + 1],
+      //       [row, col - 1],
+      //       [row, col + 1],
+      //     ];
+      //   }
+      //   return [
+      //     [row + 1, col],
+      //     [row - 1, col],
+      //     [row + 1, col - 1],
+      //     [row + 1, col + 1],
+      //     [row, col - 1],
+      //     [row, col + 1],
+      //   ];
     }
 
     return [];
