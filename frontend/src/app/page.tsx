@@ -17,12 +17,16 @@ export default function Home() {
 
   const getAvailablePositionsOfCapturedPiece = (owner: owner, targetRow: number, targetCol: number) => {
     // 二歩できなくする
+    // これって最初からpiece一つだけわたってくればいいんでは
     const isPawnInColumn = pieces.some(
       (p) => p.type === "pawn" && p.position[1] === targetCol && !p.isPromoted && p.owner === owner
     );
 
     // TODO:後手も9マス目に打てないようにするのを追加
-    const isInvalidRow = targetRow === 0;
+    const isInvalidRow =
+      owner === PLAYER
+        ? pieces.some((p) => p.owner === PLAYER && targetRow === 0)
+        : pieces.some((p) => p.owner === OPPONENT && targetRow === 8);
 
     return !isPawnInColumn && !isInvalidRow;
   };
