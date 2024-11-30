@@ -137,14 +137,14 @@ describe("先手", () => {
       movePieceToRow(5, 4);
       movePieceToRow(4, 3);
 
-      window.confirm = vi.fn(() => false);
+      window.confirm = vi.fn(() => true);
       movePieceToRow(3, 2);
 
       // 駒台をクリックして移動
       fireEvent.click(screen.getByTestId("captured-piece-player"));
-      fireEvent.click(screen.getByTestId("cell-1-0"));
+      fireEvent.click(screen.getByTestId("cell-0-0"));
 
-      expect(screen.queryByTestId("piece-1-0")).toBeNull();
+      expect(screen.queryByTestId("piece-0-0")).toBeNull();
     });
 
     //   it("1マス目に指したら自動で成る", () => {
@@ -159,23 +159,4 @@ describe("先手", () => {
     //     //
     //   });
   });
-
-  // describe("金", () => {
-  //   it("盤上の金が正しい場所に指せる", async () => {
-  //     render(<Home />);
-
-  //     // 初期位置に駒があることを確認
-  //     const initialPiece = screen.getByTestId("piece-8-3");
-
-  //     // セルの存在を確認
-  //     const targetCell = screen.getByTestId("cell-5-0");
-
-  //     fireEvent.click(initialPiece);
-  //     fireEvent.click(targetCell);
-
-  //     // 駒が移動したことを確認
-  //     expect(initialPiece).not.toBeInTheDocument();
-  //     expect(screen.getByTestId("piece-5-0")).toBeInTheDocument();
-  //   });
-  // });
 });

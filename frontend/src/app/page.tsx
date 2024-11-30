@@ -15,13 +15,16 @@ export default function Home() {
   const rows = Array.from({ length: 9 });
   const columns = Array.from({ length: 9 });
 
-  const getAvailablePositionsOfCapturedPiece = (owner: owner, targetCol: number) => {
+  const getAvailablePositionsOfCapturedPiece = (owner: owner, targetRow: number, targetCol: number) => {
     // 二歩できなくする
     const isPawnInColumn = pieces.some(
       (p) => p.type === "pawn" && p.position[1] === targetCol && !p.isPromoted && p.owner === owner
     );
 
-    return !isPawnInColumn;
+    // TODO:後手も9マス目に打てないようにするのを追加
+    const isInvalidRow = targetRow === 0;
+
+    return !isPawnInColumn && !isInvalidRow;
   };
 
   // 駒がある位置に移動可能か判定するべき
@@ -30,7 +33,7 @@ export default function Home() {
 
     if (position == null) {
       // 駒台から打てる場所を表示
-      return getAvailablePositionsOfCapturedPiece(owner, targetCol);
+      return getAvailablePositionsOfCapturedPiece(owner, targetRow, targetCol);
     }
 
     const [row, col] = position;
