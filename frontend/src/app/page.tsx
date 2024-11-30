@@ -15,21 +15,13 @@ export default function Home() {
   const rows = Array.from({ length: 9 });
   const columns = Array.from({ length: 9 });
 
-  const getAvailablePositionsOfCapturedPiece = (owner: owner, targetRow: number, targetCol: number) => {
-    const isFuhyoInColumn = pieces.some(
+  const getAvailablePositionsOfCapturedPiece = (owner: owner, targetCol: number) => {
+    // 二歩できなくする
+    const isPawnInColumn = pieces.some(
       (p) => p.type === "pawn" && p.position[1] === targetCol && !p.isPromoted && p.owner === owner
     );
-    if (owner === PLAYER) {
-      return (
-        targetRow > 0 &&
-        !pieces.some((p) => p.position[0] === targetRow && p.position[1] === targetCol) &&
-        !isFuhyoInColumn
-      );
-    }
-    return (
-      targetRow < 8 &&
-      !pieces.some((p) => p.position[0] === targetRow && p.position[1] === targetCol && !isFuhyoInColumn)
-    );
+
+    return !isPawnInColumn;
   };
 
   // 駒がある位置に移動可能か判定するべき
@@ -38,7 +30,7 @@ export default function Home() {
 
     if (position == null) {
       // 駒台から打てる場所を表示
-      return getAvailablePositionsOfCapturedPiece(owner, targetRow, targetCol);
+      return getAvailablePositionsOfCapturedPiece(owner, targetCol);
     }
 
     const [row, col] = position;
