@@ -23,10 +23,7 @@ export default function Home() {
     );
 
     // TODO:後手も9マス目に打てないようにするのを追加
-    const isInvalidRow =
-      owner === PLAYER
-        ? pieces.some((p) => p.owner === PLAYER && targetRow === 0)
-        : pieces.some((p) => p.owner === OPPONENT && targetRow === 8);
+    const isInvalidRow = owner === PLAYER ? targetRow === 0 : targetRow === 8;
 
     return !isPawnInColumn && !isInvalidRow;
   };
