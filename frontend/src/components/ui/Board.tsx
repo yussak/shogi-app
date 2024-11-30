@@ -6,10 +6,10 @@ type Props = {
   pieces: Piece[];
   selectedPiece: Piece | null;
   handleCellClick: (row: number, col: number) => void;
-  getavailablePositions: (piece: Piece) => [number, number][];
+  getAvailablePositions: (piece: Piece) => [number, number][];
 };
 
-const Board = ({ pieces, selectedPiece, handleCellClick, getavailablePositions }: Props) => {
+const Board = ({ pieces, selectedPiece, handleCellClick, getAvailablePositions }: Props) => {
   return (
     <div
       style={{
@@ -22,7 +22,7 @@ const Board = ({ pieces, selectedPiece, handleCellClick, getavailablePositions }
           // マスに駒があるかを確認
           const piece = pieces.find((p) => p.position[0] === rowIndex && p.position[1] === colIndex);
 
-          const movablePositions = selectedPiece ? getavailablePositions(selectedPiece) : [];
+          const movablePositions = selectedPiece ? getAvailablePositions(selectedPiece) : [];
           const isavailablePosition = movablePositions.some(
             (position) => position[0] === rowIndex && position[1] === colIndex
           );

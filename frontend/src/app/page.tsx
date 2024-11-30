@@ -33,13 +33,13 @@ export default function Home() {
       return canPlaceCapturedPiece(owner, targetRow, targetCol);
     }
 
-    const availablePositions = getavailablePositions(selectedPiece);
+    const availablePositions = getAvailablePositions(selectedPiece);
     return availablePositions.some(([row, col]) => row === targetRow && col === targetCol);
   };
 
   // 移動可能な場所を表示する
   // TODO:駒台から移動させるとき可能な位置に色がつかなくなったので直す→テスト書いてから対応
-  const getavailablePositions = (piece: Piece): [number, number][] => {
+  const getAvailablePositions = (piece: Piece): [number, number][] => {
     const { type, position, owner } = piece;
 
     if (position == null) return [];
@@ -86,7 +86,7 @@ export default function Home() {
   };
 
   // 駒台にある駒を打つ
-  const moveNewPiece = (piece: Piece, row: number, col: number) => {
+  const moveCapturedPiece = (piece: Piece, row: number, col: number) => {
     setPieces((prevPieces) => [
       ...prevPieces,
       {
@@ -119,7 +119,7 @@ export default function Home() {
     // 駒を移動
     if (canMoveTo(selectedPiece, row, col)) {
       if (!selectedPiece.position) {
-        moveNewPiece(selectedPiece, row, col);
+        moveCapturedPiece(selectedPiece, row, col);
         setCapturedPieces((prev) => prev.filter((p) => p != selectedPiece));
         setSelectedPiece(null);
       }
@@ -149,7 +149,7 @@ export default function Home() {
           pieces={pieces}
           selectedPiece={selectedPiece}
           handleCellClick={handleCellClick}
-          getavailablePositions={getavailablePositions}
+          getAvailablePositions={getAvailablePositions}
         />
         <CapturedPieces
           pieces={capturedPieces.filter((piece) => piece.owner === PLAYER)}
