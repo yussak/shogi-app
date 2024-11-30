@@ -5,15 +5,12 @@ import { OPPONENT, PLAYER } from "@/consts";
 import { CapturedPiece, owner, Piece } from "@/types";
 import { useState } from "react";
 import Board from "@/components/ui/Board";
-import { initialPieces } from "@/utils";
+import { initialPieces, isPromotionZone } from "@/utils";
 
 export default function Home() {
   const [pieces, setPieces] = useState<Piece[]>(initialPieces);
   const [selectedPiece, setSelectedPiece] = useState<Piece | null>(null);
   const [capturedPieces, setCapturedPieces] = useState<CapturedPiece[]>([]);
-
-  const rows: number[] = Array.from({ length: 9 });
-  const columns: number[] = Array.from({ length: 9 });
 
   const canPlaceCapturedPiece = (owner: owner, targetRow: number, targetCol: number) => {
     // 二歩できなくする
@@ -65,20 +62,12 @@ export default function Home() {
     setCapturedPieces([]);
   };
 
-  const addPieceToStand = (selectedPiece: Piece, pieceAtDestination: Piece) => {
-    setCapturedPieces((prev) => [...prev, { type: pieceAtDestination.type, owner: selectedPiece.owner }]);
-  };
-
-  const isPromotionZone = (owner: string, row: number) => {
-    return (owner === PLAYER && row <= 2) || (owner === OPPONENT && row >= 6);
-  };
-
   const capturePiece = (selectedPiece: Piece, pieceAtDestination: Piece) => {
     // 相手の駒がいる場合は取る
     setPieces((prevPieces) => prevPieces.filter((p) => p !== pieceAtDestination));
 
     // 駒台に追加
-    addPieceToStand(selectedPiece, pieceAtDestination);
+    setCapturedPieces((prev) => [...prev, { type: pieceAtDestination.type, owner: selectedPiece.owner }]);
   };
 
   // すでに駒台に置かれている駒を移動させる
@@ -157,8 +146,6 @@ export default function Home() {
 
         <button onClick={reset}>平手配置</button>
         <Board
-          rows={rows}
-          columns={columns}
           pieces={pieces}
           selectedPiece={selectedPiece}
           handleCellClick={handleCellClick}
