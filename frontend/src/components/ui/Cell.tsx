@@ -5,7 +5,7 @@ type Props = {
   rowIndex: number;
   colIndex: number;
   piece: Piece;
-  selectedPiece: Piece;
+  selectedPiece: Piece | null;
   isavailablePosition: boolean;
   handleCellClick: (piecerowIndex: number, colIndex: number) => void;
 };

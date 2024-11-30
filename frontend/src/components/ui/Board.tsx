@@ -1,6 +1,16 @@
+import { Piece } from "@/types";
 import Cell from "./Cell";
 
-const Board = ({ rows, columns, pieces, selectedPiece, handleCellClick, getavailablePositions }) => {
+type Props = {
+  rows: number[];
+  columns: number[];
+  pieces: Piece[];
+  selectedPiece: Piece | null;
+  handleCellClick: (row: number, col: number) => void;
+  getavailablePositions: (piece: Piece) => [number, number][];
+};
+
+const Board = ({ rows, columns, pieces, selectedPiece, handleCellClick, getavailablePositions }: Props) => {
   return (
     <div
       style={{
@@ -20,6 +30,7 @@ const Board = ({ rows, columns, pieces, selectedPiece, handleCellClick, getavail
 
           return (
             <Cell
+              key={`${rowIndex}-${colIndex}`}
               rowIndex={rowIndex}
               colIndex={colIndex}
               piece={piece}
