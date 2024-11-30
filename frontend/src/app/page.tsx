@@ -15,14 +15,13 @@ export default function Home() {
   const rows: number[] = Array.from({ length: 9 });
   const columns: number[] = Array.from({ length: 9 });
 
-  const getAvailablePositionsOfCapturedPiece = (owner: owner, targetRow: number, targetCol: number) => {
+  const canPlaceCapturedPiece = (owner: owner, targetRow: number, targetCol: number) => {
     // 二歩できなくする
     // 駒台の駒はpositionがないので今ある駒かがないところみたいな判定が必要なのでselectedPieceは使えない
     const isPawnInColumn = pieces.some(
       (p) => p.type === "pawn" && p.position[1] === targetCol && !p.isPromoted && p.owner === owner
     );
 
-    // TODO:後手も9マス目に打てないようにするのを追加
     const isInvalidRow = owner === PLAYER ? targetRow === 0 : targetRow === 8;
 
     return !isPawnInColumn && !isInvalidRow;
@@ -34,7 +33,8 @@ export default function Home() {
 
     if (position == null) {
       // 駒台から打てる場所を表示
-      return getAvailablePositionsOfCapturedPiece(owner, targetRow, targetCol);
+      console.log(canPlaceCapturedPiece(owner, targetRow, targetCol));
+      return canPlaceCapturedPiece(owner, targetRow, targetCol);
     }
 
     const [row, col] = position;
@@ -66,23 +66,22 @@ export default function Home() {
     }
   };
 
-  const generatePositions = (rows: number[]) => {
-    return rows.flatMap((row) => Array.from({ length: 9 }, (_, col) => [row, col] as [number, number]));
-  };
-
-  const isPositionAvailable = (row: number, col: number, owner: owner) => {
-    return (
-      !pieces.some((p) => p.position[0] === row && p.position[1] === col) && // そのマスに駒がない
-      !pieces.some((p) => p.type === "pawn" && !p.isPromoted && p.position[1] === col && p.owner === owner)
-    ); // 同じ列に歩がない
-  };
-
   // 移動可能な場所を表示するべき
-  const getavailablePositions = (piece: Piece): [number, number][] => {
+  const getavailablePositions = (piece: Piece, targetRow: number, targetCol: number): [number, number][] => {
+    // const getavailablePositions = (piece: Piece): [number, number][] => {
     const { type, position, owner } = piece;
 
+    // これなんだ？
     if (position == null) {
-      return generatePositions(rows).filter(([row, col]) => isPositionAvailable(row, col, owner));
+      // これ使えないのか？
+      // return canPlaceCapturedPiece(owner, targetRow, targetCol);
+      return rows
+        .flatMap((row) => Array.from({ length: 9 }, (_, col) => [row, col] as [number, number]))
+        .filter(
+          ([row, col]) =>
+            !pieces.some((p) => p.position[0] === row && p.position[1] === col) && // そのマスに駒がない
+            !pieces.some((p) => p.type === "pawn" && !p.isPromoted && p.position[1] === col && p.owner === owner)
+        );
     }
 
     const [row, col] = position;
