@@ -27,6 +27,10 @@ describe("先手", () => {
       expect(screen.getByTestId("piece-5-0")).toBeInTheDocument();
     });
 
+    it("選択可能な位置が色付きで表示される", async () => {
+      // まだ書いてないので対応
+    });
+
     it("盤上の歩が1マス以外に指そうとしたら移動できない", async () => {
       render(<Home />);
 

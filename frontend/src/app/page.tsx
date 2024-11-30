@@ -27,62 +27,25 @@ export default function Home() {
     return !isPawnInColumn && !isInvalidRow;
   };
 
-  // 駒がある位置に移動可能か判定するべき
-  const canMoveTo = (selectedPiece: Piece, targetRow: number, targetCol: number) => {
-    const { owner, position, type } = selectedPiece;
+  // 駒がある位置に移動可能か判定
+  const canMoveTo = (selectedPiece: Piece, targetRow: number, targetCol: number): boolean => {
+    const { owner, position } = selectedPiece;
 
     if (position == null) {
       // 駒台から打てる場所を表示
-      console.log(canPlaceCapturedPiece(owner, targetRow, targetCol));
       return canPlaceCapturedPiece(owner, targetRow, targetCol);
     }
 
-    const [row, col] = position;
-
-    if (type === "pawn") {
-      if (owner === PLAYER) {
-        return row - 1 === targetRow && col === targetCol;
-      }
-      return row + 1 === targetRow && col === targetCol;
-      // } else if (type === "gold") {
-      //   if (owner === PLAYER) {
-      //     return (
-      //       (row - 1 === targetRow && col === targetCol) || //上
-      //       (row + 1 === targetRow && col === targetCol) || //下
-      //       (row - 1 === targetRow && col - 1 === targetCol) || //左前
-      //       (row - 1 === targetRow && col + 1 === targetCol) || // 右前
-      //       (row === targetRow && col - 1 === targetCol) || // 左
-      //       (row === targetRow && col + 1 === targetCol) // 右
-      //     );
-      //   }
-      //   return (
-      //     (row + 1 === targetRow && col === targetCol) || //上
-      //     (row - 1 === targetRow && col === targetCol) || //下
-      //     (row + 1 === targetRow && col - 1 === targetCol) || //左前
-      //     (row + 1 === targetRow && col + 1 === targetCol) || // 右前
-      //     (row === targetRow && col - 1 === targetCol) || // 左
-      //     (row === targetRow && col + 1 === targetCol) // 右
-      //   );
-    }
+    const availablePositions = getavailablePositions(selectedPiece);
+    return availablePositions.some(([row, col]) => row === targetRow && col === targetCol);
   };
 
-  // 移動可能な場所を表示するべき
-  const getavailablePositions = (piece: Piece, targetRow: number, targetCol: number): [number, number][] => {
-    // const getavailablePositions = (piece: Piece): [number, number][] => {
+  // 移動可能な場所を表示する
+  // TODO:駒台から移動させるとき可能な位置に色がつかなくなったので直す→テスト書いてから対応
+  const getavailablePositions = (piece: Piece): [number, number][] => {
     const { type, position, owner } = piece;
 
-    // これなんだ？
-    if (position == null) {
-      // これ使えないのか？
-      // return canPlaceCapturedPiece(owner, targetRow, targetCol);
-      return rows
-        .flatMap((row) => Array.from({ length: 9 }, (_, col) => [row, col] as [number, number]))
-        .filter(
-          ([row, col]) =>
-            !pieces.some((p) => p.position[0] === row && p.position[1] === col) && // そのマスに駒がない
-            !pieces.some((p) => p.type === "pawn" && !p.isPromoted && p.position[1] === col && p.owner === owner)
-        );
-    }
+    if (position == null) return [];
 
     const [row, col] = position;
 
@@ -91,25 +54,6 @@ export default function Home() {
         return [[row - 1, col]];
       }
       return [[row + 1, col]];
-      // } else if (type === "gold") {
-      //   if (owner === PLAYER) {
-      //     return [
-      //       [row - 1, col],
-      //       [row + 1, col],
-      //       [row - 1, col - 1],
-      //       [row - 1, col + 1],
-      //       [row, col - 1],
-      //       [row, col + 1],
-      //     ];
-      //   }
-      //   return [
-      //     [row + 1, col],
-      //     [row - 1, col],
-      //     [row + 1, col - 1],
-      //     [row + 1, col + 1],
-      //     [row, col - 1],
-      //     [row, col + 1],
-      //   ];
     }
 
     return [];
