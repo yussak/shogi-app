@@ -210,10 +210,19 @@ describe("先手", () => {
     //     //
     //   });
 
-    // TODO:書く
-    //   it("移動可能じゃないポジションをクリックしたら選択解除される（実装済）", () => {
-    //     //
-    //   });
+    it("選択可能なポジションが出ている時に他の駒をクリックしたら選択解除される", () => {
+      render(<Home />);
+
+      // 初期位置に駒があることを確認
+      fireEvent.click(screen.getByTestId("piece-6-0"));
+
+      // 移動可能位置が青い
+      expect(window.getComputedStyle(screen.getByTestId("cell-5-0")).backgroundColor).toBe("rgb(163, 210, 202)");
+
+      // 他の駒をクリック
+      fireEvent.click(screen.getByTestId("piece-6-1"));
+      expect(window.getComputedStyle(screen.getByTestId("cell-5-0")).backgroundColor).not.toBe("rgb(163, 210, 202)");
+    });
   });
 });
 
