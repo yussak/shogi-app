@@ -27,8 +27,19 @@ describe("先手", () => {
       expect(screen.getByTestId("piece-5-0")).toBeInTheDocument();
     });
 
-    it("選択可能な位置が色付きで表示される", async () => {
-      // まだ書いてないので対応
+    it("駒台の歩の選択可能な位置が色付きで表示される", async () => {
+      render(<Home />);
+
+      // 初期位置に駒があることを確認
+      const element = screen.getByTestId("piece-6-0");
+      fireEvent.click(element);
+
+      // 移動可能位置が青い
+      expect(window.getComputedStyle(screen.getByTestId("cell-5-0")).backgroundColor).toBe("rgb(163, 210, 202)");
+
+      // そうじゃない位置は青くない
+      expect(window.getComputedStyle(screen.getByTestId("cell-5-1")).backgroundColor).toBe("rgb(240, 217, 181)");
+
     });
 
     it("盤上の歩が1マス以外に指そうとしたら移動できない", async () => {
@@ -151,14 +162,17 @@ describe("先手", () => {
       expect(screen.queryByTestId("piece-0-0")).toBeNull();
     });
 
+    // TODO:書く
     //   it("1マス目に指したら自動で成る", () => {
     //     // 未実装なので自動では成れない
     //   });
 
+    // TODO:書く
     //   it("自分の駒は取れない（多分未実装）", () => {
     //     //
     //   });
 
+    // TODO:書く
     //   it("移動可能じゃないポジションをクリックしたら選択解除される（実装済）", () => {
     //     //
     //   });
@@ -304,14 +318,17 @@ describe("後手", () => {
       expect(screen.queryByTestId("piece-8-0")).toBeNull();
     });
 
+    // TODO:書く
     //   it("1マス目に指したら自動で成る", () => {
     //     // 未実装なので自動では成れない
     //   });
 
+    // TODO:書く
     //   it("自分の駒は取れない（多分未実装）", () => {
     //     //
     //   });
 
+    // TODO:書く
     //   it("移動可能じゃないポジションをクリックしたら選択解除される（実装済）", () => {
     //     //
     //   });
