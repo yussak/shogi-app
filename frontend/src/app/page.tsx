@@ -92,7 +92,7 @@ export default function Home() {
     setCapturedPieces((prevPieces) => [...prevPieces, { type: pieceAtDestination.type, owner: selectedPiece.owner }]);
   };
 
-  // すでに駒台に置かれている駒を移動させる
+  // すでに盤上に置かれている駒を移動させる
   const moveExistingPiece = (selectedPiece: Piece, row: number, col: number, shouldPromote: boolean) => {
     setPieces((prevPieces) =>
       prevPieces.map((piece) =>
