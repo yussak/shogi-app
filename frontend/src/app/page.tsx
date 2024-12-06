@@ -37,12 +37,34 @@ export default function Home() {
     return availablePositions.some(([row, col]) => row === targetRow && col === targetCol);
   };
 
+  const generateRows = (owner: owner) => {
+    // 1~8行目か0~7行目
+    return owner === PLAYER
+      ? Array.from({ length: 8 }, (_, row) => row + 1)
+      : Array.from({ length: 8 }, (_, row) => row);
+  };
+
+  const generatePositions = (rows: number[]) => {
+    return rows.flatMap((row) => Array.from({ length: 9 }, (_, col) => [row, col] as [number, number]));
+  };
+
+  const isPositionAvailable = (row: number, col: number, owner: owner) => {
+    return (
+      !pieces.some((p) => p.position[0] === row && p.position[1] === col) && // そのマスに駒がない
+      !pieces.some((p) => p.type === "pawn" && !p.isPromoted && p.position[1] === col && p.owner === owner)
+    ); // 同じ列に歩がない
+  };
+
+
   // 移動可能な場所を表示する
-  // TODO:駒台から移動させるとき可能な位置に色がつかなくなったので直す→テスト書いてから対応
   const getAvailablePositions = (piece: Piece): [number, number][] => {
     const { type, position, owner } = piece;
 
-    if (position == null) return [];
+    if (position == null) {
+      const rows = generateRows(owner);
+      return generatePositions(rows).filter(([row, col]) => isPositionAvailable(row, col, owner));
+    }
+
 
     const [row, col] = position;
 
@@ -76,10 +98,10 @@ export default function Home() {
       prevPieces.map((piece) =>
         piece === selectedPiece
           ? {
-              ...piece,
-              position: [row, col],
-              isPromoted: piece.isPromoted || shouldPromote,
-            }
+            ...piece,
+            position: [row, col],
+            isPromoted: piece.isPromoted || shouldPromote,
+          }
           : piece
       )
     );

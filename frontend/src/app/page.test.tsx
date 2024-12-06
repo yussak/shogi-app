@@ -37,7 +37,7 @@ describe("先手", () => {
       // 移動可能位置が青い
       expect(window.getComputedStyle(screen.getByTestId("cell-5-0")).backgroundColor).toBe("rgb(163, 210, 202)");
 
-      // そうじゃない位置は青くない
+      // そうじゃない位置は茶色
       expect(window.getComputedStyle(screen.getByTestId("cell-5-1")).backgroundColor).toBe("rgb(240, 217, 181)");
 
     });
@@ -160,6 +160,44 @@ describe("先手", () => {
       fireEvent.click(screen.getByTestId("cell-0-0"));
 
       expect(screen.queryByTestId("piece-0-0")).toBeNull();
+    });
+
+    it("駒台から打つ時に移動可能な位置が青くなる", () => {
+      render(<Home />);
+
+      // １マスずつ移動させる
+      movePieceToRow(6, 5);
+      movePieceToRow(5, 4);
+      movePieceToRow(4, 3);
+
+      window.confirm = vi.fn(() => true);
+      movePieceToRow(3, 2);
+
+      // 駒台をクリック
+      fireEvent.click(screen.getByTestId("captured-piece-player"));
+
+      // 移動可能位置が青い
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-0")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-3-0")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-0")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-5-0")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-0")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-7-0")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-8-0")).backgroundColor).toBe("rgb(163, 210, 202)");
+
+      // 移動できない位置は青くない
+      expect(window.getComputedStyle(screen.getByTestId("cell-0-0")).backgroundColor).not.toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-0")).backgroundColor).not.toBe("rgb(163, 210, 202)");
+
+      expect(window.getComputedStyle(screen.getByTestId("cell-0-1")).backgroundColor).not.toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-1")).backgroundColor).not.toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-1")).backgroundColor).not.toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-3-1")).backgroundColor).not.toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-1")).backgroundColor).not.toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-5-1")).backgroundColor).not.toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-1")).backgroundColor).not.toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-7-1")).backgroundColor).not.toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-8-1")).backgroundColor).not.toBe("rgb(163, 210, 202)");
     });
 
     // TODO:書く
