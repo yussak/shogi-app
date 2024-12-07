@@ -128,13 +128,13 @@ export default function Home() {
       return;
     }
 
-    if (pieceAtDestination && pieceAtDestination.owner !== selectedPiece.owner) {
+    if (canMoveTo(selectedPiece, row, col) && pieceAtDestination && pieceAtDestination.owner !== selectedPiece.owner) {
       capturePiece(selectedPiece, pieceAtDestination);
     }
 
     // 成れるかどうか
     const isEnableToPromote =
-      !selectedPiece.isPromoted && "position" in selectedPiece && isPromotionZone(selectedPiece.owner, row);
+      !selectedPiece.isPromoted && "position" in selectedPiece && isPromotionZone(selectedPiece.owner, row) && canMoveTo(selectedPiece, row, col);
     // 成るかどうか
     const shouldPromote = isEnableToPromote && window.confirm("成りますか？");
 
@@ -145,7 +145,7 @@ export default function Home() {
         setCapturedPieces((prev) => prev.filter((p) => p != selectedPiece));
         setSelectedPiece(null);
       }
-      // すでに駒台に置かれている駒を移動させる
+      // すでに盤上に置かれている駒を移動させる
       moveExistingPiece(selectedPiece, row, col, shouldPromote);
     }
     setSelectedPiece(null);

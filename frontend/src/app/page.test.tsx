@@ -223,6 +223,19 @@ describe("先手", () => {
       fireEvent.click(screen.getByTestId("piece-6-1"));
       expect(window.getComputedStyle(screen.getByTestId("cell-5-0")).backgroundColor).not.toBe("rgb(163, 210, 202)");
     });
+
+    it("いきなり3段目の歩は取れない", () => {
+      render(<Home />);
+
+      const opponentPiece = screen.queryByTestId("piece-2-0");
+      expect(opponentPiece).toBeInTheDocument();
+
+      // いきなり3段目に移動しようとする
+      movePieceToRow(6, 2);
+
+      // 駒は取られず残ったままである
+      expect(opponentPiece).toBeInTheDocument();
+    });
   });
 });
 
