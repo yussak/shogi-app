@@ -3,9 +3,9 @@ import "@testing-library/jest-dom";
 import { describe, expect, it, vi } from "vitest";
 import Home from "./page";
 
-const movePieceToRow = (from: number, to: number) => {
-  fireEvent.click(screen.getByTestId(`piece-${from}-0`));
-  fireEvent.click(screen.getByTestId(`cell-${to}-0`));
+const movePiece = ([fromRow, fromCol]: [number, number], [toRow, toCol]: [number, number]) => {
+  fireEvent.click(screen.getByTestId(`piece-${fromRow}-${fromCol}`));
+  fireEvent.click(screen.getByTestId(`cell-${toRow}-${toCol}`));
 };
 
 describe("先手", () => {
@@ -45,7 +45,7 @@ describe("先手", () => {
     it("盤上の歩が1マス以外に指そうとしたら移動できない", async () => {
       render(<Home />);
 
-      movePieceToRow(6, 4);
+      movePiece([6, 0], [4, 0]);
 
       expect(screen.queryByTestId("piece-6-0")).toBeInTheDocument();
       expect(screen.queryByTestId("piece-4-0")).not.toBeInTheDocument();
@@ -58,10 +58,10 @@ describe("先手", () => {
       expect(screen.queryByTestId("captured-piece-player")).toBeNull();
 
       // １マスずつ移動させる
-      movePieceToRow(6, 5);
-      movePieceToRow(5, 4);
-      movePieceToRow(4, 3);
-      movePieceToRow(3, 2);
+      movePiece([6, 0], [5, 0]);
+      movePiece([5, 0], [4, 0]);
+      movePiece([4, 0], [3, 0]);
+      movePiece([3, 0], [2, 0]);
 
       expect(screen.getByTestId("captured-piece-player")).toBeInTheDocument();
     });
@@ -70,13 +70,13 @@ describe("先手", () => {
       render(<Home />);
 
       // １マスずつ移動させる
-      movePieceToRow(6, 5);
-      movePieceToRow(5, 4);
-      movePieceToRow(4, 3);
+      movePiece([6, 0], [5, 0]);
+      movePiece([5, 0], [4, 0]);
+      movePiece([4, 0], [3, 0]);
 
       // 成るかの確認
       window.confirm = vi.fn(() => true);
-      movePieceToRow(3, 2);
+      movePiece([3, 0], [2, 0]);
 
       const movedPiece = screen.getByTestId("piece-2-0");
       expect(movedPiece.textContent).not.toBe("歩");
@@ -87,13 +87,13 @@ describe("先手", () => {
       render(<Home />);
 
       // １マスずつ移動させる
-      movePieceToRow(6, 5);
-      movePieceToRow(5, 4);
-      movePieceToRow(4, 3);
+      movePiece([6, 0], [5, 0]);
+      movePiece([5, 0], [4, 0]);
+      movePiece([4, 0], [3, 0]);
 
       // 成らない
       window.confirm = vi.fn(() => false);
-      movePieceToRow(3, 2);
+      movePiece([3, 0], [2, 0]);
 
       const movedPiece = screen.getByTestId("piece-2-0");
       expect(movedPiece.textContent).toBe("歩");
@@ -101,7 +101,7 @@ describe("先手", () => {
 
       // 成る
       window.confirm = vi.fn(() => true);
-      movePieceToRow(2, 1);
+      movePiece([2, 0], [1, 0]);
 
       const promotedPiece = screen.getByTestId("piece-1-0");
       expect(promotedPiece.textContent).not.toBe("歩");
@@ -112,12 +112,12 @@ describe("先手", () => {
       render(<Home />);
 
       // １マスずつ移動させる
-      movePieceToRow(6, 5);
-      movePieceToRow(5, 4);
-      movePieceToRow(4, 3);
+      movePiece([6, 0], [5, 0]);
+      movePiece([5, 0], [4, 0]);
+      movePiece([4, 0], [3, 0]);
 
       window.confirm = vi.fn(() => true);
-      movePieceToRow(3, 2);
+      movePiece([3, 0], [2, 0]);
 
       // 駒台をクリックして移動
       fireEvent.click(screen.getByTestId("captured-piece-player"));
@@ -130,12 +130,12 @@ describe("先手", () => {
       render(<Home />);
 
       // １マスずつ移動させる
-      movePieceToRow(6, 5);
-      movePieceToRow(5, 4);
-      movePieceToRow(4, 3);
+      movePiece([6, 0], [5, 0]);
+      movePiece([5, 0], [4, 0]);
+      movePiece([4, 0], [3, 0]);
 
       window.confirm = vi.fn(() => false);
-      movePieceToRow(3, 2);
+      movePiece([3, 0], [2, 0]);
 
       // 駒台をクリックして移動
       fireEvent.click(screen.getByTestId("captured-piece-player"));
@@ -148,12 +148,12 @@ describe("先手", () => {
       render(<Home />);
 
       // １マスずつ移動させる
-      movePieceToRow(6, 5);
-      movePieceToRow(5, 4);
-      movePieceToRow(4, 3);
+      movePiece([6, 0], [5, 0]);
+      movePiece([5, 0], [4, 0]);
+      movePiece([4, 0], [3, 0]);
 
       window.confirm = vi.fn(() => true);
-      movePieceToRow(3, 2);
+      movePiece([3, 0], [2, 0]);
 
       // 駒台をクリックして移動
       fireEvent.click(screen.getByTestId("captured-piece-player"));
@@ -166,12 +166,12 @@ describe("先手", () => {
       render(<Home />);
 
       // １マスずつ移動させる
-      movePieceToRow(6, 5);
-      movePieceToRow(5, 4);
-      movePieceToRow(4, 3);
+      movePiece([6, 0], [5, 0]);
+      movePiece([5, 0], [4, 0]);
+      movePiece([4, 0], [3, 0]);
 
       window.confirm = vi.fn(() => true);
-      movePieceToRow(3, 2);
+      movePiece([3, 0], [2, 0]);
 
       // 駒台をクリック
       fireEvent.click(screen.getByTestId("captured-piece-player"));
@@ -231,7 +231,7 @@ describe("先手", () => {
       expect(opponentPiece).toBeInTheDocument();
 
       // いきなり3段目に移動しようとする
-      movePieceToRow(6, 2);
+      movePiece([6, 0], [2, 0]);
 
       // 駒は取られず残ったままである
       expect(opponentPiece).toBeInTheDocument();
@@ -261,7 +261,7 @@ describe("後手", () => {
     it("盤上の歩が1マス以外に指そうとしたら移動できない", async () => {
       render(<Home />);
 
-      movePieceToRow(2, 4);
+      movePiece([2, 0], [4, 0]);
 
       expect(screen.queryByTestId("piece-2-0")).toBeInTheDocument();
       expect(screen.queryByTestId("piece-4-0")).not.toBeInTheDocument();
@@ -274,10 +274,10 @@ describe("後手", () => {
       expect(screen.queryByTestId("captured-piece-opponent")).toBeNull();
 
       // １マスずつ移動させる
-      movePieceToRow(2, 3);
-      movePieceToRow(3, 4);
-      movePieceToRow(4, 5);
-      movePieceToRow(5, 6);
+      movePiece([2, 0], [3, 0]);
+      movePiece([3, 0], [4, 0]);
+      movePiece([4, 0], [5, 0]);
+      movePiece([5, 0], [6, 0]);
 
       expect(screen.getByTestId("captured-piece-opponent")).toBeInTheDocument();
     });
@@ -286,13 +286,13 @@ describe("後手", () => {
       render(<Home />);
 
       // １マスずつ移動させる
-      movePieceToRow(2, 3);
-      movePieceToRow(3, 4);
-      movePieceToRow(4, 5);
+      movePiece([2, 0], [3, 0]);
+      movePiece([3, 0], [4, 0]);
+      movePiece([4, 0], [5, 0]);
 
       // 成るかの確認
       window.confirm = vi.fn(() => true);
-      movePieceToRow(5, 6);
+      movePiece([5, 0], [6, 0]);
 
       const movedPiece = screen.getByTestId("piece-6-0");
       expect(movedPiece.textContent).not.toBe("歩");
@@ -303,13 +303,13 @@ describe("後手", () => {
       render(<Home />);
 
       // １マスずつ移動させる
-      movePieceToRow(2, 3);
-      movePieceToRow(3, 4);
-      movePieceToRow(4, 5);
+      movePiece([2, 0], [3, 0]);
+      movePiece([3, 0], [4, 0]);
+      movePiece([4, 0], [5, 0]);
 
       // 成らない
       window.confirm = vi.fn(() => false);
-      movePieceToRow(5, 6);
+      movePiece([5, 0], [6, 0]);
 
       const movedPiece = screen.getByTestId("piece-6-0");
       expect(movedPiece.textContent).toBe("歩");
@@ -317,7 +317,7 @@ describe("後手", () => {
 
       // 成る
       window.confirm = vi.fn(() => true);
-      movePieceToRow(6, 7);
+      movePiece([6, 0], [7, 0]);
 
       const promotedPiece = screen.getByTestId("piece-7-0");
       expect(promotedPiece.textContent).not.toBe("歩");
@@ -328,12 +328,12 @@ describe("後手", () => {
       render(<Home />);
 
       // １マスずつ移動させる
-      movePieceToRow(2, 3);
-      movePieceToRow(3, 4);
-      movePieceToRow(4, 5);
+      movePiece([2, 0], [3, 0]);
+      movePiece([3, 0], [4, 0]);
+      movePiece([4, 0], [5, 0]);
 
       window.confirm = vi.fn(() => true);
-      movePieceToRow(5, 6);
+      movePiece([5, 0], [6, 0]);
 
       // 駒台をクリックして移動
       fireEvent.click(screen.getByTestId("captured-piece-opponent"));
@@ -346,12 +346,12 @@ describe("後手", () => {
       render(<Home />);
 
       // １マスずつ移動させる
-      movePieceToRow(2, 3);
-      movePieceToRow(3, 4);
-      movePieceToRow(4, 5);
+      movePiece([2, 0], [3, 0]);
+      movePiece([3, 0], [4, 0]);
+      movePiece([4, 0], [5, 0]);
 
       window.confirm = vi.fn(() => false);
-      movePieceToRow(5, 6);
+      movePiece([5, 0], [6, 0]);
 
       // 駒台をクリックして移動
       fireEvent.click(screen.getByTestId("captured-piece-opponent"));
@@ -364,12 +364,12 @@ describe("後手", () => {
       render(<Home />);
 
       // １マスずつ移動させる
-      movePieceToRow(2, 3);
-      movePieceToRow(3, 4);
-      movePieceToRow(4, 5);
+      movePiece([2, 0], [3, 0]);
+      movePiece([3, 0], [4, 0]);
+      movePiece([4, 0], [5, 0]);
 
       window.confirm = vi.fn(() => true);
-      movePieceToRow(5, 6);
+      movePiece([5, 0], [6, 0]);
 
       // 駒台をクリックして移動
       fireEvent.click(screen.getByTestId("captured-piece-opponent"));
