@@ -73,6 +73,25 @@ export default function Home() {
         return [[row - 1, col]];
       }
       return [[row + 1, col]];
+    } else if (type === "gold") {
+      if (owner === PLAYER) {
+        return [
+          [row - 1, col],
+          [row + 1, col],
+          [row - 1, col - 1],
+          [row - 1, col + 1],
+          [row, col - 1],
+          [row, col + 1],
+        ];
+      }
+      return [
+        [row + 1, col],
+        [row - 1, col],
+        [row + 1, col - 1],
+        [row + 1, col + 1],
+        [row, col - 1],
+        [row, col + 1],
+      ];
     }
 
     return [];
