@@ -28,6 +28,12 @@ export default function Home() {
   const canMoveTo = (selectedPiece: Piece, targetRow: number, targetCol: number): boolean => {
     const { owner, position } = selectedPiece;
 
+    // 移動先の駒のownerが同じなら移動できなくする
+    const pieceAtDestination = pieces.find((p) => p.position[0] === targetRow && p.position[1] === targetCol);
+    if (pieceAtDestination && owner === pieceAtDestination.owner) {
+      return false;
+    }
+
     if (position == null) {
       // 駒台から打てる場所を表示
       return canPlaceCapturedPiece(owner, targetRow, targetCol);
