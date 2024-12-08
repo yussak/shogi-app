@@ -206,9 +206,15 @@ describe("先手", () => {
     //   });
 
     // TODO:書く
-    //   it("自分の駒は取れない（多分未実装）", () => {
-    //     //
-    //   });
+    it("自分の駒は取れない", () => {
+      render(<Home />);
+
+      movePiece([8, 3], [7, 3]);
+      movePiece([7, 3], [6, 3]);
+
+      expect(screen.getByTestId("piece-6-3").textContent).toBe("歩");
+      expect(screen.getByTestId("piece-7-3").textContent).toBe("金");
+    });
 
     it("選択可能なポジションが出ている時に他の駒をクリックしたら選択解除される", () => {
       render(<Home />);
