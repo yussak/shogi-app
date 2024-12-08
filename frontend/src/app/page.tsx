@@ -159,7 +159,7 @@ export default function Home() {
 
     // 成れるかどうか
     const isEnableToPromote =
-      !selectedPiece.isPromoted && "position" in selectedPiece && isPromotionZone(selectedPiece.owner, row) && canMoveTo(selectedPiece, row, col);
+      !selectedPiece.isPromoted && "position" in selectedPiece && isPromotionZone(selectedPiece.owner, row) && canMoveTo(selectedPiece, row, col) && selectedPiece.type !== "gold";
     // 成るかどうか
     const shouldPromote = isEnableToPromote && window.confirm("成りますか？");
 
