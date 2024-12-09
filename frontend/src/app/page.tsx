@@ -61,28 +61,26 @@ export default function Home() {
     ); // 同じ列に歩がない
   };
 
-
   // 移動可能な場所を表示する
   const getAvailablePositions = (piece: Piece): [number, number][] => {
-    const { type, position, owner } = piece;
+    const { type, position, owner, isPromoted } = piece;
 
     if (position == null) {
       const rows = generateRows(owner);
       return generatePositions(rows).filter(([row, col]) => isPositionAvailable(row, col, owner));
     }
 
-
     const [row, col] = position;
     let potentialPositions: [number, number][] = [];
 
-    if (type === "pawn") {
+    if (type === "pawn" && !isPromoted) {
       if (owner === PLAYER) {
         potentialPositions = [[row - 1, col]];
       }
       else {
         potentialPositions = [[row + 1, col]];
       }
-    } else if (type === "gold") {
+    } else if (type === "gold" || type === "pawn" && isPromoted) {
       if (owner === PLAYER) {
         potentialPositions = [
           [row - 1, col],
@@ -259,8 +257,6 @@ export default function Home() {
           pieces={capturedPieces.filter((piece) => piece.owner === OPPONENT)}
           handleCapturedPieceClick={handleCapturedPieceClick}
         />
-        {/* TODO:と金の動ける場所を正しくする */}
-
         <button onClick={reset}>平手配置</button>
         <Board
           pieces={pieces}

@@ -242,6 +242,25 @@ describe("先手", () => {
       // 駒は取られず残ったままである
       expect(opponentPiece).toBeInTheDocument();
     });
+
+    it("と金の移動可能な位置が正しい", async () => {
+      render(<Home />);
+
+      movePiece([6, 3], [5, 3]);
+      movePiece([5, 3], [4, 3]);
+      movePiece([4, 3], [3, 3]);
+      window.confirm = vi.fn(() => true);
+      movePiece([3, 3], [2, 3]);
+
+      fireEvent.click(screen.getByTestId("cell-2-3"));
+
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-2")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-4")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-3-3")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-2")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-3")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-4")).backgroundColor).toBe("rgb(163, 210, 202)");
+    });
   });
 
   describe("金", () => {
