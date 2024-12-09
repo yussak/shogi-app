@@ -121,6 +121,51 @@ export default function Home() {
           [row - 1, col + 1],
         ]
       }
+    } else if (type === "lancer") {
+      if (owner === PLAYER) {
+        for (let i = 1; i <= 8; i++) {
+          const newRow = row - i;
+          const pieceAtDestination = pieces.find(
+            (p) => p.position && p.position[0] === newRow && p.position[1] === col
+          );
+
+          if (pieceAtDestination) {
+            if (pieceAtDestination.owner === owner) {
+              // 自分の駒にぶつかったら、それ以上進めない
+              break;
+            } else {
+              // 相手の駒ならその位置は移動可能だが、それ以上は進めない
+              potentialPositions.push([newRow, col]);
+              break;
+            }
+          }
+
+          // 駒がない場合は移動可能
+          potentialPositions.push([newRow, col]);
+        }
+      }
+      else {
+        for (let i = 1; i <= 8; i++) {
+          const newRow = row + i;
+          const pieceAtDestination = pieces.find(
+            (p) => p.position && p.position[0] === newRow && p.position[1] === col
+          );
+
+          if (pieceAtDestination) {
+            if (pieceAtDestination.owner === owner) {
+              // 自分の駒にぶつかったら、それ以上進めない
+              break;
+            } else {
+              // 相手の駒ならその位置は移動可能だが、それ以上は進めない
+              potentialPositions.push([newRow, col]);
+              break;
+            }
+          }
+
+          // 駒がない場合は移動可能
+          potentialPositions.push([newRow, col]);
+        }
+      }
     }
 
     return potentialPositions.filter(([r, c]) => {

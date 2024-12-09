@@ -14,6 +14,7 @@ const pieceLabels = {
   pawn: (piece) => (piece.isPromoted ? "と" : "歩"),
   gold: () => "金",
   silver: (piece) => (piece.isPromoted ? "と" : "銀"),
+  lancer: (piece) => (piece.isPromoted ? "と" : "香"),
 }
 
 const getPieceLabel = (piece: Piece) => {
