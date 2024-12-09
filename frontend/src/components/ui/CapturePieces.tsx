@@ -18,6 +18,7 @@ const CapturedPieces = ({
         padding: "10px",
         border: "1px solid black",
       }}
+      className="h-10"
     >
       {pieces.map((piece, index) => (
         <div
