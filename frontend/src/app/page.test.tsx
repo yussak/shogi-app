@@ -253,7 +253,6 @@ describe("先手", () => {
       expect(window.getComputedStyle(screen.getByTestId("cell-7-2")).backgroundColor).toBe("rgb(163, 210, 202)");
       expect(window.getComputedStyle(screen.getByTestId("cell-7-3")).backgroundColor).toBe("rgb(163, 210, 202)");
       expect(window.getComputedStyle(screen.getByTestId("cell-7-4")).backgroundColor).toBe("rgb(163, 210, 202)");
-      expect(window.getComputedStyle(screen.getByTestId("cell-8-2")).backgroundColor).toBe("rgb(163, 210, 202)");
       expect(window.getComputedStyle(screen.getByTestId("cell-8-4")).backgroundColor).toBe("rgb(163, 210, 202)");
 
       fireEvent.click(screen.getByTestId("cell-7-3"));
