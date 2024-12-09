@@ -10,6 +10,8 @@ export const initialPieces: Piece[] = [
   { type: "pawn", position: [6, 5], owner: PLAYER, isPromoted: false },
   { type: "pawn", position: [6, 6], owner: PLAYER, isPromoted: false },
   { type: "pawn", position: [6, 7], owner: PLAYER, isPromoted: false },
+  { type: "pawn", position: [6, 8], owner: PLAYER, isPromoted: false },
+
   { type: "gold", position: [8, 3], owner: PLAYER, isPromoted: false },
   { type: "gold", position: [8, 5], owner: PLAYER, isPromoted: false },
 
