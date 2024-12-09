@@ -268,7 +268,31 @@ describe("先手", () => {
     });
     // TODO:書く
     // it("成れない");
-  })
+  });
+
+  describe("銀", () => {
+    it("移動可能な位置が正しい", async () => {
+      render(<Home />);
+
+      // 初期位置に駒があることを確認
+      fireEvent.click(screen.getByTestId("piece-8-2"));
+
+      // 移動可能位置が青い
+      expect(window.getComputedStyle(screen.getByTestId("cell-7-1")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-7-2")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-7-3")).backgroundColor).toBe("rgb(163, 210, 202)");
+
+      fireEvent.click(screen.getByTestId("cell-7-1"));
+      fireEvent.click(screen.getByTestId("piece-7-1"));
+
+      expect(window.getComputedStyle(screen.getByTestId("cell-8-0")).backgroundColor).toBe("rgb(163, 210, 202)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-8-2")).backgroundColor).toBe("rgb(163, 210, 202)");
+
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-2")).backgroundColor).toBe("rgb(240, 217, 181)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-3")).backgroundColor).toBe("rgb(240, 217, 181)");
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-4")).backgroundColor).toBe("rgb(240, 217, 181)");
+    });
+  });
 });
 
 describe("後手", () => {

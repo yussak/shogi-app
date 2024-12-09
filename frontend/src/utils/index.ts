@@ -12,11 +12,15 @@ export const initialPieces: Piece[] = [
   { type: "pawn", position: [6, 7], owner: PLAYER, isPromoted: false },
   { type: "pawn", position: [6, 8], owner: PLAYER, isPromoted: false },
 
+  { type: "silver", position: [8, 2], owner: PLAYER, isPromoted: false },
   { type: "gold", position: [8, 3], owner: PLAYER, isPromoted: false },
   { type: "gold", position: [8, 5], owner: PLAYER, isPromoted: false },
+  { type: "silver", position: [8, 6], owner: PLAYER, isPromoted: false },
 
+  { type: "silver", position: [0, 2], owner: OPPONENT, isPromoted: false },
   { type: "gold", position: [0, 3], owner: OPPONENT, isPromoted: false },
   { type: "gold", position: [0, 5], owner: OPPONENT, isPromoted: false },
+  { type: "silver", position: [0, 6], owner: OPPONENT, isPromoted: false },
 
   { type: "pawn", position: [2, 0], owner: OPPONENT, isPromoted: false },
   { type: "pawn", position: [2, 1], owner: OPPONENT, isPromoted: false },

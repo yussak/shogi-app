@@ -12,7 +12,8 @@ type Props = {
 
 const pieceLabels = {
   pawn: (piece) => (piece.isPromoted ? "と" : "歩"),
-  gold: () => "金"
+  gold: () => "金",
+  silver: (piece) => (piece.isPromoted ? "と" : "銀"),
 }
 
 const getPieceLabel = (piece: Piece) => {

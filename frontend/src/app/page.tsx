@@ -102,6 +102,25 @@ export default function Home() {
           [row, col + 1],
         ]
       }
+    } else if (type === "silver") {
+      if (owner === PLAYER) {
+        potentialPositions = [
+          [row - 1, col],
+          [row + 1, col - 1],
+          [row + 1, col + 1],
+          [row - 1, col - 1],
+          [row - 1, col + 1],
+        ]
+      }
+      else {
+        potentialPositions = [
+          [row + 1, col - 1],
+          [row + 1, col],
+          [row + 1, col + 1],
+          [row - 1, col - 1],
+          [row - 1, col + 1],
+        ]
+      }
     }
 
     return potentialPositions.filter(([r, c]) => {
