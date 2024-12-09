@@ -73,34 +73,42 @@ export default function Home() {
 
 
     const [row, col] = position;
+    let potentialPositions: [number, number][] = [];
 
     if (type === "pawn") {
       if (owner === PLAYER) {
-        return [[row - 1, col]];
+        potentialPositions = [[row - 1, col]];
       }
-      return [[row + 1, col]];
+      else {
+        potentialPositions = [[row + 1, col]];
+      }
     } else if (type === "gold") {
       if (owner === PLAYER) {
-        return [
+        potentialPositions = [
           [row - 1, col],
           [row + 1, col],
           [row - 1, col - 1],
           [row - 1, col + 1],
           [row, col - 1],
-          [row, col + 1],
-        ];
+          [row, col + 1],]
       }
-      return [
-        [row + 1, col],
-        [row - 1, col],
-        [row + 1, col - 1],
-        [row + 1, col + 1],
-        [row, col - 1],
-        [row, col + 1],
-      ];
+      else {
+        potentialPositions = [
+          [row + 1, col],
+          [row - 1, col],
+          [row + 1, col - 1],
+          [row + 1, col + 1],
+          [row, col - 1],
+          [row, col + 1],
+        ]
+      }
     }
 
-    return [];
+    return potentialPositions.filter(([r, c]) => {
+      const pieceAtDestination = pieces.find((p) => p.position && p.position[0] === r && p.position[1] === c);
+      // 移動先に駒がない、または移動先の駒が自分の駒じゃない部分を表示
+      return !pieceAtDestination || pieceAtDestination.owner !== owner;
+    });
   };
 
   const reset = () => {
@@ -188,8 +196,6 @@ export default function Home() {
           handleCapturedPieceClick={handleCapturedPieceClick}
         />
         {/* TODO:と金の動ける場所を正しくする */}
-        {/* TODO:選択中に他のコマを選択しても動かせないので対応 */}
-        {/* TODO:自分の駒を取れてしまうので修正　例えば33と金34歩33歩とできてしまう */}
 
         <button onClick={reset}>平手配置</button>
         <Board
