@@ -10,6 +10,16 @@ type Props = {
   handleCellClick: (piecerowIndex: number, colIndex: number) => void;
 };
 
+const pieceLabels = {
+  pawn: (piece) => (piece.isPromoted ? "と" : "歩"),
+  gold: () => "金"
+}
+
+const getPieceLabel = (piece: Piece) => {
+  if (pieceLabels[piece.type] == null) return;
+  return pieceLabels[piece.type](piece);
+}
+
 const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, handleCellClick }: Props) => {
   return (
     <div
@@ -30,8 +40,8 @@ const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, h
             selectedPiece.position &&
             selectedPiece.position[0] === rowIndex &&
             selectedPiece.position[1] === colIndex
-          ? "#FFD700" // 選択中の駒の色
-          : "#F0D9B5",
+            ? "#FFD700" // 選択中の駒の色
+            : "#F0D9B5",
       }}
     >
       {piece && (
@@ -40,7 +50,7 @@ const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, h
           // 相手の駒の場合逆さまにする
           style={{ transform: piece.owner === OPPONENT ? "rotate(180deg)" : "none" }}
         >
-          {piece && (piece.type === "pawn" ? (piece.isPromoted ? "と" : "歩") : piece.type === "gold" ? "金" : "")}
+          {piece && getPieceLabel(piece)}
         </div>
       )}
     </div>
