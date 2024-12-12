@@ -7,8 +7,8 @@ import { useState } from "react";
 import Board from "@/components/ui/Board";
 import { initialPieces, isPromotionZone } from "@/utils";
 
-export default function Home() {
-  const [pieces, setPieces] = useState<Piece[]>(initialPieces);
+export default function Home({ initialPiecesOverride }: { initialPiecesOverride?: Piece[] }) {
+  const [pieces, setPieces] = useState<Piece[]>(initialPiecesOverride || initialPieces);
   const [selectedPiece, setSelectedPiece] = useState<Piece | null>(null);
   const [capturedPieces, setCapturedPieces] = useState<CapturedPiece[]>([]);
 
