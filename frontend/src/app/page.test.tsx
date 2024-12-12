@@ -8,7 +8,6 @@ const movePiece = ([fromRow, fromCol]: [number, number], [toRow, toCol]: [number
   fireEvent.click(screen.getByTestId(`cell-${toRow}-${toCol}`));
 };
 
-// TODO:テストしたい駒だけ置くようにしたい
 describe("先手", () => {
   describe("歩", () => {
     it("盤上の歩が1マス上に指せる", async () => {
@@ -144,7 +143,6 @@ describe("先手", () => {
       expect(screen.queryByTestId("piece-7-0")).toBeNull();
     });
 
-    // TODO:現状だと全てのコマを読んでしまうため、香車があるので8-0に置けずテストできない。そのため一時コメントアウトしてるので直す
     it("進めなくなるので、駒台から１行目に打てない", () => {
       const customPieces = [
         {
@@ -470,24 +468,37 @@ describe("後手", () => {
       expect(screen.queryByTestId("piece-1-0")).toBeNull();
     });
 
-    // TODO:現状だと全てのコマを読んでしまうため、香車があるので8-0に置けずテストできない。そのため一時コメントアウトしてるので直す
-    // it("進めなくなるので、駒台から１行目に打てない", () => {
-    //   render(<Home />);
+    it("進めなくなるので、駒台から１行目に打てない", () => {
+      const customPieces = [
+        {
+          type: "pawn",
+          owner: "opponent",
+          position: [2, 0],
+          isPromoted: false,
+        },
+        {
+          type: "pawn",
+          owner: "player",
+          position: [6, 0],
+          isPromoted: false,
+        },
+      ];
+      render(<Home initialPiecesOverride={customPieces} />);
 
-    //   // １マスずつ移動させる
-    //   movePiece([2, 0], [3, 0]);
-    //   movePiece([3, 0], [4, 0]);
-    //   movePiece([4, 0], [5, 0]);
+      // １マスずつ移動させる
+      movePiece([2, 0], [3, 0]);
+      movePiece([3, 0], [4, 0]);
+      movePiece([4, 0], [5, 0]);
 
-    //   window.confirm = vi.fn(() => true);
-    //   movePiece([5, 0], [6, 0]);
+      window.confirm = vi.fn(() => true);
+      movePiece([5, 0], [6, 0]);
 
-    //   // 駒台をクリックして移動
-    //   fireEvent.click(screen.getByTestId("captured-piece-opponent"));
-    //   fireEvent.click(screen.getByTestId("cell-8-0"));
+      // 駒台をクリックして移動
+      fireEvent.click(screen.getByTestId("captured-piece-opponent"));
+      fireEvent.click(screen.getByTestId("cell-8-0"));
 
-    //   expect(screen.queryByTestId("piece-8-0")).toBeNull();
-    // });
+      expect(screen.queryByTestId("piece-8-0")).toBeNull();
+    });
 
     // TODO:書く
     //   it("1マス目に指したら自動で成る", () => {
