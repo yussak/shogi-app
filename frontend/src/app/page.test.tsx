@@ -2,7 +2,6 @@ import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { describe, expect, it, vi } from "vitest";
 import Home from "./page";
-import Board from "@/components/ui/Board";
 
 const movePiece = ([fromRow, fromCol]: [number, number], [toRow, toCol]: [number, number]) => {
   fireEvent.click(screen.getByTestId(`piece-${fromRow}-${fromCol}`));
@@ -146,23 +145,36 @@ describe("先手", () => {
     });
 
     // TODO:現状だと全てのコマを読んでしまうため、香車があるので8-0に置けずテストできない。そのため一時コメントアウトしてるので直す
-    // it("進めなくなるので、駒台から１行目に打てない", () => {
-    //   render(<Home />);
+    it("進めなくなるので、駒台から１行目に打てない", () => {
+      const customPieces = [
+        {
+          type: "pawn",
+          owner: "player",
+          position: [6, 0],
+          isPromoted: false,
+        },
+        {
+          type: "pawn",
+          owner: "opponent",
+          position: [2, 0],
+          isPromoted: false,
+        },
+      ];
+      render(<Home initialPiecesOverride={customPieces} />);
+      // １マスずつ移動させる
+      movePiece([6, 0], [5, 0]);
+      movePiece([5, 0], [4, 0]);
+      movePiece([4, 0], [3, 0]);
 
-    //   // １マスずつ移動させる
-    //   movePiece([6, 0], [5, 0]);
-    //   movePiece([5, 0], [4, 0]);
-    //   movePiece([4, 0], [3, 0]);
+      window.confirm = vi.fn(() => true);
+      movePiece([3, 0], [2, 0]);
 
-    //   window.confirm = vi.fn(() => true);
-    //   movePiece([3, 0], [2, 0]);
+      // // 駒台をクリックして移動
+      fireEvent.click(screen.getByTestId("captured-piece-player"));
+      fireEvent.click(screen.getByTestId("cell-0-0"));
 
-    //   // 駒台をクリックして移動
-    //   fireEvent.click(screen.getByTestId("captured-piece-player"));
-    //   fireEvent.click(screen.getByTestId("cell-0-0"));
-
-    //   expect(screen.queryByTestId("piece-0-0")).toBeNull();
-    // });
+      expect(screen.queryByTestId("piece-0-0")).toBeNull();
+    });
 
     it("駒台から打つ時に移動可能な位置が青くなる", () => {
       render(<Home />);
