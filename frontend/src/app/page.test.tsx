@@ -186,17 +186,17 @@ describe("先手", () => {
       window.confirm = vi.fn(() => false);
       movePiece([3, 0], [2, 0]);
 
-      const movedPiece = screen.getByTestId("piece-2-0");
-      expect(movedPiece.textContent).toBe("歩");
-      expect(movedPiece.textContent).not.toBe("と");
+      const movedPiece = screen.getByTestId("piece-2-0").querySelector("img");
+      expect(movedPiece).toHaveAttribute("alt", "歩");
+      expect(movedPiece).not.toHaveAttribute("alt", "と");
 
       // 成る
       window.confirm = vi.fn(() => true);
       movePiece([2, 0], [1, 0]);
 
-      const promotedPiece = screen.getByTestId("piece-1-0");
-      expect(promotedPiece.textContent).not.toBe("歩");
-      expect(promotedPiece.textContent).toBe("と");
+      const promotedPiece = screen.getByTestId("piece-1-0").querySelector("img");
+      expect(promotedPiece).not.toHaveAttribute("alt", "歩");
+      expect(promotedPiece).toHaveAttribute("alt", "と");
     });
 
     it("駒台の歩が打てる", () => {
