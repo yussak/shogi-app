@@ -109,6 +109,19 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     ];
   }
 
+  const getAvailableKnightPositions = (owner: owner, row: number, col: number, isPromoted: Boolean): [number, number][] => {
+    if (isPromoted) {
+      return getAvailableGoldPositions(owner, row, col);
+    }
+    return owner === PLAYER ? [
+      [row - 2, col - 1],
+      [row - 2, col + 1],
+    ] : [
+      [row + 2, col - 1],
+      [row + 2, col + 1],
+    ];
+  }
+
   // 移動可能な場所を表示する
   const getAvailablePositions = (piece: Piece): [number, number][] => {
     const { type, position, owner, isPromoted } = piece;
@@ -129,26 +142,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     } else if (type === "silver") {
       potentialPositions = getAvailablePSilverPositions(owner, row, col, isPromoted);
     } else if (type === "knight") {
-      if (owner === PLAYER) {
-        if (!isPromoted) {
-          potentialPositions = [
-            [row - 2, col - 1],
-            [row - 2, col + 1],
-          ]
-        } else {
-          potentialPositions = getAvailableGoldPositions(owner, row, col);
-        }
-      }
-      else {
-        if (!isPromoted) {
-          potentialPositions = [
-            [row + 2, col - 1],
-            [row + 2, col + 1],
-          ]
-        } else {
-          potentialPositions = getAvailableGoldPositions(owner, row, col);
-        }
-      }
+      potentialPositions = getAvailableKnightPositions(owner, row, col, isPromoted);
     } else if (type === "lancer") {
       if (owner === PLAYER) {
         for (let i = 1; i <= 8; i++) {
