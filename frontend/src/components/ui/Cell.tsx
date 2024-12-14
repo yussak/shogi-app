@@ -38,6 +38,8 @@ function getPieceImage(piece) {
         return "images/pieces/lancer.svg";
       case "bishop":
         return "/images/pieces/bishop.svg";
+      case "rook":
+        return "/images/pieces/rook.svg";
     }
   } else {
     switch (piece.type) {
@@ -49,6 +51,8 @@ function getPieceImage(piece) {
         return "images/pieces/nari-kyou.svg";
       case "bishop":
         return "/images/pieces/uma.svg";
+      case "rook":
+        return "/images/pieces/ryu.svg";
     }
   }
 }

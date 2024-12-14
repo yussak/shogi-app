@@ -1,7 +1,7 @@
 export type owner = "player" | "opponent";
 
 export type Piece = {
-  type: "pawn" | "gold" | "silver" | "lancer" | "bishop";
+  type: "pawn" | "gold" | "silver" | "lancer" | "bishop" | "rook";
   position: [number, number];
   owner: owner;
   isPromoted: boolean;

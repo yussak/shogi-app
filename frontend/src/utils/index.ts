@@ -12,7 +12,11 @@ export const initialPieces: Piece[] = [
   { type: "pawn", position: [6, 7], owner: PLAYER, isPromoted: false },
   { type: "pawn", position: [6, 8], owner: PLAYER, isPromoted: false },
 
+  // TODO：後手も実装
   { type: "bishop", position: [7, 1], owner: PLAYER, isPromoted: false },
+
+  // TODO：後手も実装
+  { type: "rook", position: [7, 7], owner: PLAYER, isPromoted: false },
 
   { type: "lancer", position: [8, 0], owner: PLAYER, isPromoted: false },
   { type: "silver", position: [8, 2], owner: PLAYER, isPromoted: false },
