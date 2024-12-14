@@ -165,6 +165,39 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
         }
       }
     }
+    else if (type === "bishop") {
+      potentialPositions = [];
+      const directions = [
+        [-1, -1], // 左上
+        [-1, 1],  // 右上
+        [1, -1],  // 左下
+        [1, 1]    // 右下
+      ];
+
+      for (const [dRow, dCol] of directions) {
+        let currentRow = row + dRow;
+        let currentCol = col + dCol;
+
+        while (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
+          // 駒の有無を確認する
+          const pieceAtDestination = pieces.find(
+            (p) => p.position && p.position[0] === currentRow && p.position[1] === currentCol
+          );
+          if (pieceAtDestination) {
+            // 駒がある場合、自分の駒か敵の駒かで分岐
+            if (pieceAtDestination.owner !== owner) {
+              potentialPositions.push([currentRow, currentCol]); // 敵の駒を取れる
+            }
+            break; // 障害物があるのでそれ以上進めない
+          }
+
+          // 駒がない場合、移動可能
+          potentialPositions.push([currentRow, currentCol]);
+          currentRow += dRow;
+          currentCol += dCol;
+        }
+      }
+    }
 
     return potentialPositions.filter(([r, c]) => {
       const pieceAtDestination = pieces.find((p) => p.position && p.position[0] === r && p.position[1] === c);

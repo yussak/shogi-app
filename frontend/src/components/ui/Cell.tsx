@@ -15,6 +15,7 @@ const pieceLabels = {
   gold: () => "金",
   silver: (piece) => (piece.isPromoted ? "と" : "銀"),
   lancer: (piece) => (piece.isPromoted ? "と" : "香"),
+  bishop: (piece) => (piece.isPromoted ? "馬" : "角"),
 }
 
 const getPieceLabel = (piece: Piece) => {
