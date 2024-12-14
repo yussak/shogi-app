@@ -426,6 +426,7 @@ describe("先手", () => {
     });
 
     it("と金の移動可能な位置が正しい", async () => {
+      // TODO:cusotmPieceですぐに成れる位置を指定したらコード量減らせそう
       render(<Home />);
 
       movePiece([6, 3], [5, 3]);
@@ -434,6 +435,7 @@ describe("先手", () => {
       window.confirm = vi.fn(() => true);
       movePiece([3, 3], [2, 3]);
 
+      // TODO:pieceをクリックが正しそう
       fireEvent.click(screen.getByTestId("cell-2-3"));
 
       expect(window.getComputedStyle(screen.getByTestId("cell-2-2")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
@@ -615,8 +617,34 @@ describe("先手", () => {
       expect(window.getComputedStyle(screen.getByTestId("cell-7-2")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
 
-    it.todo("成った時の移動可能な位置が正しい", async () => {
+    it("成った時の移動可能な位置が正しい", async () => {
+      const customPieces: Piece[] = [
+        {
+          type: "knight",
+          owner: "player",
+          position: [3, 0],
+          isPromoted: false,
+        },
+      ];
 
+      render(<Home initialPiecesOverride={customPieces} />);
+      window.confirm = vi.fn(() => true);
+      movePiece([3, 0], [1, 1]);
+      fireEvent.click(screen.getByTestId("piece-1-1"));
+
+      // 移動可能位置が正しい
+      expect(window.getComputedStyle(screen.getByTestId("cell-0-0")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-0-1")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-0-2")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-0")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-2")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-1")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      // 移動できない位置が正しい
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-0")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-2")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
   });
 
