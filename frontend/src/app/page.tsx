@@ -90,7 +90,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     return owner === PLAYER ? [[row - 1, col]] : [[row + 1, col]];
   }
 
-  const getAvailablePSilverPositions = (owner: owner, row: number, col: number, isPromoted: Boolean): [number, number][] => {
+  const getAvailableSilverPositions = (owner: owner, row: number, col: number, isPromoted: Boolean): [number, number][] => {
     if (isPromoted) {
       return getAvailableGoldPositions(owner, row, col);
     }
@@ -140,7 +140,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     } else if (type === "gold") {
       potentialPositions = getAvailableGoldPositions(owner, row, col);
     } else if (type === "silver") {
-      potentialPositions = getAvailablePSilverPositions(owner, row, col, isPromoted);
+      potentialPositions = getAvailableSilverPositions(owner, row, col, isPromoted);
     } else if (type === "knight") {
       potentialPositions = getAvailableKnightPositions(owner, row, col, isPromoted);
     } else if (type === "lancer") {
