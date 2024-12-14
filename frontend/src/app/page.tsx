@@ -88,7 +88,8 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
           [row - 1, col - 1],
           [row - 1, col + 1],
           [row, col - 1],
-          [row, col + 1],]
+          [row, col + 1],
+        ]
       }
       else {
         potentialPositions = [
@@ -118,6 +119,41 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
           [row - 1, col - 1],
           [row - 1, col + 1],
         ]
+      }
+    } else if (type === "knight") {
+      if (owner === PLAYER) {
+        if (!isPromoted) {
+          potentialPositions = [
+            [row - 2, col - 1],
+            [row - 2, col + 1],
+          ]
+        } else {
+          potentialPositions = [
+            [row - 1, col],
+            [row + 1, col],
+            [row - 1, col - 1],
+            [row - 1, col + 1],
+            [row, col - 1],
+            [row, col + 1],
+          ]
+        }
+      }
+      else {
+        if (!isPromoted) {
+          potentialPositions = [
+            [row + 2, col - 1],
+            [row + 2, col + 1],
+          ]
+        } else {
+          potentialPositions = [
+            [row + 1, col],
+            [row - 1, col],
+            [row + 1, col - 1],
+            [row + 1, col + 1],
+            [row, col - 1],
+            [row, col + 1],
+          ]
+        }
       }
     } else if (type === "lancer") {
       if (owner === PLAYER) {

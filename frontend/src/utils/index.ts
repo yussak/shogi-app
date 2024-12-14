@@ -19,10 +19,12 @@ export const initialPieces: Piece[] = [
   { type: "king", position: [8, 4], owner: PLAYER, isPromoted: false },
 
   { type: "lancer", position: [8, 0], owner: PLAYER, isPromoted: false },
+  { type: "knight", position: [8, 1], owner: PLAYER, isPromoted: false },
   { type: "silver", position: [8, 2], owner: PLAYER, isPromoted: false },
   { type: "gold", position: [8, 3], owner: PLAYER, isPromoted: false },
   { type: "gold", position: [8, 5], owner: PLAYER, isPromoted: false },
   { type: "silver", position: [8, 6], owner: PLAYER, isPromoted: false },
+  { type: "knight", position: [8, 7], owner: PLAYER, isPromoted: false },
   { type: "lancer", position: [8, 8], owner: PLAYER, isPromoted: false },
 
   { type: "silver", position: [0, 2], owner: OPPONENT, isPromoted: false },
@@ -31,6 +33,7 @@ export const initialPieces: Piece[] = [
   { type: "silver", position: [0, 6], owner: OPPONENT, isPromoted: false },
 
   { type: "lancer", position: [0, 0], owner: OPPONENT, isPromoted: false },
+  { type: "knight", position: [0, 1], owner: OPPONENT, isPromoted: false },
   { type: "pawn", position: [2, 0], owner: OPPONENT, isPromoted: false },
   { type: "pawn", position: [2, 1], owner: OPPONENT, isPromoted: false },
   { type: "pawn", position: [2, 2], owner: OPPONENT, isPromoted: false },
@@ -40,6 +43,7 @@ export const initialPieces: Piece[] = [
   { type: "pawn", position: [2, 6], owner: OPPONENT, isPromoted: false },
   { type: "pawn", position: [2, 7], owner: OPPONENT, isPromoted: false },
   { type: "pawn", position: [2, 8], owner: OPPONENT, isPromoted: false },
+  { type: "knight", position: [0, 7], owner: OPPONENT, isPromoted: false },
   { type: "lancer", position: [0, 8], owner: OPPONENT, isPromoted: false },
 
   { type: "bishop", position: [1, 7], owner: OPPONENT, isPromoted: false },
@@ -83,6 +87,8 @@ export function getPieceImage(piece) {
         return "images/pieces/silver.svg";
       case "lancer":
         return "images/pieces/lancer.svg";
+      case "knight":
+        return "images/pieces/knight.svg";
       case "bishop":
         return "/images/pieces/bishop.svg";
       case "rook":
@@ -98,6 +104,8 @@ export function getPieceImage(piece) {
         return "images/pieces/gin-nari.svg";
       case "lancer":
         return "images/pieces/nari-kyou.svg";
+      case "knight":
+        return "images/pieces/nari-kei.svg";
       case "bishop":
         return "/images/pieces/uma.svg";
       case "rook":

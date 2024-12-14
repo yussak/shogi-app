@@ -575,6 +575,16 @@ describe("先手", () => {
     });
   });
 
+  describe.todo("桂馬", () => {
+    it.todo("移動可能な位置が正しい", async () => {
+
+    });
+
+    it.todo("成った時の移動可能な位置が正しい", async () => {
+
+    });
+  });
+
   describe.todo("角", () => {
     it.todo("移動可能な位置が正しい", async () => {
 
