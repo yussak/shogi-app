@@ -392,21 +392,19 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     <main>
       <button onClick={reset}>平手配置</button>
       <div className="flex items-start justify-center">
-        <div className="w-32 h-32 bg-gray-300 self-start">
+        <div className="self-start">
           <CapturedPieces
             pieces={capturedPieces.filter((piece) => piece.owner === OPPONENT)}
             handleCapturedPieceClick={handleCapturedPieceClick}
           />
         </div>
-        <div className="w-6d4 h-6s4 bg-yellow-300">
-          <Board
-            pieces={pieces}
-            selectedPiece={selectedPiece}
-            handleCellClick={handleCellClick}
-            getAvailablePositions={getAvailablePositions}
-          />
-        </div>
-        <div className="w-32 h-32 bg-gray-300 self-end">
+        <Board
+          pieces={pieces}
+          selectedPiece={selectedPiece}
+          handleCellClick={handleCellClick}
+          getAvailablePositions={getAvailablePositions}
+        />
+        <div className="self-end">
           <CapturedPieces
             pieces={capturedPieces.filter((piece) => piece.owner === PLAYER)}
             handleCapturedPieceClick={handleCapturedPieceClick}
