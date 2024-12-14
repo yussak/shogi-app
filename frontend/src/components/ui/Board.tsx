@@ -9,6 +9,8 @@ type Props = {
   getAvailablePositions: (piece: Piece) => [number, number][];
 };
 
+const kanjiNumbers = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
+
 const Board = ({ pieces, selectedPiece, handleCellClick, getAvailablePositions }: Props) => {
   return (
     <div
@@ -29,7 +31,6 @@ const Board = ({ pieces, selectedPiece, handleCellClick, getAvailablePositions }
             alignItems: "center",
             justifyContent: "center",
             fontSize: "16px",
-            fontWeight: "bold",
           }}
         >
           {9 - colIndex}
@@ -76,10 +77,9 @@ const Board = ({ pieces, selectedPiece, handleCellClick, getAvailablePositions }
               alignItems: "center",
               justifyContent: "center",
               fontSize: "16px",
-              fontWeight: "bold",
             }}
           >
-            {rowIndex + 1}
+            {kanjiNumbers[rowIndex]}
           </div>
         </>
       ))}
