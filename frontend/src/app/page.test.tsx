@@ -303,7 +303,40 @@ describe("先手", () => {
 
   describe("銀", () => {
     it("移動可能な位置が正しい", async () => {
-      render(<Home />);
+      const customPieces = [
+        {
+          type: "silver",
+          owner: "player",
+          position: [8, 2],
+          isPromoted: false,
+        },
+        {
+          type: "lancer",
+          owner: "player",
+          position: [8, 0],
+          isPromoted: false,
+        },
+        {
+          type: "pawn",
+          owner: "player",
+          position: [6, 0],
+          isPromoted: false,
+        },
+        {
+          type: "pawn",
+          owner: "player",
+          position: [6, 1],
+          isPromoted: false,
+        },
+        {
+          type: "pawn",
+          owner: "player",
+          position: [6, 2],
+          isPromoted: false,
+        },
+      ];
+
+      render(<Home initialPiecesOverride={customPieces} />);
 
       // 初期位置に駒があることを確認
       fireEvent.click(screen.getByTestId("piece-8-2"));
@@ -318,6 +351,7 @@ describe("先手", () => {
 
       expect(window.getComputedStyle(screen.getByTestId("cell-8-2")).backgroundColor).toBe("rgb(163, 210, 202)");
 
+      expect(window.getComputedStyle(screen.getByTestId("cell-8-0")).backgroundColor).toBe("rgb(240, 217, 181)");
       expect(window.getComputedStyle(screen.getByTestId("cell-6-2")).backgroundColor).toBe("rgb(240, 217, 181)");
       expect(window.getComputedStyle(screen.getByTestId("cell-6-3")).backgroundColor).toBe("rgb(240, 217, 181)");
       expect(window.getComputedStyle(screen.getByTestId("cell-6-4")).backgroundColor).toBe("rgb(240, 217, 181)");
