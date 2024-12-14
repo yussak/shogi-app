@@ -38,12 +38,15 @@ function getPieceImage(piece) {
         return "images/pieces/lancer.svg";
       case "bishop":
         return "/images/pieces/bishop.svg";
-      // 他の駒も同様に設定
-      // default:
-      //   return "images/pieces/default.svg"; // 画像がない場合のデフォルト
     }
   } else {
     switch (piece.type) {
+      case "pawn":
+        return "images/pieces/to.svg";
+      case "silver":
+        return "images/pieces/gin-nari.svg";
+      case "lancer":
+        return "images/pieces/nari-kyou.svg";
       case "bishop":
         return "/images/pieces/uma.svg";
     }
