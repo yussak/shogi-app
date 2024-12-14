@@ -33,24 +33,25 @@ const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, h
             selectedPiece.position[0] === rowIndex &&
             selectedPiece.position[1] === colIndex
             ? "#FFD700" // 選択中の駒の色
-            : null,
+            : undefined,
       }}
     >
       {/* ドットを追加 */}
-      {((rowIndex === 2 && (colIndex === 2 || colIndex === 6)) || (rowIndex === 5 && (colIndex == 2 || colIndex === 6))) && (
-        <div
-          style={{
-            position: "absolute",
-            bottom: "-5px",
-            right: "-5px",
-            width: "10px",
-            height: "10px",
-            backgroundColor: "black",
-            borderRadius: "50%",
-            zIndex: "2"
-          }}
-        ></div>
-      )
+      {
+        ((rowIndex === 2 && (colIndex === 2 || colIndex === 6)) || (rowIndex === 5 && (colIndex == 2 || colIndex === 6))) && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "-5px",
+              right: "-5px",
+              width: "10px",
+              height: "10px",
+              backgroundColor: "black",
+              borderRadius: "50%",
+              zIndex: "2"
+            }}
+          ></div>
+        )
       }
       {
         piece && (
