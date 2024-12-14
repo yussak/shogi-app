@@ -61,6 +61,27 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     ); // 同じ列に歩がない
   };
 
+  const getAvailableGoldPositions = (owner: owner, row: number, col: number) => {
+    if (owner === PLAYER) {
+      return [
+        [row - 1, col],
+        [row + 1, col],
+        [row - 1, col - 1],
+        [row - 1, col + 1],
+        [row, col - 1],
+        [row, col + 1],
+      ]
+    }
+    return [
+      [row + 1, col],
+      [row - 1, col],
+      [row + 1, col - 1],
+      [row + 1, col + 1],
+      [row, col - 1],
+      [row, col + 1],
+    ]
+  }
+
   // 移動可能な場所を表示する
   const getAvailablePositions = (piece: Piece): [number, number][] => {
     const { type, position, owner, isPromoted } = piece;
@@ -70,55 +91,53 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
       return generatePositions(rows).filter(([row, col]) => isPositionAvailable(row, col, owner));
     }
 
+
     const [row, col] = position;
     let potentialPositions: [number, number][] = [];
 
-    if (type === "pawn" && !isPromoted) {
+    if (type === "pawn") {
       if (owner === PLAYER) {
-        potentialPositions = [[row - 1, col]];
+        if (!isPromoted) {
+          potentialPositions = [[row - 1, col]];
+        } else {
+          potentialPositions = getAvailableGoldPositions(owner, row, col);
+        }
       }
       else {
-        potentialPositions = [[row + 1, col]];
+        if (!isPromoted) {
+          potentialPositions = [[row + 1, col]];
+        } else {
+          potentialPositions = getAvailableGoldPositions(owner, row, col);
+        }
       }
-    } else if (type === "gold" || type === "pawn" && isPromoted) {
-      if (owner === PLAYER) {
-        potentialPositions = [
-          [row - 1, col],
-          [row + 1, col],
-          [row - 1, col - 1],
-          [row - 1, col + 1],
-          [row, col - 1],
-          [row, col + 1],
-        ]
-      }
-      else {
-        potentialPositions = [
-          [row + 1, col],
-          [row - 1, col],
-          [row + 1, col - 1],
-          [row + 1, col + 1],
-          [row, col - 1],
-          [row, col + 1],
-        ]
-      }
+    } else if (type === "gold") {
+      potentialPositions = getAvailableGoldPositions(owner, row, col);
     } else if (type === "silver") {
       if (owner === PLAYER) {
-        potentialPositions = [
-          [row - 1, col],
-          [row + 1, col - 1],
-          [row + 1, col + 1],
-          [row - 1, col - 1],
-          [row - 1, col + 1],
-        ]
+        if (!isPromoted) {
+          potentialPositions = [
+            [row - 1, col],
+            [row + 1, col - 1],
+            [row + 1, col + 1],
+            [row - 1, col - 1],
+            [row - 1, col + 1],
+          ]
+        } else {
+          potentialPositions = getAvailableGoldPositions(owner, row, col);
+        }
       }
       else {
-        potentialPositions = [
-          [row + 1, col - 1],
-          [row + 1, col],
-          [row + 1, col + 1],
-          [row - 1, col - 1],
-          [row - 1, col + 1],
-        ]
+        if (!isPromoted) {
+          potentialPositions = [
+            [row + 1, col - 1],
+            [row + 1, col],
+            [row + 1, col + 1],
+            [row - 1, col - 1],
+            [row - 1, col + 1],
+          ]
+        } else {
+          potentialPositions = getAvailableGoldPositions(owner, row, col);
+        }
       }
     } else if (type === "knight") {
       if (owner === PLAYER) {
@@ -128,14 +147,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
             [row - 2, col + 1],
           ]
         } else {
-          potentialPositions = [
-            [row - 1, col],
-            [row + 1, col],
-            [row - 1, col - 1],
-            [row - 1, col + 1],
-            [row, col - 1],
-            [row, col + 1],
-          ]
+          potentialPositions = getAvailableGoldPositions(owner, row, col);
         }
       }
       else {
@@ -145,14 +157,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
             [row + 2, col + 1],
           ]
         } else {
-          potentialPositions = [
-            [row + 1, col],
-            [row - 1, col],
-            [row + 1, col - 1],
-            [row + 1, col + 1],
-            [row, col - 1],
-            [row, col + 1],
-          ]
+          potentialPositions = getAvailableGoldPositions(owner, row, col);
         }
       }
     } else if (type === "lancer") {
