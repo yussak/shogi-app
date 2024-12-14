@@ -595,6 +595,34 @@ describe("先手", () => {
       expect(window.getComputedStyle(screen.getByTestId("cell-2-0")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
       expect(window.getComputedStyle(screen.getByTestId("cell-1-0")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
+
+    it("成った時の移動可能な位置が正しい", async () => {
+      const customPieces: Piece[] = [
+        {
+          type: "lancer",
+          owner: "player",
+          position: [8, 1],
+          isPromoted: false,
+        },
+      ];
+
+      render(<Home initialPiecesOverride={customPieces} />);
+      window.confirm = vi.fn(() => true);
+      movePiece([8, 1], [2, 1]);
+
+      fireEvent.click(screen.getByTestId("piece-2-1"));
+
+      // 移動可能位置が正しい
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-0")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-1")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-2")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-0")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-2")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-3-1")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      // // 移動できない位置が正しい
+      expect(window.getComputedStyle(screen.getByTestId("cell-0-1")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+    });
   });
 
   describe("桂馬", () => {
