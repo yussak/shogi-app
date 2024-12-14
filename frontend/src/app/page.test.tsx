@@ -482,8 +482,22 @@ describe("先手", () => {
       expect(window.getComputedStyle(screen.getByTestId("cell-8-2")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
       expect(window.getComputedStyle(screen.getByTestId("cell-8-4")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
-    // TODO:書く
-    // it("成れない");
+    it("成るかの確認は出ない", async () => {
+      const customPieces: Piece[] = [
+        {
+          type: "gold",
+          owner: "player",
+          position: [3, 0],
+          isPromoted: false,
+        },
+      ];
+      render(<Home initialPiecesOverride={customPieces} />);
+      const confirmSpy = vi.spyOn(window, "confirm").mockImplementation(() => true);
+
+      movePiece([3, 0], [2, 0]);
+
+      expect(confirmSpy).not.toHaveBeenCalled();
+    });
   });
 
   describe("銀", () => {
