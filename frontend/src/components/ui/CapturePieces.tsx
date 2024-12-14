@@ -16,7 +16,15 @@ const CapturedPieces = ({
   return (
     // TODO:歩以外も駒台から打てるようにする
     // TODO:歩以外も駒台から打つ時の可能な位置を色で表示
-    <div>
+    // TODO:強い駒を前の方におきたい（難しそう）
+    <div
+      style={{
+        backgroundImage: "url('/images/komadai.jpeg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+      className="w-64 h-64"
+    >
       {pieces.map((piece, index) => (
         <div
           key={index}
@@ -34,7 +42,8 @@ const CapturedPieces = ({
           />
 
         </div>
-      ))}
+      ))
+      }
     </div>
   );
 };
