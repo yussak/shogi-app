@@ -154,9 +154,9 @@ describe("先手", () => {
       window.confirm = vi.fn(() => true);
       movePiece([3, 0], [2, 0]);
 
-      const movedPiece = screen.getByTestId("piece-2-0");
-      expect(movedPiece.textContent).not.toBe("歩");
-      expect(movedPiece.textContent).toBe("と");
+      const movedPiece = screen.getByTestId("piece-2-0").querySelector("img");
+      expect(movedPiece).toHaveAttribute("alt", "と");
+      expect(movedPiece).not.toHaveAttribute("alt", "歩");
     });
 
     it("成ったり成らなかったりできる", () => {
