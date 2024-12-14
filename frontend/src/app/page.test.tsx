@@ -766,8 +766,51 @@ describe("先手", () => {
     });
   });
 
-  describe.todo("飛車", () => {
-    it.todo("移動可能な位置が正しい", async () => {
+  describe("飛車", () => {
+    it("移動可能な位置が正しい", async () => {
+      const customPieces: Piece[] = [
+        {
+          type: "rook",
+          owner: "player",
+          position: [4, 4],
+          isPromoted: false,
+        },
+        {
+          type: "pawn",
+          owner: "player",
+          position: [6, 4],
+          isPromoted: false,
+        },
+        {
+          type: "pawn",
+          owner: "opponent",
+          position: [2, 4],
+          isPromoted: false,
+        },
+      ];
+
+      render(<Home initialPiecesOverride={customPieces} />);
+
+      fireEvent.click(screen.getByTestId("piece-4-4"));
+
+      // 移動可能な位置が正しい
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-8")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-7")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-6")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-5")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-3")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-2")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-1")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-0")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-4")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-3-4")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-5-4")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      // 移動可能ではない位置が正しい
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-4")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-7-4")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-4")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
 
     });
 
