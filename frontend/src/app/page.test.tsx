@@ -693,8 +693,48 @@ describe("先手", () => {
       expect(window.getComputedStyle(screen.getByTestId("cell-1-7")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
 
-    it.todo("成った時の移動可能な位置が正しい", async () => {
+    it("成った時の移動可能な位置が正しい", async () => {
+      const customPieces: Piece[] = [
+        {
+          type: "bishop",
+          owner: "player",
+          position: [4, 4],
+          isPromoted: false,
+        },
+      ];
+      render(<Home initialPiecesOverride={customPieces} />);
+      window.confirm = vi.fn(() => true);
+      movePiece([4, 4], [2, 6]);
 
+      fireEvent.click(screen.getByTestId("piece-2-6"));
+
+      // 移動できる位置が正しい
+      // 周囲一マス
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-5")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-6")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-7")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-5")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-7")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-3-5")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-3-6")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-3-7")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      // 斜め / の向き
+      expect(window.getComputedStyle(screen.getByTestId("cell-0-8")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-4")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-5-3")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-2")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-7-1")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-8-0")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      // 斜め \ の向き
+      expect(window.getComputedStyle(screen.getByTestId("cell-0-4")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-8")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      // 移動できない位置が正しい
+      expect(window.getComputedStyle(screen.getByTestId("cell-0-5")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-0-6")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-0-7")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
   });
 
