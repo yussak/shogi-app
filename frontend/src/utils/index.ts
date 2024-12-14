@@ -14,7 +14,6 @@ export const initialPieces: Piece[] = [
 
   { type: "bishop", position: [7, 1], owner: PLAYER, isPromoted: false },
 
-  // TODO：後手も実装
   { type: "rook", position: [7, 7], owner: PLAYER, isPromoted: false },
 
   { type: "king", position: [8, 4], owner: PLAYER, isPromoted: false },
@@ -45,6 +44,7 @@ export const initialPieces: Piece[] = [
 
   { type: "bishop", position: [1, 7], owner: OPPONENT, isPromoted: false },
 
+  { type: "rook", position: [1, 1], owner: OPPONENT, isPromoted: false },
 
   { type: "king", position: [0, 4], owner: OPPONENT, isPromoted: false },
 
