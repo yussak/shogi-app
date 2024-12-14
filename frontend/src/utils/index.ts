@@ -18,6 +18,8 @@ export const initialPieces: Piece[] = [
   // TODO：後手も実装
   { type: "rook", position: [7, 7], owner: PLAYER, isPromoted: false },
 
+  { type: "king", position: [8, 4], owner: PLAYER, isPromoted: false },
+
   { type: "lancer", position: [8, 0], owner: PLAYER, isPromoted: false },
   { type: "silver", position: [8, 2], owner: PLAYER, isPromoted: false },
   { type: "gold", position: [8, 3], owner: PLAYER, isPromoted: false },
@@ -41,6 +43,9 @@ export const initialPieces: Piece[] = [
   { type: "pawn", position: [2, 7], owner: OPPONENT, isPromoted: false },
   { type: "pawn", position: [2, 8], owner: OPPONENT, isPromoted: false },
   { type: "lancer", position: [0, 8], owner: OPPONENT, isPromoted: false },
+
+  { type: "king", position: [0, 4], owner: OPPONENT, isPromoted: false },
+
 ];
 
 export const rows: number[] = Array.from({ length: 9 });

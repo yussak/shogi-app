@@ -40,6 +40,8 @@ function getPieceImage(piece) {
         return "/images/pieces/bishop.svg";
       case "rook":
         return "/images/pieces/rook.svg";
+      case "king":
+        return "/images/pieces/king.svg";
     }
   } else {
     switch (piece.type) {

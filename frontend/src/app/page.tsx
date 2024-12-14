@@ -277,6 +277,32 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
         }
       }
     }
+    else if (type === "king") {
+      if (owner === PLAYER) {
+        potentialPositions = [
+          [row - 1, col],
+          [row + 1, col - 1],
+          [row + 1, col + 1],
+          [row - 1, col - 1],
+          [row - 1, col + 1],
+          [row + 1, col],
+          [row, col - 1],
+          [row, col + 1],
+        ]
+      }
+      else {
+        potentialPositions = [
+          [row + 1, col - 1],
+          [row + 1, col],
+          [row + 1, col + 1],
+          [row - 1, col - 1],
+          [row - 1, col],
+          [row - 1, col + 1],
+          [row, col - 1],
+          [row, col + 1],
+        ]
+      }
+    }
 
     return potentialPositions.filter(([r, c]) => {
       const pieceAtDestination = pieces.find((p) => p.position && p.position[0] === r && p.position[1] === c);
