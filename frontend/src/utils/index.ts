@@ -12,7 +12,6 @@ export const initialPieces: Piece[] = [
   { type: "pawn", position: [6, 7], owner: PLAYER, isPromoted: false },
   { type: "pawn", position: [6, 8], owner: PLAYER, isPromoted: false },
 
-  // TODO：後手も実装
   { type: "bishop", position: [7, 1], owner: PLAYER, isPromoted: false },
 
   // TODO：後手も実装
@@ -43,6 +42,9 @@ export const initialPieces: Piece[] = [
   { type: "pawn", position: [2, 7], owner: OPPONENT, isPromoted: false },
   { type: "pawn", position: [2, 8], owner: OPPONENT, isPromoted: false },
   { type: "lancer", position: [0, 8], owner: OPPONENT, isPromoted: false },
+
+  { type: "bishop", position: [1, 7], owner: OPPONENT, isPromoted: false },
+
 
   { type: "king", position: [0, 4], owner: OPPONENT, isPromoted: false },
 
