@@ -16,15 +16,7 @@ const CapturedPieces = ({
   return (
     // TODO:歩以外も駒台から打てるようにする
     // TODO:歩以外も駒台から打つ時の可能な位置を色で表示
-    <div
-      style={{
-        display: "flex",
-        gap: "10px",
-        padding: "10px",
-        border: "1px solid black",
-      }}
-      className="h-10"
-    >
+    <div>
       {pieces.map((piece, index) => (
         <div
           key={index}
