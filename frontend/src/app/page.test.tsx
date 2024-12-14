@@ -814,7 +814,7 @@ describe("先手", () => {
 
     });
 
-    it.only("成った時の移動可能な位置が正しい", async () => {
+    it("成った時の移動可能な位置が正しい", async () => {
       const customPieces: Piece[] = [
         {
           type: "rook",
@@ -875,13 +875,53 @@ describe("先手", () => {
   });
 
 
-  describe.todo("王", () => {
-    it.todo("移動可能な位置が正しい", async () => {
+  describe("王", () => {
+    it("移動可能な位置が正しい", async () => {
+      const customPieces: Piece[] = [
+        {
+          type: "king",
+          owner: "player",
+          position: [4, 4],
+          isPromoted: false,
+        },
+      ];
 
+      render(<Home initialPiecesOverride={customPieces} />);
+
+      fireEvent.click(screen.getByTestId("piece-4-4"));
+
+      // 移動可能な位置が正しい
+      expect(window.getComputedStyle(screen.getByTestId("cell-3-3")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-3-4")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-3-5")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-3")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-5")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      expect(window.getComputedStyle(screen.getByTestId("cell-5-3")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-5-4")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-5-5")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      // 移動可能ではない位置が正しい
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-2")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-6")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
 
-    it.todo("成らない", async () => {
+    it("成らない", async () => {
+      const customPieces: Piece[] = [
+        {
+          type: "king",
+          owner: "player",
+          position: [3, 4],
+          isPromoted: false,
+        },
+      ];
 
+      render(<Home initialPiecesOverride={customPieces} />);
+      const confirmSpy = vi.spyOn(window, "confirm").mockImplementation(() => true);
+
+      movePiece([3, 4], [2, 4]);
+
+      expect(confirmSpy).not.toHaveBeenCalled();
     });
   });
 });
