@@ -197,6 +197,29 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
           currentCol += dCol;
         }
       }
+
+      if (isPromoted) {
+        const promotedDirections = [
+          [-1, 0],
+          [1, 0],
+          [0, -1],
+          [0, 1],
+        ]
+        for (const [dRow, dCol] of promotedDirections) {
+          const currentRow = row + dRow;
+          const currentCol = col + dCol;
+
+          if (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
+            const pieceAtDestination = pieces.find(
+              (p) => p.position && p.position[0] === currentRow && p.position[1] === currentCol
+            );
+
+            if (!pieceAtDestination || pieceAtDestination.owner !== owner) {
+              potentialPositions.push([currentRow, currentCol]); // 空マスか敵駒なら追加
+            }
+          }
+        }
+      }
     }
 
     return potentialPositions.filter(([r, c]) => {

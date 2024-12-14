@@ -560,6 +560,16 @@ describe("先手", () => {
       expect(window.getComputedStyle(screen.getByTestId("cell-1-0")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
   });
+
+  describe.todo("角", () => {
+    it.todo("移動可能な位置が正しい", async () => {
+
+    });
+
+    it.todo("成った時の移動可能な位置が正しい", async () => {
+
+    });
+  });
 });
 
 // TODO:一旦先手に集中してから書く
