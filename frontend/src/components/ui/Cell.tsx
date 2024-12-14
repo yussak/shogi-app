@@ -23,6 +23,32 @@ const getPieceLabel = (piece: Piece) => {
   return pieceLabels[piece.type](piece);
 }
 
+function getPieceImage(piece) {
+  if (!piece.isPromoted) {
+
+    switch (piece.type) {
+      case "pawn":
+        return "images/pieces/pawn.svg";
+      case "gold":
+        return "images/pieces/gold.svg";
+      case "silver":
+        return "images/pieces/silver.svg";
+      case "lancer":
+        return "images/pieces/lancer.svg";
+      case "bishop":
+        return "/images/pieces/bishop.svg";
+      // 他の駒も同様に設定
+      // default:
+      //   return "images/pieces/default.svg"; // 画像がない場合のデフォルト
+    }
+  } else {
+    switch (piece.type) {
+      case "bishop":
+        return "/images/pieces/uma.svg";
+    }
+  }
+}
+
 const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, handleCellClick }: Props) => {
   return (
     <div
@@ -44,7 +70,7 @@ const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, h
             selectedPiece.position[0] === rowIndex &&
             selectedPiece.position[1] === colIndex
             ? "#FFD700" // 選択中の駒の色
-            : "#F0D9B5",
+            : null,
       }}
     >
       {piece && (
@@ -53,7 +79,13 @@ const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, h
           // 相手の駒の場合逆さまにする
           style={{ transform: piece.owner === OPPONENT ? "rotate(180deg)" : "none" }}
         >
-          {piece && getPieceLabel(piece)}
+          {/* {piece && getPieceLabel(piece)} */}
+          <img
+            src={getPieceImage(piece)} // 駒の画像を取得する関数
+            alt={getPieceLabel(piece)} // 駒のラベル（例: "歩"）
+            className="w-12 h-16" // 必要に応じてサイズ調整
+          />
+
         </div>
       )}
     </div>
