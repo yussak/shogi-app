@@ -82,6 +82,14 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     ]
   }
 
+  const getAvailablePawnPositions = (owner: owner, row: number, col: number, isPromoted: Boolean): [number, number][] => {
+    if (isPromoted) {
+      return getAvailableGoldPositions(owner, row, col);
+    }
+
+    return owner === PLAYER ? [[row - 1, col]] : [[row + 1, col]];
+  }
+
   // 移動可能な場所を表示する
   const getAvailablePositions = (piece: Piece): [number, number][] => {
     const { type, position, owner, isPromoted } = piece;
@@ -96,20 +104,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     let potentialPositions: [number, number][] = [];
 
     if (type === "pawn") {
-      if (owner === PLAYER) {
-        if (!isPromoted) {
-          potentialPositions = [[row - 1, col]];
-        } else {
-          potentialPositions = getAvailableGoldPositions(owner, row, col);
-        }
-      }
-      else {
-        if (!isPromoted) {
-          potentialPositions = [[row + 1, col]];
-        } else {
-          potentialPositions = getAvailableGoldPositions(owner, row, col);
-        }
-      }
+      potentialPositions = getAvailablePawnPositions(owner, row, col, isPromoted);
     } else if (type === "gold") {
       potentialPositions = getAvailableGoldPositions(owner, row, col);
     } else if (type === "silver") {
