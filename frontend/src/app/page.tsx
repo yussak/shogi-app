@@ -147,6 +147,65 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     return potentialPositions;
   }
 
+  const getAvailableBishopPositions = (owner: owner, row: number, col: number, isPromoted: Boolean): [number, number][] => {
+    const potentialPositions: [number, number][] = [];
+    const directions = [
+      [-1, -1], // 左上
+      [-1, 1],  // 右上
+      [1, -1],  // 左下
+      [1, 1]    // 右下
+    ];
+
+    for (const [dRow, dCol] of directions) {
+      let currentRow = row + dRow;
+      let currentCol = col + dCol;
+
+      while (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
+        // 駒の有無を確認する
+        const pieceAtDestination = pieces.find(
+          (p) => p.position && p.position[0] === currentRow && p.position[1] === currentCol
+        );
+        if (pieceAtDestination) {
+          // 駒がある場合、自分の駒か敵の駒かで分岐
+          if (pieceAtDestination.owner !== owner) {
+            potentialPositions.push([currentRow, currentCol]); // 敵の駒を取れる
+          }
+          break; // 障害物があるのでそれ以上進めない
+        }
+
+        // 駒がない場合、移動可能
+        potentialPositions.push([currentRow, currentCol]);
+        currentRow += dRow;
+        currentCol += dCol;
+      }
+    }
+
+    if (isPromoted) {
+      const promotedDirections = [
+        [-1, 0],
+        [1, 0],
+        [0, -1],
+        [0, 1],
+      ]
+      for (const [dRow, dCol] of promotedDirections) {
+        const currentRow = row + dRow;
+        const currentCol = col + dCol;
+
+        if (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
+          const pieceAtDestination = pieces.find(
+            (p) => p.position && p.position[0] === currentRow && p.position[1] === currentCol
+          );
+
+          if (!pieceAtDestination || pieceAtDestination.owner !== owner) {
+            potentialPositions.push([currentRow, currentCol]); // 空マスか敵駒なら追加
+          }
+        }
+      }
+    }
+
+    return potentialPositions;
+  }
+
   // 移動可能な場所を表示する
   const getAvailablePositions = (piece: Piece): [number, number][] => {
     const { type, position, owner, isPromoted } = piece;
@@ -155,7 +214,6 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
       const rows = generateRows(owner);
       return generatePositions(rows).filter(([row, col]) => isPositionAvailable(row, col, owner));
     }
-
 
     const [row, col] = position;
     let potentialPositions: [number, number][] = [];
@@ -171,62 +229,11 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     } else if (type === "lancer") {
       potentialPositions = getAvailableLancerPositions(owner, row, col, isPromoted);
     }
+    // 角
     else if (type === "bishop") {
-      potentialPositions = [];
-      const directions = [
-        [-1, -1], // 左上
-        [-1, 1],  // 右上
-        [1, -1],  // 左下
-        [1, 1]    // 右下
-      ];
-
-      for (const [dRow, dCol] of directions) {
-        let currentRow = row + dRow;
-        let currentCol = col + dCol;
-
-        while (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
-          // 駒の有無を確認する
-          const pieceAtDestination = pieces.find(
-            (p) => p.position && p.position[0] === currentRow && p.position[1] === currentCol
-          );
-          if (pieceAtDestination) {
-            // 駒がある場合、自分の駒か敵の駒かで分岐
-            if (pieceAtDestination.owner !== owner) {
-              potentialPositions.push([currentRow, currentCol]); // 敵の駒を取れる
-            }
-            break; // 障害物があるのでそれ以上進めない
-          }
-
-          // 駒がない場合、移動可能
-          potentialPositions.push([currentRow, currentCol]);
-          currentRow += dRow;
-          currentCol += dCol;
-        }
-      }
-
-      if (isPromoted) {
-        const promotedDirections = [
-          [-1, 0],
-          [1, 0],
-          [0, -1],
-          [0, 1],
-        ]
-        for (const [dRow, dCol] of promotedDirections) {
-          const currentRow = row + dRow;
-          const currentCol = col + dCol;
-
-          if (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
-            const pieceAtDestination = pieces.find(
-              (p) => p.position && p.position[0] === currentRow && p.position[1] === currentCol
-            );
-
-            if (!pieceAtDestination || pieceAtDestination.owner !== owner) {
-              potentialPositions.push([currentRow, currentCol]); // 空マスか敵駒なら追加
-            }
-          }
-        }
-      }
+      potentialPositions = getAvailableBishopPositions(owner, row, col, isPromoted);
     }
+    // 飛車
     else if (type === "rook") {
       potentialPositions = [];
       const directions = [
