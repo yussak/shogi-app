@@ -128,7 +128,7 @@ describe("先手", () => {
       expect(screen.getByTestId("piece-8-0")).toBeInTheDocument();
     });
 
-    it.only("駒台から歩を打つ時に二歩できない", () => {
+    it("駒台から歩を打つ時に二歩できない", () => {
       const customPieces = [
         {
           type: "pawn",
