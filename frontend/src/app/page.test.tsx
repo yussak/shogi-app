@@ -2,6 +2,7 @@ import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { describe, expect, it, vi } from "vitest";
 import Home from "./page";
+import { Piece } from "@/types";
 
 const AVAILABLE_POSITION_COLOR = "rgb(163, 210, 202)";
 
@@ -13,7 +14,7 @@ const movePiece = ([fromRow, fromCol]: [number, number], [toRow, toCol]: [number
 describe("先手", () => {
   describe("歩", () => {
     it("盤上の歩が1マス上に指せる", async () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -45,7 +46,7 @@ describe("先手", () => {
     });
 
     it("駒台の歩の選択可能な位置が色付きで表示される", async () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -74,7 +75,7 @@ describe("先手", () => {
     });
 
     it("盤上の歩が1マス以外に指そうとしたら移動できない", async () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -98,7 +99,7 @@ describe("先手", () => {
     });
 
     it("駒を取得したら盤上に追加される", async () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -128,7 +129,7 @@ describe("先手", () => {
     });
 
     it("3マスより上にいる時に成れる", () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -160,7 +161,7 @@ describe("先手", () => {
     });
 
     it("成ったり成らなかったりできる", () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -200,7 +201,7 @@ describe("先手", () => {
     });
 
     it("駒台の歩が打てる", () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -233,7 +234,7 @@ describe("先手", () => {
     });
 
     it("駒台から歩を打つ時に二歩できない", () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -266,7 +267,7 @@ describe("先手", () => {
     });
 
     it("進めなくなるので、駒台から１行目に打てない", () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -297,7 +298,7 @@ describe("先手", () => {
     });
 
     it("駒台から打つ時に移動可能な位置が青くなる", () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -367,7 +368,7 @@ describe("先手", () => {
     });
 
     it("選択可能なポジションが出ている時に他の駒をクリックしたら選択解除される", () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -396,7 +397,7 @@ describe("先手", () => {
     });
 
     it("いきなり3段目の歩は取れない", () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -445,7 +446,7 @@ describe("先手", () => {
 
   describe("金", () => {
     it("移動可能な位置が正しい", async () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "gold",
           owner: "player",
@@ -487,7 +488,7 @@ describe("先手", () => {
 
   describe("銀", () => {
     it("移動可能な位置が正しい", async () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "silver",
           owner: "player",
@@ -544,7 +545,7 @@ describe("先手", () => {
 
   describe("香車", () => {
     it("移動可能な位置が正しい", async () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "lancer",
           owner: "player",
@@ -647,7 +648,7 @@ describe.skip("後手", () => {
     });
 
     it("駒を取得したら盤上に追加される", async () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -719,7 +720,7 @@ describe.skip("後手", () => {
     });
 
     it("駒台の歩が打てる", () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -752,7 +753,7 @@ describe.skip("後手", () => {
     });
 
     it("駒台から歩を打つ時に二歩できない", () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "player",
@@ -785,7 +786,7 @@ describe.skip("後手", () => {
     });
 
     it("進めなくなるので、駒台から１行目に打てない", () => {
-      const customPieces = [
+      const customPieces: Piece[] = [
         {
           type: "pawn",
           owner: "opponent",

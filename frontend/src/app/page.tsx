@@ -61,7 +61,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     ); // 同じ列に歩がない
   };
 
-  const getAvailableGoldPositions = (owner: owner, row: number, col: number) => {
+  const getAvailableGoldPositions = (owner: owner, row: number, col: number): [number, number][] => {
     if (owner === PLAYER) {
       return [
         [row - 1, col],

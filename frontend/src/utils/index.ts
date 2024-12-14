@@ -61,13 +61,12 @@ export const isPromotionZone = (owner: string, row: number) => {
   return (owner === PLAYER && row <= 2) || (owner === OPPONENT && row >= 6);
 };
 
-
 const pieceLabels = {
-  pawn: (piece) => (piece.isPromoted ? "と" : "歩"),
+  pawn: (piece: Piece) => (piece.isPromoted ? "と" : "歩"),
   gold: () => "金",
-  silver: (piece) => (piece.isPromoted ? "と" : "銀"),
-  lancer: (piece) => (piece.isPromoted ? "と" : "香"),
-  bishop: (piece) => (piece.isPromoted ? "馬" : "角"),
+  silver: (piece: Piece) => (piece.isPromoted ? "と" : "銀"),
+  lancer: (piece: Piece) => (piece.isPromoted ? "と" : "香"),
+  bishop: (piece: Piece) => (piece.isPromoted ? "馬" : "角"),
 }
 
 export const getPieceLabel = (piece: Piece) => {
@@ -75,7 +74,7 @@ export const getPieceLabel = (piece: Piece) => {
   return pieceLabels[piece.type](piece);
 }
 
-export function getPieceImage(piece) {
+export function getPieceImage(piece: Piece) {
   if (!piece.isPromoted) {
 
     switch (piece.type) {
