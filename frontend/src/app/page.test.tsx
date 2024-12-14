@@ -3,6 +3,7 @@ import "@testing-library/jest-dom";
 import { describe, expect, it, vi } from "vitest";
 import Home from "./page";
 import { Piece } from "@/types";
+import { beforeEach } from "node:test";
 
 const AVAILABLE_POSITION_COLOR = "rgb(163, 210, 202)";
 
@@ -652,9 +653,44 @@ describe("先手", () => {
     });
   });
 
-  describe.todo("角", () => {
-    it.todo("移動可能な位置が正しい", async () => {
+  describe("角", () => {
+    it("移動可能な位置が正しい", async () => {
+      const customPieces: Piece[] = [
+        {
+          type: "bishop",
+          owner: "player",
+          position: [7, 1],
+          isPromoted: false,
+        },
+        {
+          type: "pawn",
+          owner: "player",
+          position: [6, 0],
+          isPromoted: false,
+        },
+        {
+          type: "pawn",
+          owner: "opponent",
+          position: [2, 6],
+          isPromoted: false,
+        },
+      ];
 
+      render(<Home initialPiecesOverride={customPieces} />);
+
+      fireEvent.click(screen.getByTestId("piece-7-1"));
+
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-2")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-5-3")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-4-4")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-3-5")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-6")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      // 自分の駒があるので移動できない
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-0")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+
+      // 相手の駒をとっていないので飛ばせない
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-7")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
 
     it.todo("成った時の移動可能な位置が正しい", async () => {
