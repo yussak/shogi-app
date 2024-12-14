@@ -264,6 +264,28 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     return potentialPositions;
   }
 
+  const getAvailableKingPositions = (owner: owner, row: number, col: number): [number, number][] => {
+    return owner === PLAYER ? [
+      [row - 1, col],
+      [row + 1, col - 1],
+      [row + 1, col + 1],
+      [row - 1, col - 1],
+      [row - 1, col + 1],
+      [row + 1, col],
+      [row, col - 1],
+      [row, col + 1],
+    ] : [
+      [row + 1, col - 1],
+      [row + 1, col],
+      [row + 1, col + 1],
+      [row - 1, col - 1],
+      [row - 1, col],
+      [row - 1, col + 1],
+      [row, col - 1],
+      [row, col + 1],
+    ]
+  }
+
   // 移動可能な場所を表示する
   const getAvailablePositions = (piece: Piece): [number, number][] => {
     const { type, position, owner, isPromoted } = piece;
@@ -296,30 +318,9 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
       potentialPositions = getAvailableRookPositions(owner, row, col, isPromoted);
     }
     else if (type === "king") {
-      if (owner === PLAYER) {
-        potentialPositions = [
-          [row - 1, col],
-          [row + 1, col - 1],
-          [row + 1, col + 1],
-          [row - 1, col - 1],
-          [row - 1, col + 1],
-          [row + 1, col],
-          [row, col - 1],
-          [row, col + 1],
-        ]
-      }
-      else {
-        potentialPositions = [
-          [row + 1, col - 1],
-          [row + 1, col],
-          [row + 1, col + 1],
-          [row - 1, col - 1],
-          [row - 1, col],
-          [row - 1, col + 1],
-          [row, col - 1],
-          [row, col + 1],
-        ]
-      }
+      potentialPositions = getAvailableKingPositions(owner, row, col);
+
+
     }
 
     return potentialPositions.filter(([r, c]) => {
