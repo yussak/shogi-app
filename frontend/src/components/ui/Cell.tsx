@@ -47,25 +47,29 @@ const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, h
             height: "10px",
             backgroundColor: "black",
             borderRadius: "50%",
+            zIndex: "2"
           }}
         ></div>
-      )}
-      {piece && (
-        <div
-          data-testid={`piece-${rowIndex}-${colIndex}`}
-          // 相手の駒の場合逆さまにする
-          style={{ transform: piece.owner === OPPONENT ? "rotate(180deg)" : "none" }}
-        >
-          <Image
-            src={getPieceImage(piece)} // 駒の画像を取得する関数
-            width={50}
-            height={50}
-            alt={getPieceLabel(piece)} // 駒のラベル（例: "歩"）
-          />
+      )
+      }
+      {
+        piece && (
+          <div
+            data-testid={`piece-${rowIndex}-${colIndex}`}
+            // 相手の駒の場合逆さまにする
+            style={{ transform: piece.owner === OPPONENT ? "rotate(180deg)" : "none" }}
+          >
+            <Image
+              src={getPieceImage(piece)} // 駒の画像を取得する関数
+              width={50}
+              height={50}
+              alt={getPieceLabel(piece)} // 駒のラベル（例: "歩"）
+            />
 
-        </div>
-      )}
-    </div>
+          </div>
+        )
+      }
+    </div >
   );
 };
 
