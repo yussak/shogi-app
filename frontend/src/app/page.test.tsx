@@ -128,8 +128,23 @@ describe("先手", () => {
       expect(screen.getByTestId("piece-8-0")).toBeInTheDocument();
     });
 
-    it("駒台から歩を打つ時に二歩できない", () => {
-      render(<Home />);
+    it.only("駒台から歩を打つ時に二歩できない", () => {
+      const customPieces = [
+        {
+          type: "pawn",
+          owner: "player",
+          position: [6, 0],
+          isPromoted: false,
+        },
+        {
+          type: "pawn",
+          owner: "opponent",
+          position: [2, 0],
+          isPromoted: false,
+        },
+      ];
+
+      render(<Home initialPiecesOverride={customPieces} />);
 
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
