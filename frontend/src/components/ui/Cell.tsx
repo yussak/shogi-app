@@ -1,5 +1,6 @@
 import { OPPONENT } from "@/consts";
 import { Piece } from "@/types";
+import { getPieceImage, getPieceLabel } from "@/utils";
 import Image from "next/image";
 
 type Props = {
@@ -10,54 +11,6 @@ type Props = {
   isavailablePosition: boolean;
   handleCellClick: (piecerowIndex: number, colIndex: number) => void;
 };
-
-const pieceLabels = {
-  pawn: (piece) => (piece.isPromoted ? "と" : "歩"),
-  gold: () => "金",
-  silver: (piece) => (piece.isPromoted ? "と" : "銀"),
-  lancer: (piece) => (piece.isPromoted ? "と" : "香"),
-  bishop: (piece) => (piece.isPromoted ? "馬" : "角"),
-}
-
-const getPieceLabel = (piece: Piece) => {
-  if (pieceLabels[piece.type] == null) return;
-  return pieceLabels[piece.type](piece);
-}
-
-function getPieceImage(piece) {
-  if (!piece.isPromoted) {
-
-    switch (piece.type) {
-      case "pawn":
-        return "images/pieces/pawn.svg";
-      case "gold":
-        return "images/pieces/gold.svg";
-      case "silver":
-        return "images/pieces/silver.svg";
-      case "lancer":
-        return "images/pieces/lancer.svg";
-      case "bishop":
-        return "/images/pieces/bishop.svg";
-      case "rook":
-        return "/images/pieces/rook.svg";
-      case "king":
-        return "/images/pieces/king.svg";
-    }
-  } else {
-    switch (piece.type) {
-      case "pawn":
-        return "images/pieces/to.svg";
-      case "silver":
-        return "images/pieces/gin-nari.svg";
-      case "lancer":
-        return "images/pieces/nari-kyou.svg";
-      case "bishop":
-        return "/images/pieces/uma.svg";
-      case "rook":
-        return "/images/pieces/ryu.svg";
-    }
-  }
-}
 
 const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, handleCellClick }: Props) => {
   return (

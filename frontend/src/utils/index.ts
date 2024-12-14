@@ -56,3 +56,52 @@ export const columns: number[] = Array.from({ length: 9 });
 export const isPromotionZone = (owner: string, row: number) => {
   return (owner === PLAYER && row <= 2) || (owner === OPPONENT && row >= 6);
 };
+
+
+const pieceLabels = {
+  pawn: (piece) => (piece.isPromoted ? "と" : "歩"),
+  gold: () => "金",
+  silver: (piece) => (piece.isPromoted ? "と" : "銀"),
+  lancer: (piece) => (piece.isPromoted ? "と" : "香"),
+  bishop: (piece) => (piece.isPromoted ? "馬" : "角"),
+}
+
+export const getPieceLabel = (piece: Piece) => {
+  if (pieceLabels[piece.type] == null) return;
+  return pieceLabels[piece.type](piece);
+}
+
+export function getPieceImage(piece) {
+  if (!piece.isPromoted) {
+
+    switch (piece.type) {
+      case "pawn":
+        return "images/pieces/pawn.svg";
+      case "gold":
+        return "images/pieces/gold.svg";
+      case "silver":
+        return "images/pieces/silver.svg";
+      case "lancer":
+        return "images/pieces/lancer.svg";
+      case "bishop":
+        return "/images/pieces/bishop.svg";
+      case "rook":
+        return "/images/pieces/rook.svg";
+      case "king":
+        return "/images/pieces/king.svg";
+    }
+  } else {
+    switch (piece.type) {
+      case "pawn":
+        return "images/pieces/to.svg";
+      case "silver":
+        return "images/pieces/gin-nari.svg";
+      case "lancer":
+        return "images/pieces/nari-kyou.svg";
+      case "bishop":
+        return "/images/pieces/uma.svg";
+      case "rook":
+        return "/images/pieces/ryu.svg";
+    }
+  }
+}

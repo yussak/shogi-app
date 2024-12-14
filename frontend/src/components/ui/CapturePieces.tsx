@@ -1,3 +1,6 @@
+import { getPieceImage, getPieceLabel } from "@/utils";
+import Image from "next/image";
+
 type CapturedPiece = {
   type: string;
   owner: "player" | "opponent";
@@ -10,7 +13,6 @@ const CapturedPieces = ({
   pieces: CapturedPiece[];
   handleCapturedPieceClick: (piece: CapturedPiece) => void;
 }) => {
-  // TODO:歩以外を取っても駒台に追加されないので直す
   return (
     <div
       style={{
@@ -30,7 +32,13 @@ const CapturedPieces = ({
           }}
           onClick={() => handleCapturedPieceClick(piece)}
         >
-          {piece.type === "pawn" ? "歩" : ""}
+          <Image
+            src={getPieceImage(piece)}
+            width={50}
+            height={50}
+            alt={getPieceLabel(piece)}
+          />
+
         </div>
       ))}
     </div>
