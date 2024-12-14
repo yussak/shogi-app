@@ -11,6 +11,7 @@ const movePiece = ([fromRow, fromCol]: [number, number], [toRow, toCol]: [number
   fireEvent.click(screen.getByTestId(`cell-${toRow}-${toCol}`));
 };
 
+// TODO:初期位置を変えればmovePieceの数を減らせるので改善
 describe("先手", () => {
   describe("歩", () => {
     it("盤上の歩が1マス上に指せる", async () => {
@@ -463,7 +464,6 @@ describe("先手", () => {
 
       render(<Home initialPiecesOverride={customPieces} />);
 
-      // 初期位置に駒があることを確認
       fireEvent.click(screen.getByTestId("piece-8-3"));
 
       // 移動可能位置が青い
@@ -590,9 +590,29 @@ describe("先手", () => {
     });
   });
 
-  describe.todo("桂馬", () => {
-    it.todo("移動可能な位置が正しい", async () => {
+  describe("桂馬", () => {
+    it("移動可能な位置が正しい", async () => {
+      const customPieces: Piece[] = [
+        {
+          type: "knight",
+          owner: "player",
+          position: [8, 1],
+          isPromoted: false,
+        },
+      ];
 
+      render(<Home initialPiecesOverride={customPieces} />);
+
+      fireEvent.click(screen.getByTestId("piece-8-1"));
+
+      // 移動可能位置が青い
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-0")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-2")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-1")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-7-0")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-7-1")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-7-2")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
 
     it.todo("成った時の移動可能な位置が正しい", async () => {
