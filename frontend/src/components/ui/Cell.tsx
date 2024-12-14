@@ -21,7 +21,7 @@ const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, h
       style={{
         width: "70px",
         height: "70px",
-        border: "0.1px solid black",
+        border: "0.5px solid black",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

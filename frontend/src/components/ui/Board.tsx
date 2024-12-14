@@ -16,6 +16,7 @@ const Board = ({ pieces, selectedPiece, handleCellClick, getAvailablePositions }
         display: "grid",
         gridTemplateColumns: "repeat(9, 70px)",
         backgroundImage: "url('/images/board.jpeg')",
+        padding: "20px"
       }}
     >
       {rows.map((_, rowIndex) =>
