@@ -363,7 +363,22 @@ describe("先手", () => {
 
   describe("香車", () => {
     it("移動可能な位置が正しい", async () => {
-      render(<Home />);
+      const customPieces = [
+        {
+          type: "lancer",
+          owner: "player",
+          position: [8, 0],
+          isPromoted: false,
+        },
+        {
+          type: "pawn",
+          owner: "opponent",
+          position: [2, 0],
+          isPromoted: false,
+        },
+      ];
+
+      render(<Home initialPiecesOverride={customPieces} />);
 
       // 初期位置に駒があることを確認
       fireEvent.click(screen.getByTestId("piece-8-0"));
@@ -371,15 +386,11 @@ describe("先手", () => {
       // 移動可能位置が青い
       expect(window.getComputedStyle(screen.getByTestId("cell-7-0")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
 
-      // fireEvent.click(screen.getByTestId("cell-7-0"));
-      // fireEvent.click(screen.getByTestId("piece-7-0"));
+      fireEvent.click(screen.getByTestId("cell-7-0"));
+      fireEvent.click(screen.getByTestId("piece-7-0"));
 
-      // expect(window.getComputedStyle(screen.getByTestId("cell-8-0")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
-      // expect(window.getComputedStyle(screen.getByTestId("cell-8-2")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
-
-      // expect(window.getComputedStyle(screen.getByTestId("cell-6-2")).backgroundColor).toBe(NORMAL_POSITION_COLOR);
-      // expect(window.getComputedStyle(screen.getByTestId("cell-6-3")).backgroundColor).toBe(NORMAL_POSITION_COLOR);
-      // expect(window.getComputedStyle(screen.getByTestId("cell-6-4")).backgroundColor).toBe(NORMAL_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-2-0")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-1-0")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
   });
 });
