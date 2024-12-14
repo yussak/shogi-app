@@ -10,6 +10,7 @@ const CapturedPieces = ({
   pieces: CapturedPiece[];
   handleCapturedPieceClick: (piece: CapturedPiece) => void;
 }) => {
+  // TODO:歩以外を取っても駒台に追加されないので直す
   return (
     <div
       style={{
