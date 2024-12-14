@@ -426,17 +426,21 @@ describe("先手", () => {
     });
 
     it("と金の移動可能な位置が正しい", async () => {
-      // TODO:cusotmPieceですぐに成れる位置を指定したらコード量減らせそう
-      render(<Home />);
+      const customPieces: Piece[] = [
+        {
+          type: "pawn",
+          owner: "player",
+          position: [3, 3],
+          isPromoted: false,
+        },
+      ];
 
-      movePiece([6, 3], [5, 3]);
-      movePiece([5, 3], [4, 3]);
-      movePiece([4, 3], [3, 3]);
+      render(<Home initialPiecesOverride={customPieces} />);
+
       window.confirm = vi.fn(() => true);
       movePiece([3, 3], [2, 3]);
 
-      // TODO:pieceをクリックが正しそう
-      fireEvent.click(screen.getByTestId("cell-2-3"));
+      fireEvent.click(screen.getByTestId("piece-2-3"));
 
       expect(window.getComputedStyle(screen.getByTestId("cell-2-2")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
       expect(window.getComputedStyle(screen.getByTestId("cell-2-4")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
