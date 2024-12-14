@@ -390,27 +390,35 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
 
   return (
     <main>
-      <button onClick={reset}>平手配置</button>
-      <div className="flex items-start justify-center">
-        <div className="self-start">
-          <CapturedPieces
-            pieces={capturedPieces.filter((piece) => piece.owner === OPPONENT)}
-            handleCapturedPieceClick={handleCapturedPieceClick}
+      <div
+        style={{
+          backgroundImage: "url('/images/tatami.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}>
+        <div className="flex items-start justify-center">
+          <div className="self-start">
+            <CapturedPieces
+              pieces={capturedPieces.filter((piece) => piece.owner === OPPONENT)}
+              handleCapturedPieceClick={handleCapturedPieceClick}
+            />
+          </div>
+          <Board
+            pieces={pieces}
+            selectedPiece={selectedPiece}
+            handleCellClick={handleCellClick}
+            getAvailablePositions={getAvailablePositions}
           />
-        </div>
-        <Board
-          pieces={pieces}
-          selectedPiece={selectedPiece}
-          handleCellClick={handleCellClick}
-          getAvailablePositions={getAvailablePositions}
-        />
-        <div className="self-end">
-          <CapturedPieces
-            pieces={capturedPieces.filter((piece) => piece.owner === PLAYER)}
-            handleCapturedPieceClick={handleCapturedPieceClick}
-          />
+          <div className="self-end">
+            <CapturedPieces
+              pieces={capturedPieces.filter((piece) => piece.owner === PLAYER)}
+              handleCapturedPieceClick={handleCapturedPieceClick}
+            />
+          </div>
         </div>
       </div>
+      <button type="button" onClick={reset} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">平手配置</button>
+
     </main>
   );
 }
