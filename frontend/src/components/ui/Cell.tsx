@@ -21,11 +21,11 @@ const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, h
       style={{
         width: "70px",
         height: "70px",
-        border: "1px solid black",
+        border: "0.1px solid black",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-
+        position: "relative", // ドットを配置するためにrelative指定
         backgroundColor: isavailablePosition
           ? "#A3D2CA" // 移動可能位置の色
           : selectedPiece &&
@@ -36,6 +36,20 @@ const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, h
             : null,
       }}
     >
+      {/* ドットを追加 */}
+      {((rowIndex === 2 && (colIndex === 2 || colIndex === 6)) || (rowIndex === 5 && (colIndex == 2 || colIndex === 6))) && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "-5px",
+            right: "-5px",
+            width: "10px",
+            height: "10px",
+            backgroundColor: "black",
+            borderRadius: "50%",
+          }}
+        ></div>
+      )}
       {piece && (
         <div
           data-testid={`piece-${rowIndex}-${colIndex}`}
