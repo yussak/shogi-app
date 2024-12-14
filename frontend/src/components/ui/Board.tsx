@@ -30,6 +30,7 @@ const Board = ({ pieces, selectedPiece, handleCellClick, getAvailablePositions }
           );
 
           return (
+            // TODO:数字のカウントを実際のようにしたい。現状左上で数字も0スタートなので
             <Cell
               key={`${rowIndex}-${colIndex}`}
               rowIndex={rowIndex}
