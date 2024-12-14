@@ -14,36 +14,77 @@ const Board = ({ pieces, selectedPiece, handleCellClick, getAvailablePositions }
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(9, 70px)",
+        gridTemplateColumns: "repeat(9, 70px) 40px", // 将棋盤 + 右端の番号
+        gridTemplateRows: "40px repeat(9, 70px)", // 上端の番号 + 将棋盤
         backgroundImage: "url('/images/board.jpeg')",
-        padding: "20px"
+        padding: "10px",
       }}
     >
-      {rows.map((_, rowIndex) =>
-        columns.map((_, colIndex) => {
-          // マスに駒があるかを確認
-          const piece = pieces.find((p) => p.position[0] === rowIndex && p.position[1] === colIndex);
+      {/* 上辺の番号 */}
+      {Array.from({ length: 9 }).map((_, colIndex) => (
+        <div
+          key={`top-number-${colIndex}`}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+        >
+          {9 - colIndex}
+        </div>
+      ))}
 
-          const movablePositions = selectedPiece ? getAvailablePositions(selectedPiece) : [];
-          const isavailablePosition = movablePositions.some(
-            (position) => position[0] === rowIndex && position[1] === colIndex
-          );
+      {/* 左上隅に空白 */}
+      <div />
 
-          return (
-            // TODO:数字のカウントを実際のようにしたい。現状左上で数字も0スタートなので
-            <Cell
-              key={`${rowIndex}-${colIndex}`}
-              rowIndex={rowIndex}
-              colIndex={colIndex}
-              piece={piece}
-              isavailablePosition={isavailablePosition}
-              selectedPiece={selectedPiece}
-              handleCellClick={handleCellClick}
-            />
-          );
-        })
-      )}
+      {/* 盤面 + 右辺の番号 */}
+      {rows.map((_, rowIndex) => (
+        <>
+          {/* 将棋盤 */}
+          {columns.map((_, colIndex) => {
+            const piece = pieces.find(
+              (p) => p.position[0] === rowIndex && p.position[1] === colIndex
+            );
+
+            const movablePositions = selectedPiece
+              ? getAvailablePositions(selectedPiece)
+              : [];
+            const isavailablePosition = movablePositions.some(
+              (position) => position[0] === rowIndex && position[1] === colIndex
+            );
+
+            return (
+              <Cell
+                key={`${rowIndex}-${colIndex}`}
+                rowIndex={rowIndex}
+                colIndex={colIndex}
+                piece={piece}
+                isavailablePosition={isavailablePosition}
+                selectedPiece={selectedPiece}
+                handleCellClick={handleCellClick}
+              />
+            );
+          })}
+
+          {/* 右辺の番号 */}
+          <div
+            key={`right-number-${rowIndex}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "16px",
+              fontWeight: "bold",
+            }}
+          >
+            {rowIndex + 1}
+          </div>
+        </>
+      ))}
     </div>
+
   );
 };
 
