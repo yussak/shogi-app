@@ -122,6 +122,31 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     ];
   }
 
+  const getAvailableLancerPositions = (owner: owner, row: number, col: number, isPromoted: Boolean): [number, number][] => {
+    if (isPromoted) {
+      return getAvailableGoldPositions(owner, row, col);
+    }
+    const potentialPositions: [number, number][] = [];
+    for (let i = 1; i <= 8; i++) {
+      const newRow = owner === PLAYER ? row - i : row + i;
+      const pieceAtDestination = pieces.find(
+        (p) => p.position && p.position[0] === newRow && p.position[1] === col
+      );
+
+      if (pieceAtDestination) {
+        if (pieceAtDestination.owner !== owner) {
+          // 相手の駒ならその位置は移動可能だが、それ以上は進めない
+          potentialPositions.push([newRow, col]);
+          break;
+        }
+      }
+
+      // 駒がない場合は移動可能
+      potentialPositions.push([newRow, col]);
+    }
+    return potentialPositions;
+  }
+
   // 移動可能な場所を表示する
   const getAvailablePositions = (piece: Piece): [number, number][] => {
     const { type, position, owner, isPromoted } = piece;
@@ -144,58 +169,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     } else if (type === "knight") {
       potentialPositions = getAvailableKnightPositions(owner, row, col, isPromoted);
     } else if (type === "lancer") {
-      if (owner === PLAYER) {
-        if (isPromoted) {
-          potentialPositions = getAvailableGoldPositions(owner, row, col);
-        } else {
-          for (let i = 1; i <= 8; i++) {
-            const newRow = row - i;
-            const pieceAtDestination = pieces.find(
-              (p) => p.position && p.position[0] === newRow && p.position[1] === col
-            );
-
-            if (pieceAtDestination) {
-              if (pieceAtDestination.owner === owner) {
-                // 自分の駒にぶつかったら、それ以上進めない
-                break;
-              } else {
-                // 相手の駒ならその位置は移動可能だが、それ以上は進めない
-                potentialPositions.push([newRow, col]);
-                break;
-              }
-            }
-
-            // 駒がない場合は移動可能
-            potentialPositions.push([newRow, col]);
-          }
-        }
-      }
-      else {
-        if (isPromoted) {
-          potentialPositions = getAvailableGoldPositions(owner, row, col);
-        } else {
-          for (let i = 1; i <= 8; i++) {
-            const newRow = row + i;
-            const pieceAtDestination = pieces.find(
-              (p) => p.position && p.position[0] === newRow && p.position[1] === col
-            );
-
-            if (pieceAtDestination) {
-              if (pieceAtDestination.owner === owner) {
-                // 自分の駒にぶつかったら、それ以上進めない
-                break;
-              } else {
-                // 相手の駒ならその位置は移動可能だが、それ以上は進めない
-                potentialPositions.push([newRow, col]);
-                break;
-              }
-            }
-
-            // 駒がない場合は移動可能
-            potentialPositions.push([newRow, col]);
-          }
-        }
-      }
+      potentialPositions = getAvailableLancerPositions(owner, row, col, isPromoted);
     }
     else if (type === "bishop") {
       potentialPositions = [];
