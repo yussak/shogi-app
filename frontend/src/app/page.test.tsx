@@ -362,8 +362,8 @@ describe("先手", () => {
       movePiece([8, 3], [7, 3]);
       movePiece([7, 3], [6, 3]);
 
-      expect(screen.getByTestId("piece-6-3").textContent).toBe("歩");
-      expect(screen.getByTestId("piece-7-3").textContent).toBe("金");
+      expect(screen.getByTestId("piece-6-3").querySelector("img")).toHaveAttribute("alt", "歩");
+      expect(screen.getByTestId("piece-7-3").querySelector("img")).toHaveAttribute("alt", "金");
     });
 
     it("選択可能なポジションが出ている時に他の駒をクリックしたら選択解除される", () => {
