@@ -14,6 +14,8 @@ const CapturedPieces = ({
   handleCapturedPieceClick: (piece: CapturedPiece) => void;
 }) => {
   return (
+    // TODO:歩以外も駒台から打てるようにする
+    // TODO:歩以外も駒台から打つ時の可能な位置を色で表示
     <div
       style={{
         display: "flex",
