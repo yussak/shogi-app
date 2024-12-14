@@ -299,29 +299,33 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     const [row, col] = position;
     let potentialPositions: [number, number][] = [];
 
-    if (type === "pawn") {
-      potentialPositions = getAvailablePawnPositions(owner, row, col, isPromoted);
-    } else if (type === "gold") {
-      potentialPositions = getAvailableGoldPositions(owner, row, col);
-    } else if (type === "silver") {
-      potentialPositions = getAvailableSilverPositions(owner, row, col, isPromoted);
-    } else if (type === "knight") {
-      potentialPositions = getAvailableKnightPositions(owner, row, col, isPromoted);
-    } else if (type === "lancer") {
-      potentialPositions = getAvailableLancerPositions(owner, row, col, isPromoted);
-    }
-    // 角
-    else if (type === "bishop") {
-      potentialPositions = getAvailableBishopPositions(owner, row, col, isPromoted);
-    }
-    // 飛車
-    else if (type === "rook") {
-      potentialPositions = getAvailableRookPositions(owner, row, col, isPromoted);
-    }
-    else if (type === "king") {
-      potentialPositions = getAvailableKingPositions(owner, row, col);
-
-
+    switch (type) {
+      case "pawn":
+        potentialPositions = getAvailablePawnPositions(owner, row, col, isPromoted);
+        break;
+      case "gold":
+        potentialPositions = getAvailableGoldPositions(owner, row, col);
+        break;
+      case "silver":
+        potentialPositions = getAvailableSilverPositions(owner, row, col, isPromoted);
+        break;
+      case "knight":
+        potentialPositions = getAvailableKnightPositions(owner, row, col, isPromoted);
+        break;
+      case "lancer":
+        potentialPositions = getAvailableLancerPositions(owner, row, col, isPromoted);
+        break;
+      case "bishop": // 角
+        potentialPositions = getAvailableBishopPositions(owner, row, col, isPromoted);
+        break;
+      case "rook":
+        potentialPositions = getAvailableRookPositions(owner, row, col, isPromoted);
+        break;
+      case "king":
+        potentialPositions = getAvailableKingPositions(owner, row, col);
+        break;
+      default:
+        throw new Error(`Unknown type: ${type}`);
     }
 
     return potentialPositions.filter(([r, c]) => {
