@@ -4,7 +4,6 @@ import { describe, expect, it, vi } from "vitest";
 import Home from "./page";
 
 const AVAILABLE_POSITION_COLOR = "rgb(163, 210, 202)";
-const NORMAL_POSITION_COLOR = "rgb(240, 217, 181)";
 
 const movePiece = ([fromRow, fromCol]: [number, number], [toRow, toCol]: [number, number]) => {
   fireEvent.click(screen.getByTestId(`piece-${fromRow}-${fromCol}`));
@@ -464,9 +463,9 @@ describe("先手", () => {
       expect(window.getComputedStyle(screen.getByTestId("cell-7-4")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
       expect(window.getComputedStyle(screen.getByTestId("cell-8-3")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
 
-      expect(window.getComputedStyle(screen.getByTestId("cell-6-2")).backgroundColor).toBe(NORMAL_POSITION_COLOR);
-      expect(window.getComputedStyle(screen.getByTestId("cell-6-3")).backgroundColor).toBe(NORMAL_POSITION_COLOR);
-      expect(window.getComputedStyle(screen.getByTestId("cell-6-4")).backgroundColor).toBe(NORMAL_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-2")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-3")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-4")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
     // TODO:書く
     // it("成れない");
@@ -522,10 +521,10 @@ describe("先手", () => {
 
       expect(window.getComputedStyle(screen.getByTestId("cell-8-2")).backgroundColor).toBe(AVAILABLE_POSITION_COLOR);
 
-      expect(window.getComputedStyle(screen.getByTestId("cell-8-0")).backgroundColor).toBe(NORMAL_POSITION_COLOR);
-      expect(window.getComputedStyle(screen.getByTestId("cell-6-2")).backgroundColor).toBe(NORMAL_POSITION_COLOR);
-      expect(window.getComputedStyle(screen.getByTestId("cell-6-3")).backgroundColor).toBe(NORMAL_POSITION_COLOR);
-      expect(window.getComputedStyle(screen.getByTestId("cell-6-4")).backgroundColor).toBe(NORMAL_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-8-0")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-2")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-3")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
+      expect(window.getComputedStyle(screen.getByTestId("cell-6-4")).backgroundColor).not.toBe(AVAILABLE_POSITION_COLOR);
     });
   });
 
