@@ -1,5 +1,6 @@
 import { OPPONENT } from "@/consts";
 import { Piece } from "@/types";
+import Image from "next/image";
 
 type Props = {
   rowIndex: number;
@@ -79,11 +80,11 @@ const Cell = ({ rowIndex, colIndex, piece, isavailablePosition, selectedPiece, h
           // 相手の駒の場合逆さまにする
           style={{ transform: piece.owner === OPPONENT ? "rotate(180deg)" : "none" }}
         >
-          {/* {piece && getPieceLabel(piece)} */}
-          <img
+          <Image
             src={getPieceImage(piece)} // 駒の画像を取得する関数
+            width={50}
+            height={50}
             alt={getPieceLabel(piece)} // 駒のラベル（例: "歩"）
-            className="w-12 h-16" // 必要に応じてサイズ調整
           />
 
         </div>
