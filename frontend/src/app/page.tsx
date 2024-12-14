@@ -13,6 +13,10 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
   const [selectedPiece, setSelectedPiece] = useState<Piece | null>(null);
   const [capturedPieces, setCapturedPieces] = useState<CapturedPiece[]>([]);
 
+  const getPieceAtDestination = (pieces: Piece[], row: number, col: number) => {
+    return pieces.find((p) => p.position[0] === row && p.position[1] === col);
+  }
+
   const canPlaceCapturedPiece = (owner: owner, targetRow: number, targetCol: number) => {
     // 二歩できなくする
     // 駒台の駒はpositionがないので今ある駒かがないところみたいな判定が必要なのでselectedPieceは使えない
@@ -30,7 +34,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     const { owner, position } = selectedPiece;
 
     // 移動先の駒のownerが同じなら移動できなくする
-    const pieceAtDestination = pieces.find((p) => p.position[0] === targetRow && p.position[1] === targetCol);
+    const pieceAtDestination = getPieceAtDestination(pieces, targetRow, targetCol);
     if (pieceAtDestination && owner === pieceAtDestination.owner) {
       return false;
     }
@@ -130,9 +134,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     const potentialPositions: [number, number][] = [];
     for (let i = 1; i <= 8; i++) {
       const newRow = owner === PLAYER ? row - i : row + i;
-      const pieceAtDestination = pieces.find(
-        (p) => p.position && p.position[0] === newRow && p.position[1] === col
-      );
+      const pieceAtDestination = getPieceAtDestination(pieces, newRow, col);
 
       if (pieceAtDestination) {
         if (pieceAtDestination.owner !== owner) {
@@ -163,9 +165,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
 
       while (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
         // 駒の有無を確認する
-        const pieceAtDestination = pieces.find(
-          (p) => p.position && p.position[0] === currentRow && p.position[1] === currentCol
-        );
+        const pieceAtDestination = getPieceAtDestination(pieces, currentRow, currentCol);
         if (pieceAtDestination) {
           // 駒がある場合、自分の駒か敵の駒かで分岐
           if (pieceAtDestination.owner !== owner) {
@@ -193,9 +193,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
         const currentCol = col + dCol;
 
         if (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
-          const pieceAtDestination = pieces.find(
-            (p) => p.position && p.position[0] === currentRow && p.position[1] === currentCol
-          );
+          const pieceAtDestination = getPieceAtDestination(pieces, currentRow, currentCol);
 
           if (!pieceAtDestination || pieceAtDestination.owner !== owner) {
             potentialPositions.push([currentRow, currentCol]); // 空マスか敵駒なら追加
@@ -221,9 +219,8 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
 
       while (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
         // 駒の有無を確認する
-        const pieceAtDestination = pieces.find(
-          (p) => p.position && p.position[0] === currentRow && p.position[1] === currentCol
-        );
+        const pieceAtDestination = getPieceAtDestination(pieces, currentRow, currentCol);
+
         if (pieceAtDestination) {
           // 駒がある場合、自分の駒か敵の駒かで分岐
           if (pieceAtDestination.owner !== owner) {
@@ -251,9 +248,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
         const currentCol = col + dCol;
 
         if (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
-          const pieceAtDestination = pieces.find(
-            (p) => p.position && p.position[0] === currentRow && p.position[1] === currentCol
-          );
+          const pieceAtDestination = getPieceAtDestination(pieces, currentRow, currentCol);
 
           if (!pieceAtDestination || pieceAtDestination.owner !== owner) {
             potentialPositions.push([currentRow, currentCol]); // 空マスか敵駒なら追加
@@ -329,7 +324,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     }
 
     return potentialPositions.filter(([r, c]) => {
-      const pieceAtDestination = pieces.find((p) => p.position && p.position[0] === r && p.position[1] === c);
+      const pieceAtDestination = getPieceAtDestination(pieces, r, c);
       // 移動先に駒がない、または移動先の駒が自分の駒じゃない部分を表示
       return !pieceAtDestination || pieceAtDestination.owner !== owner;
     });
@@ -378,8 +373,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
 
   const handleCellClick = (row: number, col: number) => {
     // 移動先のマスにある駒
-    const pieceAtDestination = pieces.find((p) => p.position[0] === row && p.position[1] === col);
-
+    const pieceAtDestination = getPieceAtDestination(pieces, row, col);
     if (!selectedPiece) {
       if (pieceAtDestination) setSelectedPiece(pieceAtDestination);
       return;
