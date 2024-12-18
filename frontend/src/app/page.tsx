@@ -17,14 +17,14 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     return pieces.find((p) => p.position[0] === row && p.position[1] === col);
   }
 
-  const canPlaceCapturedPiece = (owner: owner, targetRow: number, targetCol: number) => {
+  const canPlaceCapturedPiece = (owner: owner, row: number, col: number) => {
     // 二歩できなくする
     // 駒台の駒はpositionがないので今ある駒かがないところみたいな判定が必要なのでselectedPieceは使えない
     const isPawnInColumn = pieces.some(
-      (p) => p.type === "pawn" && p.position[1] === targetCol && !p.isPromoted && p.owner === owner
+      (p) => p.type === "pawn" && p.position[1] === col && !p.isPromoted && p.owner === owner
     );
 
-    const isInvalidRow = owner === PLAYER ? targetRow === 0 : targetRow === 8;
+    const isInvalidRow = owner === PLAYER ? row === 0 : row === 8;
 
     return !isPawnInColumn && !isInvalidRow;
   };
@@ -87,7 +87,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     ]
   }
 
-  const getAvailablePawnPositions = (owner: owner, row: number, col: number, isPromoted: Boolean): [number, number][] => {
+  const getAvailablePawnPositions = (owner: owner, row: number, col: number, isPromoted: boolean): [number, number][] => {
     if (isPromoted) {
       return getAvailableGoldPositions(owner, row, col);
     }
@@ -95,7 +95,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     return owner === PLAYER ? [[row - 1, col]] : [[row + 1, col]];
   }
 
-  const getAvailableSilverPositions = (owner: owner, row: number, col: number, isPromoted: Boolean): [number, number][] => {
+  const getAvailableSilverPositions = (owner: owner, row: number, col: number, isPromoted: boolean): [number, number][] => {
     if (isPromoted) {
       return getAvailableGoldPositions(owner, row, col);
     }
@@ -114,7 +114,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     ];
   }
 
-  const getAvailableKnightPositions = (owner: owner, row: number, col: number, isPromoted: Boolean): [number, number][] => {
+  const getAvailableKnightPositions = (owner: owner, row: number, col: number, isPromoted: boolean): [number, number][] => {
     if (isPromoted) {
       return getAvailableGoldPositions(owner, row, col);
     }
@@ -127,7 +127,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     ];
   }
 
-  const getAvailableLancerPositions = (owner: owner, row: number, col: number, isPromoted: Boolean): [number, number][] => {
+  const getAvailableLancerPositions = (owner: owner, row: number, col: number, isPromoted: boolean): [number, number][] => {
     if (isPromoted) {
       return getAvailableGoldPositions(owner, row, col);
     }
@@ -150,7 +150,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
     return potentialPositions;
   }
 
-  const getAvailableBishopPositions = (owner: owner, row: number, col: number, isPromoted: Boolean): [number, number][] => {
+  const getAvailableBishopPositions = (owner: owner, row: number, col: number, isPromoted: boolean): [number, number][] => {
     const potentialPositions: [number, number][] = [];
     const directions = [
       [-1, -1], // 左上
@@ -204,7 +204,7 @@ export default function Home({ initialPiecesOverride }: { initialPiecesOverride?
 
     return potentialPositions;
   }
-  const getAvailableRookPositions = (owner: owner, row: number, col: number, isPromoted: Boolean): [number, number][] => {
+  const getAvailableRookPositions = (owner: owner, row: number, col: number, isPromoted: boolean): [number, number][] => {
     const potentialPositions: [number, number][] = [];
     const directions = [
       [-1, 0],

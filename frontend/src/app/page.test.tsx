@@ -3,7 +3,6 @@ import "@testing-library/jest-dom";
 import { describe, expect, it, vi } from "vitest";
 import Home from "./page";
 import { Piece } from "@/types";
-import { beforeEach } from "node:test";
 
 const AVAILABLE_POSITION_COLOR = "rgb(163, 210, 202)";
 
