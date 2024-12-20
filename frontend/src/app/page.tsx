@@ -7,8 +7,12 @@ import { useState } from "react";
 import Board from "@/components/ui/Board";
 import { initialPieces, isPromotionZone } from "@/utils";
 
+type HomeProps = {
+  initialPiecesOverride?: Piece[];
+}
+
 // TODO:指した手をどこかに表示したい。先手24歩　後手84歩とか
-export default function Home({ initialPiecesOverride }: { initialPiecesOverride?: Piece[] }) {
+export default function Home({ initialPiecesOverride }: HomeProps) {
   const [pieces, setPieces] = useState<Piece[]>(initialPiecesOverride || initialPieces);
   const [selectedPiece, setSelectedPiece] = useState<Piece | null>(null);
   const [capturedPieces, setCapturedPieces] = useState<CapturedPiece[]>([]);
