@@ -47,7 +47,7 @@ const Board = ({ pieces, selectedPiece, handleCellClick, getAvailablePositions }
           {columns.map((_, colIndex) => {
             const piece = pieces.find(
               (p) => p.position[0] === rowIndex && p.position[1] === colIndex
-            );
+            ) || null;
 
             const movablePositions = selectedPiece
               ? getAvailablePositions(selectedPiece)

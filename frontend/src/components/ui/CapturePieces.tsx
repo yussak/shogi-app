@@ -38,7 +38,9 @@ const CapturedPieces = ({
             src={getPieceImage(piece)}
             width={50}
             height={50}
-            alt={getPieceLabel(piece)}
+            // TODO:治す
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            alt={getPieceLabel(piece as any)}
           />
 
         </div>

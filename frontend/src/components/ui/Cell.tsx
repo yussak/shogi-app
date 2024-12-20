@@ -6,7 +6,7 @@ import Image from "next/image";
 type Props = {
   rowIndex: number;
   colIndex: number;
-  piece: Piece;
+  piece: Piece | null;
   selectedPiece: Piece | null;
   isavailablePosition: boolean;
   handleCellClick: (piecerowIndex: number, colIndex: number) => void;

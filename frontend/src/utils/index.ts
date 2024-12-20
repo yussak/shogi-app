@@ -1,5 +1,5 @@
 import { OPPONENT, PLAYER } from "@/consts";
-import { Piece } from "@/types";
+import { CapturedPiece, Piece } from "@/types";
 
 export const initialPieces: Piece[] = [
   { type: "pawn", position: [6, 0], owner: PLAYER, isPromoted: false },
@@ -66,17 +66,18 @@ const pieceLabels = {
   gold: () => "金",
   silver: (piece: Piece) => (piece.isPromoted ? "と" : "銀"),
   lancer: (piece: Piece) => (piece.isPromoted ? "と" : "香"),
+  knight: (piece: Piece) => (piece.isPromoted ? "と" : "桂馬"),
   bishop: (piece: Piece) => (piece.isPromoted ? "馬" : "角"),
+  rook: (piece: Piece) => (piece.isPromoted ? "龍" : "飛車"),
+  king: () => ("玉"),
 }
 
-export const getPieceLabel = (piece: Piece) => {
-  if (pieceLabels[piece.type] == null) return;
+export const getPieceLabel = (piece: Piece): string => {
   return pieceLabels[piece.type](piece);
 }
 
-export function getPieceImage(piece: Piece) {
-  if (!piece.isPromoted) {
-
+export function getPieceImage(piece: Piece | CapturedPiece): string {
+  if (!("isPromoted" in piece) || !piece.isPromoted) {
     switch (piece.type) {
       case "pawn":
         return "images/pieces/pawn.svg";
@@ -94,6 +95,8 @@ export function getPieceImage(piece: Piece) {
         return "/images/pieces/rook.svg";
       case "king":
         return "/images/pieces/king.svg";
+      default:
+        throw new Error("Invalid piece type");
     }
   } else {
     switch (piece.type) {
@@ -109,6 +112,8 @@ export function getPieceImage(piece: Piece) {
         return "/images/pieces/uma.svg";
       case "rook":
         return "/images/pieces/ryu.svg";
+      default:
+        throw new Error("Invalid piece type");
     }
   }
 }
