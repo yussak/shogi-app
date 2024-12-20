@@ -3,6 +3,7 @@ import "@testing-library/jest-dom";
 import { describe, expect, it, vi } from "vitest";
 import Home from "./page";
 import { Piece } from "@/types";
+import GameArea from "@/components/ui/GameArea";
 
 const AVAILABLE_POSITION_COLOR = "rgb(163, 210, 202)";
 
@@ -30,7 +31,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // 初期位置に駒があることを確認
       const initialPiece = screen.getByTestId("piece-6-0");
@@ -62,7 +63,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // 初期位置に駒があることを確認
       const element = screen.getByTestId("piece-6-0");
@@ -91,7 +92,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       movePiece([6, 0], [4, 0]);
 
@@ -115,7 +116,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // 最初に駒台に駒はない
       expect(screen.queryByTestId("captured-piece-player")).toBeNull();
@@ -145,7 +146,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
@@ -177,7 +178,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
@@ -217,7 +218,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
@@ -250,7 +251,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
@@ -282,7 +283,7 @@ describe("先手", () => {
           isPromoted: false,
         },
       ];
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
       movePiece([5, 0], [4, 0]);
@@ -326,7 +327,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
@@ -384,7 +385,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // 初期位置に駒があることを確認
       fireEvent.click(screen.getByTestId("piece-6-0"));
@@ -413,7 +414,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       const opponentPiece = screen.queryByTestId("piece-2-0");
       expect(opponentPiece).toBeInTheDocument();
@@ -435,7 +436,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       window.confirm = vi.fn(() => true);
       movePiece([3, 3], [2, 3]);
@@ -468,7 +469,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       fireEvent.click(screen.getByTestId("piece-8-3"));
 
@@ -497,7 +498,7 @@ describe("先手", () => {
           isPromoted: false,
         },
       ];
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
       const confirmSpy = vi.spyOn(window, "confirm").mockImplementation(() => true);
 
       movePiece([3, 0], [2, 0]);
@@ -541,7 +542,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // 初期位置に駒があることを確認
       fireEvent.click(screen.getByTestId("piece-8-2"));
@@ -580,7 +581,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // 初期位置に駒があることを確認
       fireEvent.click(screen.getByTestId("piece-8-0"));
@@ -605,7 +606,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
       window.confirm = vi.fn(() => true);
       movePiece([8, 1], [2, 1]);
 
@@ -635,7 +636,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       fireEvent.click(screen.getByTestId("piece-8-1"));
 
@@ -659,7 +660,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
       window.confirm = vi.fn(() => true);
       movePiece([3, 0], [1, 1]);
       fireEvent.click(screen.getByTestId("piece-1-1"));
@@ -703,7 +704,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       fireEvent.click(screen.getByTestId("piece-7-1"));
 
@@ -729,7 +730,7 @@ describe("先手", () => {
           isPromoted: false,
         },
       ];
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
       window.confirm = vi.fn(() => true);
       movePiece([4, 4], [2, 6]);
 
@@ -788,7 +789,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       fireEvent.click(screen.getByTestId("piece-4-4"));
 
@@ -841,7 +842,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
       window.confirm = vi.fn(() => true);
       movePiece([4, 4], [2, 4]);
 
@@ -885,7 +886,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       fireEvent.click(screen.getByTestId("piece-4-4"));
 
@@ -915,7 +916,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
       const confirmSpy = vi.spyOn(window, "confirm").mockImplementation(() => true);
 
       movePiece([3, 4], [2, 4]);
@@ -970,7 +971,7 @@ describe.skip("後手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // 最初に駒台に駒はない
       expect(screen.queryByTestId("captured-piece-opponent")).toBeNull();
@@ -1042,7 +1043,7 @@ describe.skip("後手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // １マスずつ移動させる
       movePiece([2, 0], [3, 0]);
@@ -1075,7 +1076,7 @@ describe.skip("後手", () => {
         },
       ];
 
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // １マスずつ移動させる
       movePiece([2, 0], [3, 0]);
@@ -1107,7 +1108,7 @@ describe.skip("後手", () => {
           isPromoted: false,
         },
       ];
-      render(<Home initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} />);
 
       // １マスずつ移動させる
       movePiece([2, 0], [3, 0]);
