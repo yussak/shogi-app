@@ -4,6 +4,7 @@ import { CapturedPiece, owner, Piece } from "@/types";
 import { useState } from "react";
 import Board from "@/components/ui/Board";
 import { initialPieces, isPromotionZone } from "@/utils";
+import { getPieceAtDestination, getPieceMovementPositions } from "@/utils/pieceMovement";
 
 type HomeProps = {
   initialPiecesOverride?: Piece[];
@@ -25,9 +26,7 @@ const GameArea = ({ initialPiecesOverride, debugMode = false }: HomeProps) => {
     setIsDebugMode(!isDebugMode);
   };
 
-  const getPieceAtDestination = (pieces: Piece[], row: number, col: number) => {
-    return pieces.find((p) => p.position[0] === row && p.position[1] === col);
-  }
+
 
   const canPlaceCapturedPiece = (owner: owner, row: number, col: number) => {
     // 二歩できなくする
@@ -78,268 +77,18 @@ const GameArea = ({ initialPiecesOverride, debugMode = false }: HomeProps) => {
     ); // 同じ列に歩がない
   };
 
-  const getAvailableGoldPositions = (owner: owner, row: number, col: number): [number, number][] => {
-    if (owner === PLAYER) {
-      return [
-        [row - 1, col],
-        [row + 1, col],
-        [row - 1, col - 1],
-        [row - 1, col + 1],
-        [row, col - 1],
-        [row, col + 1],
-      ]
-    }
-    return [
-      [row + 1, col],
-      [row - 1, col],
-      [row + 1, col - 1],
-      [row + 1, col + 1],
-      [row, col - 1],
-      [row, col + 1],
-    ]
-  }
 
-  const getAvailablePawnPositions = (owner: owner, row: number, col: number, isPromoted: boolean): [number, number][] => {
-    if (isPromoted) {
-      return getAvailableGoldPositions(owner, row, col);
-    }
-
-    return owner === PLAYER ? [[row - 1, col]] : [[row + 1, col]];
-  }
-
-  const getAvailableSilverPositions = (owner: owner, row: number, col: number, isPromoted: boolean): [number, number][] => {
-    if (isPromoted) {
-      return getAvailableGoldPositions(owner, row, col);
-    }
-    return owner === PLAYER ? [
-      [row - 1, col],
-      [row + 1, col - 1],
-      [row + 1, col + 1],
-      [row - 1, col - 1],
-      [row - 1, col + 1],
-    ] : [
-      [row + 1, col - 1],
-      [row + 1, col],
-      [row + 1, col + 1],
-      [row - 1, col - 1],
-      [row - 1, col + 1],
-    ];
-  }
-
-  const getAvailableKnightPositions = (owner: owner, row: number, col: number, isPromoted: boolean): [number, number][] => {
-    if (isPromoted) {
-      return getAvailableGoldPositions(owner, row, col);
-    }
-    return owner === PLAYER ? [
-      [row - 2, col - 1],
-      [row - 2, col + 1],
-    ] : [
-      [row + 2, col - 1],
-      [row + 2, col + 1],
-    ];
-  }
-
-  const getAvailableLancerPositions = (owner: owner, row: number, col: number, isPromoted: boolean): [number, number][] => {
-    if (isPromoted) {
-      return getAvailableGoldPositions(owner, row, col);
-    }
-    const potentialPositions: [number, number][] = [];
-    for (let i = 1; i <= 8; i++) {
-      const newRow = owner === PLAYER ? row - i : row + i;
-      const pieceAtDestination = getPieceAtDestination(pieces, newRow, col);
-
-      if (pieceAtDestination) {
-        if (pieceAtDestination.owner !== owner) {
-          // 相手の駒ならその位置は移動可能だが、それ以上は進めない
-          potentialPositions.push([newRow, col]);
-          break;
-        }
-      }
-
-      // 駒がない場合は移動可能
-      potentialPositions.push([newRow, col]);
-    }
-    return potentialPositions;
-  }
-
-  const getAvailableBishopPositions = (owner: owner, row: number, col: number, isPromoted: boolean): [number, number][] => {
-    const potentialPositions: [number, number][] = [];
-    const directions = [
-      [-1, -1], // 左上
-      [-1, 1],  // 右上
-      [1, -1],  // 左下
-      [1, 1]    // 右下
-    ];
-
-    for (const [dRow, dCol] of directions) {
-      let currentRow = row + dRow;
-      let currentCol = col + dCol;
-
-      while (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
-        // 駒の有無を確認する
-        const pieceAtDestination = getPieceAtDestination(pieces, currentRow, currentCol);
-        if (pieceAtDestination) {
-          // 駒がある場合、自分の駒か敵の駒かで分岐
-          if (pieceAtDestination.owner !== owner) {
-            potentialPositions.push([currentRow, currentCol]); // 敵の駒を取れる
-          }
-          break; // 障害物があるのでそれ以上進めない
-        }
-
-        // 駒がない場合、移動可能
-        potentialPositions.push([currentRow, currentCol]);
-        currentRow += dRow;
-        currentCol += dCol;
-      }
-    }
-
-    if (isPromoted) {
-      const promotedDirections = [
-        [-1, 0],
-        [1, 0],
-        [0, -1],
-        [0, 1],
-      ]
-      for (const [dRow, dCol] of promotedDirections) {
-        const currentRow = row + dRow;
-        const currentCol = col + dCol;
-
-        if (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
-          const pieceAtDestination = getPieceAtDestination(pieces, currentRow, currentCol);
-
-          if (!pieceAtDestination || pieceAtDestination.owner !== owner) {
-            potentialPositions.push([currentRow, currentCol]); // 空マスか敵駒なら追加
-          }
-        }
-      }
-    }
-
-    return potentialPositions;
-  }
-  const getAvailableRookPositions = (owner: owner, row: number, col: number, isPromoted: boolean): [number, number][] => {
-    const potentialPositions: [number, number][] = [];
-    const directions = [
-      [-1, 0],
-      [1, 0],
-      [0, -1],
-      [0, 1]
-    ];
-
-    for (const [dRow, dCol] of directions) {
-      let currentRow = row + dRow;
-      let currentCol = col + dCol;
-
-      while (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
-        // 駒の有無を確認する
-        const pieceAtDestination = getPieceAtDestination(pieces, currentRow, currentCol);
-
-        if (pieceAtDestination) {
-          // 駒がある場合、自分の駒か敵の駒かで分岐
-          if (pieceAtDestination.owner !== owner) {
-            potentialPositions.push([currentRow, currentCol]); // 敵の駒を取れる
-          }
-          break; // 障害物があるのでそれ以上進めない
-        }
-
-        // 駒がない場合、移動可能
-        potentialPositions.push([currentRow, currentCol]);
-        currentRow += dRow;
-        currentCol += dCol;
-      }
-    }
-
-    if (isPromoted) {
-      const promotedDirections = [
-        [-1, -1],
-        [1, 1],
-        [1, -1],
-        [-1, 1],
-      ]
-      for (const [dRow, dCol] of promotedDirections) {
-        const currentRow = row + dRow;
-        const currentCol = col + dCol;
-
-        if (currentRow >= 0 && currentRow < 9 && currentCol >= 0 && currentCol < 9) {
-          const pieceAtDestination = getPieceAtDestination(pieces, currentRow, currentCol);
-
-          if (!pieceAtDestination || pieceAtDestination.owner !== owner) {
-            potentialPositions.push([currentRow, currentCol]); // 空マスか敵駒なら追加
-          }
-        }
-      }
-    }
-
-    return potentialPositions;
-  }
-
-  const getAvailableKingPositions = (owner: owner, row: number, col: number): [number, number][] => {
-    return owner === PLAYER ? [
-      [row - 1, col],
-      [row + 1, col - 1],
-      [row + 1, col + 1],
-      [row - 1, col - 1],
-      [row - 1, col + 1],
-      [row + 1, col],
-      [row, col - 1],
-      [row, col + 1],
-    ] : [
-      [row + 1, col - 1],
-      [row + 1, col],
-      [row + 1, col + 1],
-      [row - 1, col - 1],
-      [row - 1, col],
-      [row - 1, col + 1],
-      [row, col - 1],
-      [row, col + 1],
-    ]
-  }
 
   // 移動可能な場所を表示する
   const getAvailablePositions = (piece: Piece): [number, number][] => {
-    const { type, position, owner, isPromoted } = piece;
+    const { position, owner } = piece;
 
     if (position == null) {
       const rows = generateRows(owner);
       return generatePositions(rows).filter(([row, col]) => isPositionAvailable(row, col, owner));
     }
 
-    const [row, col] = position;
-    let potentialPositions: [number, number][] = [];
-
-    switch (type) {
-      case "pawn":
-        potentialPositions = getAvailablePawnPositions(owner, row, col, isPromoted);
-        break;
-      case "gold":
-        potentialPositions = getAvailableGoldPositions(owner, row, col);
-        break;
-      case "silver":
-        potentialPositions = getAvailableSilverPositions(owner, row, col, isPromoted);
-        break;
-      case "knight":
-        potentialPositions = getAvailableKnightPositions(owner, row, col, isPromoted);
-        break;
-      case "lancer":
-        potentialPositions = getAvailableLancerPositions(owner, row, col, isPromoted);
-        break;
-      case "bishop": // 角
-        potentialPositions = getAvailableBishopPositions(owner, row, col, isPromoted);
-        break;
-      case "rook":
-        potentialPositions = getAvailableRookPositions(owner, row, col, isPromoted);
-        break;
-      case "king":
-        potentialPositions = getAvailableKingPositions(owner, row, col);
-        break;
-      default:
-        throw new Error(`Unknown type: ${type}`);
-    }
-
-    return potentialPositions.filter(([r, c]) => {
-      const pieceAtDestination = getPieceAtDestination(pieces, r, c);
-      // 移動先に駒がない、または移動先の駒が自分の駒じゃない部分を表示
-      return !pieceAtDestination || pieceAtDestination.owner !== owner;
-    });
+    return getPieceMovementPositions(pieces, piece);
   };
 
   const reset = () => {
