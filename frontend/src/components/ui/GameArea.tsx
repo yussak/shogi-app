@@ -27,7 +27,6 @@ const GameArea = ({ initialPiecesOverride, debugMode = false }: HomeProps) => {
     setIsDebugMode(!isDebugMode);
   };
 
-
   const generateRows = (owner: owner) => {
     // 1~8行目か0~7行目
     return owner === PLAYER
