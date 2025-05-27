@@ -14,9 +14,14 @@ const GameArea = ({ initialPiecesOverride }: HomeProps) => {
   const [selectedPiece, setSelectedPiece] = useState<Piece | null>(null);
   const [capturedPieces, setCapturedPieces] = useState<CapturedPiece[]>([]);
   const [currentTurn, setCurrentTurn] = useState<owner>(PLAYER); // 先手から開始
+  const [isDebugMode, setIsDebugMode] = useState<boolean>(false); // デバッグモード
 
   const switchTurn = () => {
     setCurrentTurn(currentTurn === PLAYER ? OPPONENT : PLAYER);
+  };
+
+  const toggleDebugMode = () => {
+    setIsDebugMode(!isDebugMode);
   };
 
   const getPieceAtDestination = (pieces: Piece[], row: number, col: number) => {
@@ -341,6 +346,7 @@ const GameArea = ({ initialPiecesOverride }: HomeProps) => {
     setSelectedPiece(null);
     setCapturedPieces([]);
     setCurrentTurn(PLAYER); // 先手から開始
+    setIsDebugMode(false); // デバッグモードを無効化
   };
 
   const capturePiece = (selectedPiece: Piece, pieceAtDestination: Piece) => {
@@ -382,8 +388,8 @@ const GameArea = ({ initialPiecesOverride }: HomeProps) => {
     // 移動先のマスにある駒
     const pieceAtDestination = getPieceAtDestination(pieces, row, col);
     if (!selectedPiece) {
-      // 自分のターンの駒のみ選択可能
-      if (pieceAtDestination && pieceAtDestination.owner === currentTurn) {
+      // デバッグモード時は制約なし、通常モードは自分のターンの駒のみ選択可能
+      if (pieceAtDestination && (isDebugMode || pieceAtDestination.owner === currentTurn)) {
         setSelectedPiece(pieceAtDestination);
       }
       return;
@@ -405,19 +411,19 @@ const GameArea = ({ initialPiecesOverride }: HomeProps) => {
         moveCapturedPiece(selectedPiece, row, col);
         setCapturedPieces((prev) => prev.filter((p) => p != selectedPiece));
         setSelectedPiece(null);
-        switchTurn(); // ターン切り替え
+        if (!isDebugMode) switchTurn(); // デバッグモード時はターン切り替えしない
         return;
       }
       // すでに盤上に置かれている駒を移動させる
       moveExistingPiece(selectedPiece, row, col, shouldPromote);
-      switchTurn(); // ターン切り替え
+      if (!isDebugMode) switchTurn(); // デバッグモード時はターン切り替えしない
     }
     setSelectedPiece(null);
   };
 
   const handleCapturedPieceClick = (piece: CapturedPiece) => {
-    // 自分のターンの駒のみ選択可能
-    if (piece.owner === currentTurn) {
+    // デバッグモード時は制約なし、通常モードは自分のターンの駒のみ選択可能
+    if (isDebugMode || piece.owner === currentTurn) {
       // TODO:治す
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setSelectedPiece(piece as any);
@@ -437,7 +443,7 @@ const GameArea = ({ initialPiecesOverride }: HomeProps) => {
         <div className="text-center py-4">
           <div className="inline-block bg-white bg-opacity-90 px-6 py-2 rounded-lg shadow-md">
             <span className="text-lg font-bold">
-              {currentTurn === PLAYER ? "先手" : "後手"}の番
+              {isDebugMode ? "デバッグモード" : `${currentTurn === PLAYER ? "先手" : "後手"}の番`}
             </span>
           </div>
         </div>
@@ -462,7 +468,13 @@ const GameArea = ({ initialPiecesOverride }: HomeProps) => {
           </div>
         </div>
       </div>
-      <button type="button" onClick={reset} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">平手配置</button></>
+      <div className="text-center space-x-2">
+        <button type="button" onClick={reset} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">平手配置</button>
+        <button type="button" onClick={toggleDebugMode} className={`font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:ring-4 focus:outline-none ${isDebugMode ? 'text-white bg-red-700 hover:bg-red-800 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800' : 'text-white bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800'}`}>
+          {isDebugMode ? "通常モード" : "デバッグモード"}
+        </button>
+      </div>
+    </>
   )
 }
 
