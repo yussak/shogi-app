@@ -26,8 +26,6 @@ const GameArea = ({ initialPiecesOverride, debugMode = false }: HomeProps) => {
     setIsDebugMode(!isDebugMode);
   };
 
-
-
   const canPlaceCapturedPiece = (owner: owner, row: number, col: number) => {
     // 二歩できなくする
     // 駒台の駒はpositionがないので今ある駒かがないところみたいな判定が必要なのでselectedPieceは使えない
@@ -76,8 +74,6 @@ const GameArea = ({ initialPiecesOverride, debugMode = false }: HomeProps) => {
       !pieces.some((p) => p.type === "pawn" && !p.isPromoted && p.position[1] === col && p.owner === owner)
     ); // 同じ列に歩がない
   };
-
-
 
   // 移動可能な場所を表示する
   const getAvailablePositions = (piece: Piece): [number, number][] => {
@@ -179,7 +175,6 @@ const GameArea = ({ initialPiecesOverride, debugMode = false }: HomeProps) => {
       setSelectedPiece(piece as any);
     }
   };
-
 
   return (
     <>

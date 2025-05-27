@@ -297,4 +297,4 @@ export const getPieceMovementPositions = (pieces: Piece[], piece: Piece): [numbe
     // 移動先に駒がない、または移動先の駒が自分の駒じゃない部分を表示
     return !pieceAtDestination || pieceAtDestination.owner !== owner;
   });
-}; 
+};
