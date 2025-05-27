@@ -13,6 +13,11 @@ const GameArea = ({ initialPiecesOverride }: HomeProps) => {
   const [pieces, setPieces] = useState<Piece[]>(initialPiecesOverride || initialPieces);
   const [selectedPiece, setSelectedPiece] = useState<Piece | null>(null);
   const [capturedPieces, setCapturedPieces] = useState<CapturedPiece[]>([]);
+  const [currentTurn, setCurrentTurn] = useState<owner>(PLAYER); // 先手から開始
+
+  const switchTurn = () => {
+    setCurrentTurn(currentTurn === PLAYER ? OPPONENT : PLAYER);
+  };
 
   const getPieceAtDestination = (pieces: Piece[], row: number, col: number) => {
     return pieces.find((p) => p.position[0] === row && p.position[1] === col);
@@ -335,6 +340,7 @@ const GameArea = ({ initialPiecesOverride }: HomeProps) => {
     setPieces(initialPieces);
     setSelectedPiece(null);
     setCapturedPieces([]);
+    setCurrentTurn(PLAYER); // 先手から開始
   };
 
   const capturePiece = (selectedPiece: Piece, pieceAtDestination: Piece) => {
@@ -376,7 +382,10 @@ const GameArea = ({ initialPiecesOverride }: HomeProps) => {
     // 移動先のマスにある駒
     const pieceAtDestination = getPieceAtDestination(pieces, row, col);
     if (!selectedPiece) {
-      if (pieceAtDestination) setSelectedPiece(pieceAtDestination);
+      // 自分のターンの駒のみ選択可能
+      if (pieceAtDestination && pieceAtDestination.owner === currentTurn) {
+        setSelectedPiece(pieceAtDestination);
+      }
       return;
     }
 
@@ -396,17 +405,23 @@ const GameArea = ({ initialPiecesOverride }: HomeProps) => {
         moveCapturedPiece(selectedPiece, row, col);
         setCapturedPieces((prev) => prev.filter((p) => p != selectedPiece));
         setSelectedPiece(null);
+        switchTurn(); // ターン切り替え
+        return;
       }
       // すでに盤上に置かれている駒を移動させる
       moveExistingPiece(selectedPiece, row, col, shouldPromote);
+      switchTurn(); // ターン切り替え
     }
     setSelectedPiece(null);
   };
 
   const handleCapturedPieceClick = (piece: CapturedPiece) => {
-    // TODO:治す
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setSelectedPiece(piece as any);
+    // 自分のターンの駒のみ選択可能
+    if (piece.owner === currentTurn) {
+      // TODO:治す
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setSelectedPiece(piece as any);
+    }
   };
 
 
@@ -418,6 +433,14 @@ const GameArea = ({ initialPiecesOverride }: HomeProps) => {
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}>
+        {/* ターン表示 */}
+        <div className="text-center py-4">
+          <div className="inline-block bg-white bg-opacity-90 px-6 py-2 rounded-lg shadow-md">
+            <span className="text-lg font-bold">
+              {currentTurn === PLAYER ? "先手" : "後手"}の番
+            </span>
+          </div>
+        </div>
         <div className="flex items-start justify-center">
           <div className="self-start">
             <CapturedPieces
