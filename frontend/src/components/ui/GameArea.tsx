@@ -5,6 +5,7 @@ import { useState } from "react";
 import Board from "@/components/ui/Board";
 import { initialPieces, isPromotionZone } from "@/utils";
 import { getPieceAtDestination, getPieceMovementPositions } from "@/utils/pieceMovement";
+import { canMoveTo, isPositionAvailable } from "@/utils/gameRules";
 
 type HomeProps = {
   initialPiecesOverride?: Piece[];
@@ -26,36 +27,6 @@ const GameArea = ({ initialPiecesOverride, debugMode = false }: HomeProps) => {
     setIsDebugMode(!isDebugMode);
   };
 
-  const canPlaceCapturedPiece = (owner: owner, row: number, col: number) => {
-    // 二歩できなくする
-    // 駒台の駒はpositionがないので今ある駒かがないところみたいな判定が必要なのでselectedPieceは使えない
-    const isPawnInColumn = pieces.some(
-      (p) => p.type === "pawn" && p.position[1] === col && !p.isPromoted && p.owner === owner
-    );
-
-    const isInvalidRow = owner === PLAYER ? row === 0 : row === 8;
-
-    return !isPawnInColumn && !isInvalidRow;
-  };
-
-  // 駒がある位置に移動可能か判定
-  const canMoveTo = (selectedPiece: Piece, targetRow: number, targetCol: number): boolean => {
-    const { owner, position } = selectedPiece;
-
-    // 移動先の駒のownerが同じなら移動できなくする
-    const pieceAtDestination = getPieceAtDestination(pieces, targetRow, targetCol);
-    if (pieceAtDestination && owner === pieceAtDestination.owner) {
-      return false;
-    }
-
-    if (position == null) {
-      // 駒台から打てる場所を表示
-      return canPlaceCapturedPiece(owner, targetRow, targetCol);
-    }
-
-    const availablePositions = getAvailablePositions(selectedPiece);
-    return availablePositions.some(([row, col]) => row === targetRow && col === targetCol);
-  };
 
   const generateRows = (owner: owner) => {
     // 1~8行目か0~7行目
@@ -68,20 +39,13 @@ const GameArea = ({ initialPiecesOverride, debugMode = false }: HomeProps) => {
     return rows.flatMap((row) => Array.from({ length: 9 }, (_, col) => [row, col] as [number, number]));
   };
 
-  const isPositionAvailable = (row: number, col: number, owner: owner) => {
-    return (
-      !pieces.some((p) => p.position[0] === row && p.position[1] === col) && // そのマスに駒がない
-      !pieces.some((p) => p.type === "pawn" && !p.isPromoted && p.position[1] === col && p.owner === owner)
-    ); // 同じ列に歩がない
-  };
-
   // 移動可能な場所を表示する
   const getAvailablePositions = (piece: Piece): [number, number][] => {
     const { position, owner } = piece;
 
     if (position == null) {
       const rows = generateRows(owner);
-      return generatePositions(rows).filter(([row, col]) => isPositionAvailable(row, col, owner));
+      return generatePositions(rows).filter(([row, col]) => isPositionAvailable(pieces, row, col, owner));
     }
 
     return getPieceMovementPositions(pieces, piece);
@@ -141,18 +105,18 @@ const GameArea = ({ initialPiecesOverride, debugMode = false }: HomeProps) => {
       return;
     }
 
-    if (canMoveTo(selectedPiece, row, col) && pieceAtDestination && pieceAtDestination.owner !== selectedPiece.owner) {
+    if (canMoveTo(pieces, selectedPiece, row, col, getAvailablePositions) && pieceAtDestination && pieceAtDestination.owner !== selectedPiece.owner) {
       capturePiece(selectedPiece, pieceAtDestination);
     }
 
     // 成れるかどうか
     const isEnableToPromote =
-      !selectedPiece.isPromoted && "position" in selectedPiece && isPromotionZone(selectedPiece.owner, row) && canMoveTo(selectedPiece, row, col) && selectedPiece.type !== "gold" && selectedPiece.type !== "king";
+      !selectedPiece.isPromoted && "position" in selectedPiece && isPromotionZone(selectedPiece.owner, row) && canMoveTo(pieces, selectedPiece, row, col, getAvailablePositions) && selectedPiece.type !== "gold" && selectedPiece.type !== "king";
     // 成るかどうか
     const shouldPromote = isEnableToPromote && window.confirm("成りますか？");
 
     // 駒を移動
-    if (canMoveTo(selectedPiece, row, col)) {
+    if (canMoveTo(pieces, selectedPiece, row, col, getAvailablePositions)) {
       if (!selectedPiece.position) {
         moveCapturedPiece(selectedPiece, row, col);
         setCapturedPieces((prev) => prev.filter((p) => p != selectedPiece));
