@@ -7,14 +7,15 @@ import { initialPieces, isPromotionZone } from "@/utils";
 
 type HomeProps = {
   initialPiecesOverride?: Piece[];
+  debugMode?: boolean;
 }
 
-const GameArea = ({ initialPiecesOverride }: HomeProps) => {
+const GameArea = ({ initialPiecesOverride, debugMode = false }: HomeProps) => {
   const [pieces, setPieces] = useState<Piece[]>(initialPiecesOverride || initialPieces);
   const [selectedPiece, setSelectedPiece] = useState<Piece | null>(null);
   const [capturedPieces, setCapturedPieces] = useState<CapturedPiece[]>([]);
   const [currentTurn, setCurrentTurn] = useState<owner>(PLAYER); // 先手から開始
-  const [isDebugMode, setIsDebugMode] = useState<boolean>(false); // デバッグモード
+  const [isDebugMode, setIsDebugMode] = useState<boolean>(debugMode); // デバッグモード
 
   const switchTurn = () => {
     setCurrentTurn(currentTurn === PLAYER ? OPPONENT : PLAYER);

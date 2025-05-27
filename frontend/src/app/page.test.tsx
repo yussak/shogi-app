@@ -116,7 +116,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
 
       // 最初に駒台に駒はない
       expect(screen.queryByTestId("captured-piece-player")).toBeNull();
@@ -146,7 +146,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
 
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
@@ -178,7 +178,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
 
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
@@ -218,7 +218,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
 
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
@@ -251,7 +251,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
 
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
@@ -283,7 +283,7 @@ describe("先手", () => {
           isPromoted: false,
         },
       ];
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
       movePiece([5, 0], [4, 0]);
@@ -327,7 +327,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
 
       // １マスずつ移動させる
       movePiece([6, 0], [5, 0]);
@@ -436,7 +436,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
 
       window.confirm = vi.fn(() => true);
       movePiece([3, 3], [2, 3]);
@@ -469,7 +469,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
 
       fireEvent.click(screen.getByTestId("piece-8-3"));
 
@@ -498,7 +498,7 @@ describe("先手", () => {
           isPromoted: false,
         },
       ];
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
       const confirmSpy = vi.spyOn(window, "confirm").mockImplementation(() => true);
 
       movePiece([3, 0], [2, 0]);
@@ -542,7 +542,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
 
       // 初期位置に駒があることを確認
       fireEvent.click(screen.getByTestId("piece-8-2"));
@@ -581,7 +581,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
 
       // 初期位置に駒があることを確認
       fireEvent.click(screen.getByTestId("piece-8-0"));
@@ -606,7 +606,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
       window.confirm = vi.fn(() => true);
       movePiece([8, 1], [2, 1]);
 
@@ -660,7 +660,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
       window.confirm = vi.fn(() => true);
       movePiece([3, 0], [1, 1]);
       fireEvent.click(screen.getByTestId("piece-1-1"));
@@ -730,7 +730,7 @@ describe("先手", () => {
           isPromoted: false,
         },
       ];
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
       window.confirm = vi.fn(() => true);
       movePiece([4, 4], [2, 6]);
 
@@ -842,7 +842,7 @@ describe("先手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
       window.confirm = vi.fn(() => true);
       movePiece([4, 4], [2, 4]);
 
@@ -971,7 +971,7 @@ describe.skip("後手", () => {
         },
       ];
 
-      render(<GameArea initialPiecesOverride={customPieces} />);
+      render(<GameArea initialPiecesOverride={customPieces} debugMode={true} />);
 
       // 最初に駒台に駒はない
       expect(screen.queryByTestId("captured-piece-opponent")).toBeNull();
